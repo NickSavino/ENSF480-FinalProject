@@ -1,6 +1,5 @@
 package flightapp.main;
 
-import flightapp.gui.*;
 import flightapp.gui.panel.AdminPanel;
 import flightapp.gui.panel.AttendantPanel;
 import flightapp.gui.panel.CustomerPanel;
@@ -9,7 +8,7 @@ import flightapp.gui.panel.LoginPanel;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainApplication extends JFrame implements LoginListener {
+public class MainApplication extends JFrame{
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -67,8 +66,6 @@ public class MainApplication extends JFrame implements LoginListener {
         cardLayout.show(cardPanel, "Login");
 
     }
-
-    @Override
     public void onLogin(String username, char[] password) {
 
         // TODO: Implement login Authentication

@@ -1,6 +1,5 @@
 package flightapp.gui.panel;
 
-import flightapp.gui.LoginListener;
 import flightapp.main.MainApplication;
 
 import javax.swing.*;
@@ -14,11 +13,9 @@ public class LoginPanel extends JPanel {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton exitButton;
-
-    private LoginListener loginListener;
     public MainApplication mainApp;
-    public LoginPanel(LoginListener listener) {
-        this.loginListener = listener;
+    public LoginPanel(MainApplication mainApp) {
+        this.mainApp = mainApp;
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.insets = new Insets(5, 0, 5, 0); // External padding
@@ -33,7 +30,7 @@ public class LoginPanel extends JPanel {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loginListener.onLogin(usernameField.getText(), passwordField.getPassword());
+                mainApp.onLogin(usernameField.getText(), passwordField.getPassword());
             }
         });
 

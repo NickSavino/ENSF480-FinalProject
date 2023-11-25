@@ -1,4 +1,4 @@
-package flightapp.main;
+package flightapp.gui.main;
 
 import flightapp.gui.dialog.RegistrationDialog;
 import flightapp.gui.panel.AdminPanel;
@@ -9,21 +9,20 @@ import flightapp.gui.panel.LoginPanel;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainApplication extends JFrame{
+public class MainView extends JFrame{
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private JButton exitButton;
     private JButton logoutButton;
     private JLabel titleLabel;
-    public MainApplication() {
+    public MainView() {
         // Initialize the main frame
         super("Flight Reservation System");
         //Specify on action on close
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Specify Minimum Size
         setMinimumSize(new Dimension(400, 200));
-
 
         //Create a title label
         titleLabel = new JLabel("Flight Reservation System", SwingConstants.CENTER);
@@ -56,7 +55,6 @@ public class MainApplication extends JFrame{
         add(titleLabel, BorderLayout.NORTH);
         add(cardPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
-
 
         pack();
         // Center the frame on the screen
@@ -101,7 +99,7 @@ public class MainApplication extends JFrame{
         // Start the application on the EDT
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new MainApplication();
+                new MainView();
             }
         });
     }

@@ -3,11 +3,10 @@ package flightapp.gui.panel;
 import flightapp.gui.dialog.AddFlightDialog;
 import flightapp.gui.dialog.DialogCallback;
 import flightapp.gui.navigation.NavigationController;
-import flightapp.main.MainApplication;
+import flightapp.gui.main.MainView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Dictionary;
 import java.util.Vector;
 
 public class AdminPanel extends JPanel implements DialogCallback {
@@ -25,13 +24,13 @@ public class AdminPanel extends JPanel implements DialogCallback {
     JPanel aircraftsPanel;
     JPanel usersPanel;
     private NavigationController navigationController;
-    private MainApplication mainApplication;
+    private MainView mainView;
 
     JList<String> flightsList;
     Vector<String> flightsData;
 
-    public AdminPanel(MainApplication mainApp) {
-        this.mainApplication = mainApp;
+    public AdminPanel(MainView mainApp) {
+        this.mainView = mainApp;
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
@@ -121,7 +120,7 @@ public class AdminPanel extends JPanel implements DialogCallback {
         System.out.println(type);
         if (type != null) {
             if (type.equals("Flights")) {
-                AddFlightDialog flightDialog = new AddFlightDialog(this.mainApplication, this);
+                AddFlightDialog flightDialog = new AddFlightDialog(this.mainView, this);
                 flightDialog.setVisible(true);
             }
         }

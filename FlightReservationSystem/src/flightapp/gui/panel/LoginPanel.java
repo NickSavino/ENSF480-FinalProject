@@ -1,6 +1,6 @@
 package flightapp.gui.panel;
 
-import flightapp.main.MainApplication;
+import flightapp.gui.main.MainView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +15,8 @@ public class LoginPanel extends JPanel {
     private JButton exitButton;
     private JButton registerButton;
     private JButton guestButton;
-    public MainApplication mainApp;
-    public LoginPanel(MainApplication mainApp) {
+    public MainView mainApp;
+    public LoginPanel(MainView mainApp) {
         this.mainApp = mainApp;
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;

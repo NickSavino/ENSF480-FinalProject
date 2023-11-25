@@ -13,6 +13,8 @@ public class LoginPanel extends JPanel {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton exitButton;
+    private JButton registerButton;
+    private JButton guestButton;
     public MainApplication mainApp;
     public LoginPanel(MainApplication mainApp) {
         this.mainApp = mainApp;
@@ -26,6 +28,8 @@ public class LoginPanel extends JPanel {
         // Create a login button and add an action listener to it
         loginButton = new JButton("Login");
         exitButton = new JButton("Exit");
+        registerButton = new JButton("Register");
+        guestButton = new JButton("Guest");
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -40,12 +44,18 @@ public class LoginPanel extends JPanel {
                 System.exit(1);
             }
         });
+
+        registerButton.addActionListener(e -> mainApp.onRegister());
+        guestButton.addActionListener(e -> mainApp.browseAsGuest());
+
         // Add components to the login panel
         add(new JLabel("Username:"), gbc);
         add(usernameField, gbc);
         add(new JLabel("Password:"), gbc);
         add(passwordField, gbc);
         add(loginButton, gbc);
+        add(registerButton, gbc);
+        add(guestButton, gbc);
     }
 
 

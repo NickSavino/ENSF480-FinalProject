@@ -1,5 +1,6 @@
 package flightapp.main;
 
+import flightapp.gui.dialog.RegistrationDialog;
 import flightapp.gui.panel.AdminPanel;
 import flightapp.gui.panel.AttendantPanel;
 import flightapp.gui.panel.CustomerPanel;
@@ -50,7 +51,6 @@ public class MainApplication extends JFrame{
         cardPanel.add(new CustomerPanel(), "Customer");
         cardPanel.add(new AttendantPanel(), "Attendant");
         cardPanel.add(new AdminPanel(this), "Admin");
-
         //Set Layout to organize main page elements
         setLayout(new BorderLayout());
         add(titleLabel, BorderLayout.NORTH);
@@ -71,7 +71,7 @@ public class MainApplication extends JFrame{
         // TODO: Implement login Authentication
 
         System.out.println("Login attempted with username: " + username  + " and password: " + password);
-        cardLayout.show(cardPanel, "Customer");
+        cardLayout.show(cardPanel, "Admin");
         logoutButton.setVisible(true);
     }
 
@@ -81,6 +81,14 @@ public class MainApplication extends JFrame{
         logoutButton.setVisible(false); // Hide the logout button on logout
     }
 
+    public void onRegister() {
+        RegistrationDialog registrationDialog = new RegistrationDialog(this);
+        registrationDialog.setVisible(true);
+    }
+
+    public void browseAsGuest() {
+        cardLayout.show(cardPanel, "Customer");
+    }
     public static void main(String[] args) {
         // Set the look and feel to the system look and feel
         try {

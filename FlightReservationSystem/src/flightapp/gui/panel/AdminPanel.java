@@ -1,12 +1,16 @@
 package flightapp.gui.panel;
 
+import flightapp.gui.dialog.AddFlightDialog;
+import flightapp.gui.dialog.DialogCallback;
 import flightapp.gui.navigation.NavigationController;
 import flightapp.main.MainApplication;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Dictionary;
+import java.util.Vector;
 
-public class AdminPanel extends JPanel {
+public class AdminPanel extends JPanel implements DialogCallback {
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private JButton backButton;
@@ -15,8 +19,16 @@ public class AdminPanel extends JPanel {
     private JButton browseAircraftsButton;
     private JButton browseUsersButton;
 
+    JPanel mainMenuPanel;
+    JPanel flightsPanel;
+    JPanel crewsPanel;
+    JPanel aircraftsPanel;
+    JPanel usersPanel;
     private NavigationController navigationController;
     private MainApplication mainApplication;
+
+    JList<String> flightsList;
+    Vector<String> flightsData;
 
     public AdminPanel(MainApplication mainApp) {
         this.mainApplication = mainApp;
@@ -24,11 +36,17 @@ public class AdminPanel extends JPanel {
         cardPanel = new JPanel(cardLayout);
 
 
-        JPanel mainMenuPanel = createMainMenuPanel();
-        JPanel flightsPanel = createListPanel("Flights");
-        JPanel crewsPanel = createListPanel("Crews");
-        JPanel aircraftsPanel = createListPanel("Aircrafts");
-        JPanel usersPanel = createListPanel("Registered Users");
+        flightsData = new Vector<>();
+        flightsData.add("Hello");
+        flightsData.add("Hi");
+        flightsData.add("Hey");
+        flightsList = new JList<>(flightsData);
+
+        mainMenuPanel = createMainMenuPanel();
+        flightsPanel = createListPanel("Flights");
+        crewsPanel = createListPanel("Crews");
+        aircraftsPanel = createListPanel("Aircrafts");
+        usersPanel = createListPanel("Registered Users");
 
         // Add panels to the card layout
         cardPanel.add(mainMenuPanel, "MainMenu");
@@ -40,7 +58,7 @@ public class AdminPanel extends JPanel {
         setLayout(new BorderLayout());
         add(cardPanel, BorderLayout.CENTER);
 
-
+        //Create Back button
         backButton = new JButton("Back");
         backButton.addActionListener(e -> navigationController.goBack());
         add(backButton, BorderLayout.SOUTH);
@@ -75,8 +93,11 @@ public class AdminPanel extends JPanel {
 
     private JPanel createListPanel(String type) {
         JPanel panel = new JPanel(new BorderLayout());
-        JList<String> list = new JList<>(); // Placeholder for actual data
-        JScrollPane scrollPane = new JScrollPane(list);
+        JScrollPane scrollPane = new JScrollPane();
+        flightsList.setVisible(true);
+        scrollPane.add(flightsList);
+        scrollPane.repaint();
+        scrollPane.revalidate();
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton addButton = new JButton("Add");
@@ -84,7 +105,7 @@ public class AdminPanel extends JPanel {
 
         // Add action listeners for Add and Remove
         addButton.addActionListener(e -> onAddItem(type));
-        removeButton.addActionListener(e -> onRemoveItem(list, type));
+        removeButton.addActionListener(e -> onRemoveItem(flightsList, type));
 
         buttonPanel.add(addButton);
         buttonPanel.add(removeButton);
@@ -97,8 +118,26 @@ public class AdminPanel extends JPanel {
 
     private void onAddItem(String type) {
         // Show dialog to add item
-        JOptionPane.showMessageDialog(this, "Add " + type);
+        System.out.println(type);
+        if (type != null) {
+            if (type.equals("Flights")) {
+                AddFlightDialog flightDialog = new AddFlightDialog(this.mainApplication, this);
+                flightDialog.setVisible(true);
+            }
+        }
     }
+
+    @Override
+    public void onFlightAdded(String flightInfo) {
+
+        flightsData.add(flightInfo);
+        flightsList.setListData(flightsData);
+        flightsList.revalidate();
+        flightsList.repaint();
+    }
+
+
+
 
     private void onRemoveItem(JList<String> list, String type) {
         // Show confirmation dialog and remove item

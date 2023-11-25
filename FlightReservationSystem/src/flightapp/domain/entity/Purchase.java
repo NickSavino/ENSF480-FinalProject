@@ -10,5 +10,19 @@ public class Purchase {
     private Ticket ticket;
     private Receipt receipt;
 
+    public Purchase(Date date, boolean loungeAccess, Ticket ticket, Receipt receipt) {
+        this.date = date;
+        this.loungeAccess = loungeAccess;
+        this.ticket = ticket;
+        this.receipt = receipt;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+
     public void confirmPurchase() {}
+
+    public void cancelPurchase() {}
 }

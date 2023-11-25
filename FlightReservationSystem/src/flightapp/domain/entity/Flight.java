@@ -17,5 +17,15 @@ public class Flight {
 
     private Date date;
 
+    public Flight(Aircraft aircraft, int flightId, ArrayList<Seat> seatMap, Location origin, Location destination, FlightCrew flightCrew, Date date) {
+        this.aircraft = aircraft;
+        this.flightId = flightId;
+        this.seatMap = seatMap;
+        this.origin = origin;
+        this.destination = destination;
+        this.flightCrew = flightCrew;
+        this.date = date;
+    }
+
 
 }

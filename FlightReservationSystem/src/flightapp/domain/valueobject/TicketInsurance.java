@@ -6,5 +6,11 @@ public class TicketInsurance {
 
     private Date cancelByDate;
 
+    public TicketInsurance(Date cancelByDate) {
+        this.cancelByDate = cancelByDate;
+    }
 
+    public Date getCancelByDate() {
+        return cancelByDate;
+    }
 }

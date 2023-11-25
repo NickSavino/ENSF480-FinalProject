@@ -7,4 +7,9 @@ public class FlightCrew {
 
     private ArrayList<Integer> assignedFlights;
     private int crewId;
+
+    public FlightCrew(int crewId) {
+        this.crewId = crewId;
+        this.assignedFlights = new ArrayList<Integer>();
+    }
 }

@@ -9,8 +9,15 @@ public class Seat {
 
     private boolean isBooked;
 
-    private Map<String, Integer> seatMap;
+    private Map<String, Integer> seatType;
 
+    public Seat(String seatId, boolean isBooked, Map<String, Integer> seatType) {
+        this.seatId = seatId;
+        this.isBooked = isBooked;
+        this.seatType = seatType;
+    }
 
     public void book() {}
+
+    public void unbook() {}
 }

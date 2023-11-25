@@ -7,6 +7,9 @@ public abstract class NonAdmin extends Employee {
 
     private BrowsePassengersStrategy browseStrategy;
 
+    public NonAdmin(String firstName, String lastName, String address, String email, int age, String phoneNumber, int employeeId) {
+        super(firstName, lastName, address, email, age, phoneNumber, employeeId);
+    }
 
     public void performBrowse() {}
 

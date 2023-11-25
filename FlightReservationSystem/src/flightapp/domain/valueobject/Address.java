@@ -9,7 +9,15 @@ public class Address {
     private String country;
 
 
-    public Address(String houseNumber, String street, String city, String province, String country) {
+    /*
+     *  Constructor
+     *  @param address
+     * 
+     * should take address in as 123SampleStreet_SampleCity_SampleProvince_SampleCountry
+     * analyzes string and splits into data members
+     * 
+     */
+    public Address(String address) {
         this.houseNumber = houseNumber;
         this.street = street;
         this.city = city;

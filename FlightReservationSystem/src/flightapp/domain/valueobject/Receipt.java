@@ -2,11 +2,13 @@ package flightapp.domain.valueobject;
 
 public class Receipt {
 
-    private int receiptNumber;
+    private String receiptId;
+    private String creditCardNumber;
     private int price;
 
-    public Receipt(int receiptNumber, int price) {
-        this.receiptNumber = receiptNumber;
+    public Receipt(String receiptId, int price, String creditCardNumber) {
+        this.receiptId = receiptId;
         this.price = price;
+        this.creditCardNumber = creditCardNumber;
     }
 }

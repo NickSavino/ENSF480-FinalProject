@@ -7,6 +7,7 @@ public class Customer extends Person {
     private String viewLevel = "Guest";
 
     private int customerId;
+    private String status = "Unregistered";
 
     private ArrayList<Purchase> purchases;
 
@@ -25,8 +26,14 @@ public class Customer extends Person {
         return this.purchases;
     }
 
-    public int getCustomerId() {
+    public int getCustomerId() 
+    {
         return this.customerId;
+    }
+
+    public String getStatus()
+    {
+        return this.status;
     }
 
 }

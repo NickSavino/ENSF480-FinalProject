@@ -1,8 +1,6 @@
 package flightapp.domain.entity;
 
-import flightapp.domain.pattern.BrowseAll;
-import flightapp.domain.pattern.BrowsePerFlight;
-
+import flightapp.domain.pattern.*;
 public class FlightAttendant extends NonAdmin {
 
     private String viewLevel = "FlightAttendant";

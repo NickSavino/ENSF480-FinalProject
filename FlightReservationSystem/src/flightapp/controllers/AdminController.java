@@ -8,9 +8,15 @@ import flightapp.domain.pattern.*;
 
 public class AdminController {
     private Airline airline;
+    private Employee employee;
 
     public AdminController(Airline airline) {
         this.airline = airline;
+    }
+
+    public void setEmployee(Employee employee)
+    {
+        this.employee = employee;
     }
 
     public ArrayList<Flight> browseFlights(Location origin, Location destination, Date date)
@@ -156,7 +162,7 @@ public class AdminController {
     }
 
     public void addFlight(int flightId, int aircraftId, int originId, String destinationId, 
-        int year, int day, int month, int crewId, int flightDuration)
+        int year, int day, int month, int crewId, int flightDuration, int baseFlightCost)
     {
         // Add flight to airline flight list (Don't do anything if flightId already exists)
         for (Flight flight : this.airline.getFlights())
@@ -207,7 +213,7 @@ public class AdminController {
 
         if (origin != null && destination != null && aircraft != null && flightCrew != null)
         {
-            Flight newFlight = new Flight(aircraft, flightId, origin, destination, flightCrew, timeOfDeparture, flightDuration);
+            Flight newFlight = new Flight(aircraft, flightId, origin, baseFlightCost, destination, flightCrew, timeOfDeparture, flightDuration);
             this.airline.getFlights().add(newFlight);
         }
         // TODO: Need to update database
@@ -267,5 +273,22 @@ public class AdminController {
             }
         }
         return registeredCustomers;
+    }
+
+    // This method is for airline agents and flight attendants
+    public ArrayList<Customer> browsePassengers(int flightId)
+    {
+        // MAY NOT WORK DEPENDING ON POLYMORPHISM (CHECK THIS LATER)
+        NonAdmin currentNonAdmin = null;
+        for (NonAdmin nonAdmin : this.airline.getNonAdmins())
+        {
+            if (nonAdmin.getEmployeeId() == this.employee.getEmployeeId())
+            {
+                currentNonAdmin = nonAdmin;
+            }
+        }
+        ArrayList<Customer> browsePassengers = currentNonAdmin.performBrowse(this.airline.getCustomers(), flightId);
+            
+        return browsePassengers;
     }
 }

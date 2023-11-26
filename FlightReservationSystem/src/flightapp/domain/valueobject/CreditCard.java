@@ -1,19 +1,23 @@
 package flightapp.domain.valueobject;
 
 public class CreditCard {
-    private int cardNumber;
-
-    /*
-     * Constructor for CreditCard
-     * @param cardNumber
-     * @throws IllegalArgumentException if card number is not 16 digits
-     */
-    public CreditCard(int cardNumber) {
+    private String cardNumber;
+    private int securityCode;
+    
+    public CreditCard(String cardNumber, int securityCode) {
         //card number should have 16 digits
-        if (String.valueOf(cardNumber).length() != 16) {
+        if (String.valueOf(cardNumber).length() != 16) 
+        {
             throw new IllegalArgumentException("Invalid card number");
-        } else {
+        } 
+        else 
+        {
             this.cardNumber = cardNumber;
         }
+        this.securityCode = securityCode;
+    }
+
+    public String getCreditCardNumber() {
+        return this.cardNumber;
     }
 }

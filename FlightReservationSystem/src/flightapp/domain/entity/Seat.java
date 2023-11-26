@@ -14,7 +14,28 @@ public class Seat {
         this.seatType = seatType;
     }
 
-    public void book() {}
+    public void book()
+    {
+        this.isBooked = true;
+    }
 
-    public void unbook() {}
+    public void unbook()
+    {
+        this.isBooked = false;
+    }
+
+    public int getSeatId()
+    {
+        return this.seatId;
+    }
+
+    public String getSeatType()
+    {
+        return this.seatType;
+    }
+
+    public boolean isBooked()
+    {
+        return this.isBooked;
+    }
 }

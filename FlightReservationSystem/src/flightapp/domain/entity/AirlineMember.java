@@ -8,6 +8,7 @@ public class AirlineMember extends RegisteredCustomer {
 
     public AirlineMember(String firstName, String lastName, String address, String email, int age, String phoneNumber, int customerId) {
         super(firstName, lastName, address, email, age,  phoneNumber, customerId);
+        this.companionVoucher = new CompanionVoucher();
     }
 
     public CompanionVoucher getCompanionVoucher() {

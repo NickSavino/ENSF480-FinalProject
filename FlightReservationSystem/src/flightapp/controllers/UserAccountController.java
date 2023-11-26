@@ -8,6 +8,7 @@ import flightapp.domain.pattern.*;
 
 public class UserAccountController {
     private Airline airline;
+    private Customer currentCustomer;
     
     public UserAccountController(Airline airline) {
         this.airline = airline;

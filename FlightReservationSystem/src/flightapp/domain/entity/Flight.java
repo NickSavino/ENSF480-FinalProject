@@ -14,10 +14,11 @@ public class Flight {
     private Location destination;
     private int flightDuration;
     private FlightCrew flightCrew;
+    private int baseFlightCost;
 
-    private Date date;
+    private Date departureTime;
 
-    public Flight(Aircraft aircraft, int flightId, Location origin, 
+    public Flight(Aircraft aircraft, int flightId, Location origin, int baseFlightCost,
         Location destination, FlightCrew flightCrew, Date date, int flightDuration) 
     {
         this.aircraft = aircraft;
@@ -26,10 +27,10 @@ public class Flight {
         this.origin = origin;
         this.destination = destination;
         this.flightCrew = flightCrew;
-        this.date = date;
+        this.departureTime = date;
+        this.baseFlightCost = baseFlightCost;
 
         int numberOfSeats = aircraft.getNumberOfSeats();
-        int numberOfOrdinarySeats = aircraft.getNumberOfOrdinarySeats();
         int numberOfBusinessSeats = aircraft.getNumberOfBusinessSeats();
         int numberOfComfortSeats = aircraft.getNumberOfComfortSeats();
 
@@ -63,7 +64,7 @@ public class Flight {
 
     public Date getDate() 
     {
-        return this.date;
+        return this.departureTime;
     }
 
     public FlightCrew getFlightCrew()
@@ -83,7 +84,7 @@ public class Flight {
 
     public void setDate(Date newDate)
     {
-        this.date = newDate;
+        this.departureTime = newDate;
     }
 
     public void setDuration(int newDuration)
@@ -99,6 +100,11 @@ public class Flight {
     public ArrayList<Seat> getSeatList()
     {
         return this.seatList;
+    }
+
+    public int getBaseFlightCost()
+    {
+        return this.baseFlightCost;
     }
 
 }

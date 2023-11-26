@@ -8,16 +8,18 @@ import flightapp.domain.pattern.*;
 
 public class FlightController {
     private Airline airline;
-    
     private Flight selectedFlight = null;
     private ArrayList<Seat> selectedSeats;
-    private boolean selectInsurance = false; 
-    private CreditCard usingCreditCard = null;
-    private boolean selectLounge = false;
-    private CompanionVoucher selectedVoucher = null;
+    // private String userRole;
+    private Customer customer;
 
     public FlightController(Airline airline) {
         this.airline = airline;
+    }
+
+    public void setCustomer(Customer customer)
+    {
+        this.customer = customer;
     }
 
     public ArrayList<Flight> browseFlights(Location destination)
@@ -65,70 +67,105 @@ public class FlightController {
         return seatMap;
     }
 
-    public void selectSeats(ArrayList<Seat> seats)
+    public void selectSeats(ArrayList<Integer> seatIds)
     {
-        this.selectedSeats = seats;
+        this.selectedSeats.clear();
+        for (int seatId : seatIds)
+        {
+            for (Seat seat : this.selectedFlight.getSeatList())
+            {
+                if (seat.getSeatId() == seatId && !seat.isBooked())
+                {
+                    this.selectedSeats.add(seat);
+                    seat.book();
+                }
+            }
+        }
     }
 
-    public void selectInsurance(Date cancelByDate)
-    {
-        // TODO: Implement
-        // Need to make a new TicketInsurance object (add more valuable attributes to this class) and populate class information
+    public void purchase(boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher, 
+        String creditCardNumber, int creditCardSecurityCode)
+    {  
+        // REQUIRES: Purchase parameters
+        // RETURNS: Total cost of the purchase
+        CreditCard creditCard = new CreditCard(creditCardNumber, creditCardSecurityCode);
 
-    }
+        // Mark companion voucher as used or don't use it at all if unavailable
+        if (useCompanionVoucher && this.selectedSeats.size() > 1)
+        {
+            for (AirlineMember member : this.airline.getAirlineMembers())
+            {
+                if (member.getCustomerId() == this.customer.getCustomerId())
+                {
+                    if (member.getCompanionVoucher().isUsable())
+                    {
+                        member.getCompanionVoucher().use();
+                        break;
+                    }
+                    else
+                    {
+                        useCompanionVoucher = false;
+                    }
+                }
+            }
+        }
+        if (this.selectedSeats.size() < 2)
+        {
+            useCompanionVoucher = false;
+        }
 
-    public void setCreditCard(String cardNumber, int securityCode)
-    {
-        // TODO: Implement
-        // Need to make a new credit card object and populate it within this class
-    }
-
-    public void setAirportLounge(int chooseLounge)
-    {
-        // TODO: Implement
-    }
-
-    public void setCompanionVoucher(int chooseVoucher)
-    {
-        // TODO: Implement
-    }
-
-    public void purchase()
-    {
-        // TODO: Implement
-        // Need to calculate the total cost (baseCost + seatCost)
-        // Need to create new ticket and receipt objects
-        // Need to create a new purchase object and send it to the database
-        sendReceiptAndTicket(Ticket ticket, Receipt receipt);
+        Purchase currentPurchase = new Purchase(this.selectedFlight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCard, this.selectedSeats, this.customer);
+        this.airline.getPurchases().add(currentPurchase);
+        sendReceiptAndTicket(currentPurchase.getTickets(), currentPurchase.getReceipt());
         selectedSeats.clear();
-        selectedFlight = null;
-        selectedInsurance = null;
-        usingCreditCard = null;
-        selectedLounge = null;
-        selectedVoucher = null;
+        this.customer.addPurchase(currentPurchase);
+        // TODO: Need to update database
+        
     }
 
-    private void sendReceiptAndTicket(Ticket ticket, Receipt receipt)
+    private void sendReceiptAndTicket(ArrayList<Ticket> ticket, Receipt receipt)
     {
         // TODO: Implement
-        // Need to populate the proper information inside of a new Receipt and Payment 
+        // Need to populate the proper information inside of a new Receipt and Payment
+        return;
     }
 
-    public void refundPurchase(int purchaseId)
+    public void refundPurchase(String purchaseId)
     {
-        // TODO: Implement
+        Purchase currentPurchase = null;
+        for (Purchase purchase : this.airline.getPurchases())
+        {
+            if (purchase.getPurchaseId() == purchaseId)
+            {
+                currentPurchase = purchase;
+                break;
+            }
+        }
+        if (currentPurchase != null)
+        {
+            for (Ticket ticket : currentPurchase.getTickets())
+            {
+                int flightId = ticket.getFlightNumber();
+                for (Flight flight : this.airline.getFlights())
+                {
+                    if (flight.getFlightId() == flightId)
+                    {
+                        this.selectedFlight = flight;
+                        break;
+                    }
+                }
+                for (Seat seat : this.selectedFlight.getSeatList())
+                {
+                    seat.unbook();
+                }
+            }
+        }
         // Need to find purchase and refund; update database
     }
-    
-    // This method is for airline agents and flight attendants
-    public void browsePassengers(int flightId)
-    {
-        // TODO: Implement
-        // Make sure to make use of design pattern inside of domain model for this
-    }
 
-    public void sendPromotionalNews()
+    public String sendPromotionalNews()
     {
-        // TODO: Implement
+        String promotionalNews = "New flights to Hawaii! Find your new vacation destination today for cheap! Variety of options provided and high-class flying!";
+        return promotionalNews;
     }
 }

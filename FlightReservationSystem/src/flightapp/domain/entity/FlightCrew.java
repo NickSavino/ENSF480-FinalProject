@@ -12,4 +12,18 @@ public class FlightCrew {
         this.crewId = crewId;
         this.assignedFlights = new ArrayList<Integer>();
     }
+
+    public void assignFlight(int flightId) {
+        this.assignedFlights.add(flightId);
+    }
+
+    public ArrayList<Integer> getAssignedFlights() {
+        return this.assignedFlights;
+    }
+
+    public int getCrewId() {
+        return this.crewId;
+    }
+
+
 }

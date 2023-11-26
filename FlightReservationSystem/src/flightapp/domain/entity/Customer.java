@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class Customer extends Person {
 
+    private String viewLevel = "Guest";
+
     private int customerId;
 
     private ArrayList<Purchase> purchases;
@@ -15,5 +17,16 @@ public class Customer extends Person {
         this.purchases = new ArrayList<Purchase>();
     }
 
+    public void addPurchase(Purchase purchase) {
+        this.purchases.add(purchase);
+    }
+
+    public ArrayList<Purchase> getPurchases() {
+        return this.purchases;
+    }
+
+    public int getCustomerId() {
+        return this.customerId;
+    }
 
 }

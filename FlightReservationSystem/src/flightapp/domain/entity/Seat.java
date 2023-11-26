@@ -1,6 +1,5 @@
 package flightapp.domain.entity;
 
-import java.util.Dictionary;
 import java.util.Map;
 
 public class Seat {

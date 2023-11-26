@@ -14,4 +14,10 @@ public class Aircraft {
         this.aircraftId = id;
         this.condition = condition;
     }
+
+    public String getModel() {
+        return this.model;
+    }
+
+    
 }

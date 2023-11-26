@@ -6,7 +6,6 @@ public class Airline {
 
     ArrayList<Flight> flights;
     ArrayList<Employee> employees;
-
     ArrayList<Customer> customers;
     public Airline(ArrayList<Flight> flights, ArrayList<Employee> employees, ArrayList<Customer> customers) {
 

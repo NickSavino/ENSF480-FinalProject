@@ -12,7 +12,4 @@ public class AirlineAgent extends NonAdmin {
         setBrowseStrategy(new BrowseAll());
     }
 
-    
-
-    
 }

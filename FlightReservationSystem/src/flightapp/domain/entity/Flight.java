@@ -9,7 +9,7 @@ public class Flight {
 
     private Aircraft aircraft;
     private int flightId;
-    private ArrayList<Seat> seatMap;
+    private ArrayList<Seat> seatList;
     private Location origin;
     private Location destination;
     private int flightDuration;
@@ -35,17 +35,17 @@ public class Flight {
 
         for (int i = 0; i < numberOfSeats; i++)
         {
-            if (i < numberOfOrdinarySeats)
+            if (i < numberOfBusinessSeats)
             {
-                this.seatMap.add(new Seat(i + 1, "Ordinary"));
+                this.seatList.add(new Seat(i + 1, "Business"));
             }
-            else if (i < numberOfOrdinarySeats + numberOfBusinessSeats)
+            else if (i < numberOfBusinessSeats + numberOfComfortSeats)
             {
-                this.seatMap.add(new Seat(i + 1, "Business"));
+                this.seatList.add(new Seat(i + 1, "Comfort"));
             }
             else
             {
-                this.seatMap.add(new Seat(i + 1, "Comfort"));
+                this.seatList.add(new Seat(i + 1, "Ordinary"));
             }
         }
 
@@ -89,6 +89,16 @@ public class Flight {
     public void setDuration(int newDuration)
     {
         this.flightDuration = newDuration;
+    }
+
+    public Aircraft getAircraft()
+    {
+        return this.aircraft;
+    }
+
+    public ArrayList<Seat> getSeatList()
+    {
+        return this.seatList;
     }
 
 }

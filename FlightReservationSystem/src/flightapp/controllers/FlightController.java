@@ -9,11 +9,11 @@ import flightapp.domain.pattern.*;
 public class FlightController {
     private Airline airline;
     
-    private Flight selectedFlight;
+    private Flight selectedFlight = null;
     private ArrayList<Seat> selectedSeats;
-    private TicketInsurance selectedInsurance = null; 
+    private boolean selectInsurance = false; 
     private CreditCard usingCreditCard = null;
-    private AirportLounge selectedLounge = null;
+    private boolean selectLounge = false;
     private CompanionVoucher selectedVoucher = null;
 
     public FlightController(Airline airline) {
@@ -22,18 +22,47 @@ public class FlightController {
 
     public ArrayList<Flight> browseFlights(Location destination)
     {
-        // TODO: Implement
+        ArrayList<Flight> flightsToDestination = new ArrayList<Flight>();
+        for (Flight flight : this.airline.getFlights())
+        {
+            if (flight.getDestination() == destination)
+            {
+                flightsToDestination.add(flight);
+            }
+        }
+        return flightsToDestination;
     }
 
     public void selectFlight(int flightId)
     {
-        // TODO: Implement
+        for (Flight flight : this.airline.getFlights())
+        {
+            if (flight.getFlightId() == flightId)
+            {
+                this.selectedFlight = flight;
+                return;
+            }
+        }
     }
 
-    public ArrayList<Seat> browseSeatMapGraphically()
+    public ArrayList<ArrayList<Seat>> browseSeatMapGraphically()
     {
-        // TODO: Implement
-        // Return an array of seats belonging to that flight
+        ArrayList<ArrayList<Seat>> seatMap = new ArrayList<ArrayList<Seat>>();
+        
+        int rowCounter = 0;
+        int seatInRowCounter = 0;
+        for (int i = 0; i < this.selectedFlight.getAircraft().getNumberOfSeats(); i++)
+        {
+            if (seatInRowCounter == 6)
+            {
+                rowCounter++;
+                seatInRowCounter = 1;
+            }
+            // Add Seat object at seatMap[rowCounter][seatInRowCounter]
+            seatMap.get(rowCounter).add(this.selectedFlight.getSeatList().get(i));
+            seatInRowCounter++;
+        }
+        return seatMap;
     }
 
     public void selectSeats(ArrayList<Seat> seats)
@@ -41,7 +70,7 @@ public class FlightController {
         this.selectedSeats = seats;
     }
 
-    public void selectInsurance (Date cancelByDate)
+    public void selectInsurance(Date cancelByDate)
     {
         // TODO: Implement
         // Need to make a new TicketInsurance object (add more valuable attributes to this class) and populate class information
@@ -98,7 +127,7 @@ public class FlightController {
         // Make sure to make use of design pattern inside of domain model for this
     }
 
-    public void sendMonthlyNews()
+    public void sendPromotionalNews()
     {
         // TODO: Implement
     }

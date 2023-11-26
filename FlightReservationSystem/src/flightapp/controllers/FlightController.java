@@ -2,7 +2,9 @@ package flightapp.controllers;
 
 import java.util.List;
 import java.util.ArrayList;
-import flightapp.domain.*;
+import flightapp.domain.entity.*;
+import flightapp.domain.valueobject.*;
+import flightapp.domain.pattern.*;
 
 public class FlightController {
     private Airline airline;

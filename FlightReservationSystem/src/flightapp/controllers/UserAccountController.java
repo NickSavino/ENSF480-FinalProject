@@ -1,16 +1,15 @@
 package flightapp.controllers;
 
 import java.util.List;
-
-import javax.naming.AuthenticationNotSupportedException;
-
 import java.util.ArrayList;
-import flightapp.domain.*;
+import flightapp.domain.entity.*;
+import flightapp.domain.valueobject.*;
+import flightapp.domain.pattern.*;
 
-public class AuthenticationController {
+public class UserAccountController {
     private Airline airline;
     
-    public AuthenticationController(Airline airline) {
+    public UserAccountController(Airline airline) {
         this.airline = airline;
     }
 

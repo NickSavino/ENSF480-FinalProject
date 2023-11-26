@@ -3,21 +3,51 @@ package flightapp.domain.entity;
 public class Aircraft {
 
     private String model;
-    private boolean isFlying;
     private int aircraftId;
     private String condition;
+    private int amountOfOrdinarySeats;
+    private int amountOfBusinessSeats;
+    private int amountOfComfortSeats;
+    private int amountOfSeats;
 
-    Aircraft(String model, int id, String condition) {
+    public Aircraft(String model, int id, String condition, int amountOfOrdinarySeats,
+        int amountOfBusinessSeats, int amountOfComfortSeats) {
 
         this.model = model;
-        this.isFlying = false;
         this.aircraftId = id;
         this.condition = condition;
+        this.amountOfOrdinarySeats = amountOfOrdinarySeats;
+        this.amountOfBusinessSeats = amountOfBusinessSeats;
+        this.amountOfComfortSeats = amountOfComfortSeats;
+        this.amountOfSeats = amountOfOrdinarySeats + amountOfBusinessSeats + amountOfComfortSeats;
     }
 
     public String getModel() {
         return this.model;
     }
 
+    public int getAircraftId() 
+    {
+        return this.aircraftId;
+    }
+
+    public int getNumberOfSeats() 
+    {
+        return this.amountOfSeats;
+    }
+
+    public int getNumberOfOrdinarySeats() 
+    {
+        return this.amountOfOrdinarySeats;
+    }
     
+    public int getNumberOfBusinessSeats() 
+    {
+        return this.amountOfBusinessSeats;
+    }
+
+    public int getNumberOfComfortSeats() 
+    {
+        return this.amountOfComfortSeats;
+    }
 }

@@ -4,15 +4,13 @@ import java.util.Map;
 
 public class Seat {
 
-    private String seatId;
-
+    private int seatId;
     private boolean isBooked;
+    private String seatType;
 
-    private Map<String, Integer> seatType;
-
-    public Seat(String seatId, boolean isBooked, Map<String, Integer> seatType) {
+    public Seat(int seatId, String seatType) {
         this.seatId = seatId;
-        this.isBooked = isBooked;
+        this.isBooked = false;
         this.seatType = seatType;
     }
 

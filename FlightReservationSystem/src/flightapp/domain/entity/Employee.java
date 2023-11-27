@@ -7,9 +7,9 @@ public class Employee extends Person {
     private String employeeType; // "Flight Attendant", "Admin", or "Airline Agent"
 
     public Employee(String firstName, String lastName, int houseNumber, String street, String city, String province, 
-        String country, String email, int age, String phoneNumber, String password, String role) 
+        String country, String email, String password, String role) 
     {
-        super(firstName, lastName, houseNumber, street, city, province, country, email, age, phoneNumber);
+        super(firstName, lastName, houseNumber, street, city, province, country, email);
         this.employeeId = UUID.randomUUID().hashCode();
         this.password = password;
         this.employeeType = role;

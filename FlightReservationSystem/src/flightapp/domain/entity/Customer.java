@@ -10,9 +10,9 @@ public class Customer extends Person {
 
     
     public Customer(String firstName, String lastName, int houseNumber, String street, String city, 
-        String province, String country, String email, int age, String phoneNumber)
+        String province, String country, String email)
     {
-        super(firstName, lastName, houseNumber, street, city, province, country, email, age, phoneNumber);
+        super(firstName, lastName, houseNumber, street, city, province, country, email);
         this.customerId = UUID.randomUUID().hashCode();
         this.purchases = new ArrayList<Purchase>();
     }

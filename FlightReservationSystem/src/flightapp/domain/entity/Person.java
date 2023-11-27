@@ -7,15 +7,11 @@ public abstract class Person {
     private Name name;
     private Address address;
     private String email;
-    private int age;
-    private String phoneNumber;
 
     public Person(String firstName, String lastName, int houseNumber, String street, String city, 
-        String province, String country, String email, int age, String phoneNumber) {
+        String province, String country, String email) {
         this.name = new Name(firstName, lastName);
         this.address = new Address(houseNumber, street, city, province, country);
         this.email = email;
-        this.age = age;
-        this.phoneNumber = phoneNumber;
     }
 }

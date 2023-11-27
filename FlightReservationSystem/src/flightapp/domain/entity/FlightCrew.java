@@ -4,25 +4,16 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class FlightCrew {
+    private int flightCrewId;
+    private ArrayList<FlightAttendant> flightAttendants;
 
-    private ArrayList<Integer> assignedFlights;
-    private int crewId;
-
-    public FlightCrew(int crewId) {
-        this.crewId = crewId;
-        this.assignedFlights = new ArrayList<Integer>();
+    public FlightCrew(int crewId, ArrayList<FlightAttendant> flightAttendants) {
+        this.flightCrewId = crewId;
+        this.flightAttendants = flightAttendants;
     }
 
-    public void assignFlight(int flightId) {
-        this.assignedFlights.add(flightId);
-    }
-
-    public ArrayList<Integer> getAssignedFlights() {
-        return this.assignedFlights;
-    }
-
-    public int getCrewId() {
-        return this.crewId;
+    public int getFlightCrewId() {
+        return this.flightCrewId;
     }
 
 

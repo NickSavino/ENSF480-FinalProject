@@ -1,28 +1,102 @@
 package flightapp.domain.entity;
-
-import flightapp.domain.valueobject.Date;
+import java.util.ArrayList;
 import flightapp.domain.valueobject.Receipt;
+import java.util.UUID;
+import flightapp.domain.valueobject.*;
 
 public class Purchase {
 
-    private Date date;
     private boolean loungeAccess;
-    private Ticket ticket;
+    private String purchaseId;
+    private boolean ticketInsurance;
+    private ArrayList<Ticket> tickets;
     private Receipt receipt;
+    private int totalPurchaseCost = 0;
+    CreditCard creditCard;
 
-    public Purchase(Date date, boolean loungeAccess, Ticket ticket, Receipt receipt) {
-        this.date = date;
-        this.loungeAccess = loungeAccess;
-        this.ticket = ticket;
-        this.receipt = receipt;
+    public Purchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
+        CreditCard creditCard, ArrayList<Seat> seats, Customer customer) 
+    {
+        this.loungeAccess = buyAirportLoungeAccess;
+        this.ticketInsurance = buyInsurance;
+        this.tickets = new ArrayList<Ticket>();
+        this.creditCard = creditCard;
+        this.purchaseId = UUID.randomUUID().toString();
+
+        int baseFlightCost = flight.getBaseFlightCost();
+
+        for (Seat seat : seats)
+        {
+            this.tickets.add(new Ticket(flight.getDate(), flight.getFlightId(), seat.getSeatId(), UUID.randomUUID().toString()));
+            this.totalPurchaseCost += baseFlightCost;
+            if (seat.getSeatType().equals("Business"))
+            {
+                this.totalPurchaseCost += 200;
+            }
+            else if (seat.getSeatType().equals("Comfort"))
+            {
+                this.totalPurchaseCost += 140;
+            }
+            else
+            {
+                this.totalPurchaseCost += 100;
+            }
+        }
+
+        if (loungeAccess)
+        {
+            if (customer.getStatus().equals("Airline Member"))
+            {
+                this.totalPurchaseCost += 25 * seats.size();
+            }
+            else
+            {
+                this.totalPurchaseCost += 50 * seats.size();
+            }
+        }
+
+        if (ticketInsurance)
+        {
+            this.totalPurchaseCost += 20 * seats.size();
+        }
+
+        if (useCompanionVoucher)
+        {
+            String seatType = seats.get(0).getSeatType();
+            if (seatType.equals("Business"))
+            {
+                this.totalPurchaseCost -= 200;
+            }
+            else if (seatType.equals("Comfort"))
+            {
+                this.totalPurchaseCost -= 140;
+            }
+            else
+            {
+                this.totalPurchaseCost -= 100;
+            }
+        }
+
+        this.receipt = new Receipt(UUID.randomUUID().toString(), this.totalPurchaseCost, this.creditCard.getCreditCardNumber());
     }
 
-    public Date getDate() {
-        return date;
+    public int getTotalPurchaseCost()
+    {
+        return this.totalPurchaseCost;
     }
 
+    public ArrayList<Ticket> getTickets()
+    {
+        return this.tickets;
+    }
 
-    public void confirmPurchase() {}
+    public Receipt getReceipt()
+    {
+        return this.receipt;
+    }
 
-    public void cancelPurchase() {}
+    public String getPurchaseId()
+    {
+        return this.purchaseId;
+    }
 }

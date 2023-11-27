@@ -4,19 +4,38 @@ import java.util.Map;
 
 public class Seat {
 
-    private String seatId;
-
+    private int seatId;
     private boolean isBooked;
+    private String seatType;
 
-    private Map<String, Integer> seatType;
-
-    public Seat(String seatId, boolean isBooked, Map<String, Integer> seatType) {
+    public Seat(int seatId, String seatType) {
         this.seatId = seatId;
-        this.isBooked = isBooked;
+        this.isBooked = false;
         this.seatType = seatType;
     }
 
-    public void book() {}
+    public void book()
+    {
+        this.isBooked = true;
+    }
 
-    public void unbook() {}
+    public void unbook()
+    {
+        this.isBooked = false;
+    }
+
+    public int getSeatId()
+    {
+        return this.seatId;
+    }
+
+    public String getSeatType()
+    {
+        return this.seatType;
+    }
+
+    public boolean isBooked()
+    {
+        return this.isBooked;
+    }
 }

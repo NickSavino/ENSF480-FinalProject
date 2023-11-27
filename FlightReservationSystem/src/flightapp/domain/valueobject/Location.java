@@ -9,4 +9,14 @@ public class Location {
         this.name = name;
         this.locationId = locationId;
     }
+
+    public String getName()
+    {
+        return this.name;
+    }
+
+    public String getLocationId()
+    {
+        return this.locationId;
+    }
 }

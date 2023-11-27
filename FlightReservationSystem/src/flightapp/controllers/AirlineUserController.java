@@ -107,7 +107,7 @@ public class AirlineUserController {
         String country, String email, int age, String phoneNumber, String password)
     {
         RegisteredCustomer newCustomer = new RegisteredCustomer(username, firstName, lastName, houseNumber, street, 
-            city, province, country, email, age, phoneNumber, password);
+            city, province, country, email, password);
         this.airline.getCustomers().add(newCustomer);
         this.airline.getRegisteredCustomers().add(newCustomer);
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
@@ -121,7 +121,7 @@ public class AirlineUserController {
     public void employeeSignup(String firstName, String lastName, String email, int age, String password, int houseNumber,
         String street, String city, String province, String country, String phoneNumber, String role)
     {
-        Employee newEmployee = new Employee(firstName, lastName, houseNumber, street, city, province, country, email, age, phoneNumber, password, role);
+        Employee newEmployee = new Employee(firstName, lastName, houseNumber, street, city, province, country, email, password, role);
         this.airline.getEmployees().add(newEmployee);
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
         loginSingleton.addEmployee(newEmployee.getEmployeeId(), newEmployee.getPassword());

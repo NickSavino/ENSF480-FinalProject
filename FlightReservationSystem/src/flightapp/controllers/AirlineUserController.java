@@ -1,9 +1,11 @@
 package flightapp.controllers;
 
-import java.util.List;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import flightapp.DatabaseConnection;
 import flightapp.domain.entity.*;
-import flightapp.domain.valueobject.*;
 import flightapp.domain.pattern.*;
 
 
@@ -30,6 +32,12 @@ public class AirlineUserController {
     private void initializeDataOnStartup(Airline airline)
     {
         // TODO: Need to pull all data from the database to populate the airline object
+        System.out.println("Initializing Data");
+        try (Connection conn = DatabaseConnection.getConnection()) {
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return;
     }
 

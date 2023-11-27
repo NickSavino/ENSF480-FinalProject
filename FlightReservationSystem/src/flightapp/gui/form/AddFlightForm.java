@@ -1,10 +1,10 @@
-package flightapp.gui.dialog;
+package flightapp.gui.form;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class AddFlightDialog extends JDialog {
+public class AddFlightForm extends JDialog {
 
     // Components
     private JComboBox<String> planeComboBox;
@@ -13,10 +13,9 @@ public class AddFlightDialog extends JDialog {
     private JTextField datePicker; //Need to build a date picking method around this
     private JButton submitButton;
     private JButton cancelButton;
+    private FormCallback callback;
 
-    private DialogCallback callback;
-
-    public AddFlightDialog(JFrame parent, DialogCallback callback) {
+    public AddFlightForm(JFrame parent, FormCallback callback) {
         super(parent, "Add a Flight", true);
         this.callback = callback;
         initializeUI();

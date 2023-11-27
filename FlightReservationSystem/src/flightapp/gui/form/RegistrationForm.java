@@ -1,11 +1,11 @@
-package flightapp.gui.dialog;
+package flightapp.gui.form;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RegistrationDialog extends JDialog {
+public class RegistrationForm extends JDialog {
     private JTextField usernameField;
     private JTextField emailField;
     private JPasswordField passwordField;
@@ -13,7 +13,7 @@ public class RegistrationDialog extends JDialog {
     private JButton registerButton;
     private JButton cancelButton;
 
-    public RegistrationDialog(JFrame parent) {
+    public RegistrationForm(JFrame parent) {
         super(parent, "Registration", true);
         initializeUI();
     }

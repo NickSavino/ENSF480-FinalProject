@@ -141,7 +141,7 @@ CREATE TABLES (
 
 DROP TABLE IF EXISTS TICKETS
 CREATE TABLE TICKETS (
-      ticketId            INT,
+      ticketId            VARCHAR(25),
       seatNumber          INT,
       flightNumber        INT,
       flightDay           INT,
@@ -170,8 +170,8 @@ DROP TABLE IF EXISTS FLIGHTSEATS
 CREATE TABLE FLIGHTS (
       flightId            INT,
       aircraftId          INT,
-      originId            INT,
-      destinationId       INT,
+      originId            VARCHAR(25),
+      destinationId       VARCHAR(25),
       flightDuration      INT,
       flightCrewId        INT,
       baseFlightCost      INT,

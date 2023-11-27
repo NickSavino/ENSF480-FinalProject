@@ -18,6 +18,22 @@ USE AIRLINEDATABASE;
 -- 1.11 Field for email
 -- 1.12 Field for flight crew ID
 
+DROP TABLE IF EXISTS EMPLOYEES
+CREATE TABLE EMPLOYEES (
+      employeeId          INT,
+      flightcrewID        INT DEFAULT NULL,
+      password            VARCHAR(25),
+      employeeType        VARCHAR(25),
+      firstName           VARCHAR(25),
+      lastName            VARCHAR(25),
+      houseNumber         VARCHAR(25),
+      street              VARCHAR(25),
+      city                VARCHAR(25),
+      province            VARCHAR(25),
+      country             VARCHAR(25),
+      email               VARCHAR(25)
+      PRIMARY KEY (employeeId)
+);
 
 -- 2. Add table for registered customers
 -- 2.1 Field for customerId

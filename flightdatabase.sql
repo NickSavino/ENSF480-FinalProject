@@ -35,8 +35,7 @@ USE AIRLINEDATABASE;
 -- 2.14 Field for province
 -- 2.15 Field for country
 -- 2.16 Field for email
-
--- 2.3 Add foreign key referencing PurchaseId
+-- 2.17 Add foreign key referencing PurchaseId
 
 
 -- 3. Add table for aircrafts

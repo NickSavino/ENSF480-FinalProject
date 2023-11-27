@@ -118,7 +118,7 @@ CREATE TABLE LOCATIONS (
 
 DROP TABLE IF EXISTS PURCHASES
 CREATE TABLES (
-      purchaseId          INT,
+      purchaseId          VARCHAR(25),
       loungeAccess        BOOLEAN,
       creditCardNumber    VARCHAR(25),
       creditCardSecurityCode INT,

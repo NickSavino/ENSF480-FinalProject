@@ -26,7 +26,7 @@ CREATE TABLE EMPLOYEES (
       employeeType        VARCHAR(25),
       firstName           VARCHAR(25),
       lastName            VARCHAR(25),
-      houseNumber         VARCHAR(25),
+      houseNumber         INT,
       street              VARCHAR(25),
       city                VARCHAR(25),
       province            VARCHAR(25),
@@ -66,13 +66,13 @@ CREATE TABLE CUSTOMERS (
       companionVoucherUsable BOOLEAN,
       firstName           VARCHAR(25),
       lastName            VARCHAR(25),
-      houseNumber         VARCHAR(25),
+      houseNumber         INT,
       street              VARCHAR(25),
       city                VARCHAR(25),
       province            VARCHAR(25),
       country             VARCHAR(25),
       email               VARCHAR(25),
-      purchaseId          INT,
+      purchaseId          VARCHAR(25),
       PRIMARY KEY (customerId)
 );
 
@@ -101,7 +101,7 @@ CREATE TABLE AIRCRAFTS (
 
 DROP TABLE IF EXISTS LOCATIONS
 CREATE TABLE LOCATIONS (
-      locationId          INT,
+      locationId          VARCHAR(25),
       locationName        VARCHAR(25),
       PRIMARY KEY (locationId)
 );

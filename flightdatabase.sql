@@ -320,3 +320,8 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2023-11-26  9:13:49
+
+DROP USER 'user'@'localhost';
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+GRANT SELECT, INSERT, UPDATE, DELETE ON airline.* TO 'user'@'localhost';
+FLUSH PRIVILEGES;

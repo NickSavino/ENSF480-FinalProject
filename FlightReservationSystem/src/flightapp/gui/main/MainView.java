@@ -1,5 +1,7 @@
 package flightapp.gui.main;
 
+import flightapp.DatabaseConnection;
+import flightapp.controllers.AirlineUserController;
 import flightapp.gui.form.RegistrationForm;
 import flightapp.gui.panel.*;
 
@@ -8,6 +10,7 @@ import java.awt.*;
 
 public class MainView extends JFrame{
 
+    AirlineUserController userController;
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private JButton exitButton;
@@ -63,14 +66,35 @@ public class MainView extends JFrame{
         setVisible(true);
         cardLayout.show(cardPanel, "Login");
 
+        userController = new AirlineUserController();
+
+
     }
-    public void onLogin(String username, char[] password) {
-
-        // TODO: Implement login Authentication
-
-        System.out.println("Login attempted with username: " + username  + " and password: " + password);
-        cardLayout.show(cardPanel, "AirlineAgent");
-        logoutButton.setVisible(true);
+    public void onLogin(String username, String password) {
+        cardLayout.show(cardPanel, "Attendant");
+//        userController = new AirlineUserController();
+//
+//        int userId;
+//        try {
+//            userId = Integer.parseInt(username); // Assuming the username is a user ID
+//        } catch (NumberFormatException e) {
+//            JOptionPane.showMessageDialog(this, "Invalid User ID", "Login Error", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//
+//        boolean loginSuccess = userController.customerLogin(userId, password) ||
+//                userController.employeeLogin(userId, password);
+//
+//        if (loginSuccess) {
+//            if (userController.isCustomerLoggedIn()) {
+//                cardLayout.show(cardPanel, "Customer");
+//            } else if (userController.isEmployeeLoggedIn()) {
+//                cardLayout.show(cardPanel, "Employee");
+//            }
+//            logoutButton.setVisible(true);
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+//        }
     }
 
     private void performLogout() {
@@ -95,6 +119,8 @@ public class MainView extends JFrame{
                  IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+
+        DatabaseConnection.initialize();
 
         // Start the application on the EDT
         SwingUtilities.invokeLater(new Runnable() {

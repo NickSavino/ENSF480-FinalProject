@@ -1,8 +1,17 @@
 package flightapp.controllers;
 
-import java.util.List;
 import java.util.ArrayList;
-import flightapp.domain.*;
+
+import flightapp.domain.entity.Aircraft;
+import flightapp.domain.entity.Airline;
+import flightapp.domain.entity.Flight;
+import flightapp.domain.entity.Seat;
+import flightapp.domain.valueobject.AirportLounge;
+import flightapp.domain.valueobject.CompanionVoucher;
+import flightapp.domain.valueobject.CreditCard;
+import flightapp.domain.valueobject.Date;
+import flightapp.domain.valueobject.Location;
+import flightapp.domain.valueobject.TicketInsurance;
 
 public class FlightController {
     private Airline airline;
@@ -21,6 +30,7 @@ public class FlightController {
     public ArrayList<Flight> browseFlights(Location destination)
     {
         // TODO: Implement
+        return new ArrayList<Flight>();
     }
 
     public void selectFlight(int flightId)
@@ -32,6 +42,7 @@ public class FlightController {
     {
         // TODO: Implement
         // Return an array of seats belonging to that flight
+        return new ArrayList<Seat>();
     }
 
     public void selectSeats(ArrayList<Seat> seats)
@@ -68,7 +79,7 @@ public class FlightController {
         // Need to calculate the total cost (baseCost + seatCost)
         // Need to create new ticket and receipt objects
         // Need to create a new purchase object and send it to the database
-        sendReceiptAndTicket(Ticket ticket, Receipt receipt);
+        //sendReceiptAndTicket(Thread ticket, Receipt receipt);
         selectedSeats.clear();
         selectedFlight = null;
         selectedInsurance = null;
@@ -77,7 +88,7 @@ public class FlightController {
         selectedVoucher = null;
     }
 
-    private void sendReceiptAndTicket(Ticket ticket, Receipt receipt)
+    //private void sendReceiptAndTicket(Ticket ticket, Receipt receipt)
     {
         // TODO: Implement
         // Need to populate the proper information inside of a new Receipt and Payment 

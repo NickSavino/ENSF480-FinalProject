@@ -1,10 +1,7 @@
 package flightapp.gui.main;
 
-import flightapp.gui.dialog.RegistrationDialog;
-import flightapp.gui.panel.AdminPanel;
-import flightapp.gui.panel.AttendantPanel;
-import flightapp.gui.panel.CustomerPanel;
-import flightapp.gui.panel.LoginPanel;
+import flightapp.gui.form.RegistrationForm;
+import flightapp.gui.panel.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,10 +42,13 @@ public class MainView extends JFrame{
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
+
         //Instantiate and add user panels to cardPanel
+        cardPanel.add(new GuestPanel(this), "Guest");
         cardPanel.add(new LoginPanel(this), "Login");
         cardPanel.add(new CustomerPanel(), "Customer");
         cardPanel.add(new AttendantPanel(), "Attendant");
+        cardPanel.add(new AirlineAgentPanel(), "AirlineAgent");
         cardPanel.add(new AdminPanel(this), "Admin");
         //Set Layout to organize main page elements
         setLayout(new BorderLayout());
@@ -69,7 +69,7 @@ public class MainView extends JFrame{
         // TODO: Implement login Authentication
 
         System.out.println("Login attempted with username: " + username  + " and password: " + password);
-        cardLayout.show(cardPanel, "Admin");
+        cardLayout.show(cardPanel, "AirlineAgent");
         logoutButton.setVisible(true);
     }
 
@@ -80,8 +80,8 @@ public class MainView extends JFrame{
     }
 
     public void onRegister() {
-        RegistrationDialog registrationDialog = new RegistrationDialog(this);
-        registrationDialog.setVisible(true);
+        RegistrationForm registrationForm = new RegistrationForm(this);
+        registrationForm.setVisible(true);
     }
 
     public void browseAsGuest() {

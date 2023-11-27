@@ -1,11 +1,8 @@
 package flightapp.controllers;
 
-import java.util.List;
 
-import javax.naming.AuthenticationNotSupportedException;
 
-import java.util.ArrayList;
-import flightapp.domain.*;
+import flightapp.domain.entity.Airline;
 
 public class AuthenticationController {
     private Airline airline;
@@ -21,21 +18,19 @@ public class AuthenticationController {
     }
 
     public void signup(String firstName, String lastName, String email, int age, String password, String street, 
-        String city, String province, String country, int newCustomerId)
-    {
+        String city, String province, String country, int newCustomerId) {
         // TODO: Implement
         // Remember to add all information to the Singleton instance
         // Need to make sure that newCustomerId does not already exist
-    {
-
-    public void becomeAirlineMember()
-    {
-        // TODO: Implement
     }
 
-    public applyForAirlineCreditCard(int newCreditCardNumber, int newSecurityCode, RegisteredCustomer customer)
-    {
-        // TODO: Implement
-    }
+            public void becomeAirlineMember ()
+            {
+                // TODO: Implement
+            }
 
-}
+            //public applyForAirlineCreditCard(int newCreditCardNumber, int newSecurityCode, RegisteredCustomer customer)
+            {
+                // TODO: Implement
+            }
+        }

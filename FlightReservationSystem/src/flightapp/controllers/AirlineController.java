@@ -1,8 +1,6 @@
 package flightapp.controllers;
 
-import java.util.List;
-import java.util.ArrayList;
-import flightapp.domain.*;
+import flightapp.domain.entity.Airline;
 
 
 public class AirlineController {
@@ -12,7 +10,7 @@ public class AirlineController {
     private Airline airline;
 
     public AirlineController() {
-        airline = new Airline();
+        //airline = new Airline();
         initializeDataOnStartup(airline);
         adminController = new AdminController(airline);
         authenticationController = new AuthenticationController(airline);

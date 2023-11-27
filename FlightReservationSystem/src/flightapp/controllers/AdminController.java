@@ -1,8 +1,9 @@
 package flightapp.controllers;
 
-import java.util.List;
 import java.util.ArrayList;
-import flightapp.domain.*;
+import flightapp.domain.entity.*;
+import flightapp.domain.valueobject.Date;
+import flightapp.domain.valueobject.Location;
 
 public class AdminController {
     private Airline airline;
@@ -14,16 +15,19 @@ public class AdminController {
     public ArrayList<Flight> browseFlights(Location origin, Location destination, Date date)
     {
         // TODO: Implement
+        return new ArrayList<Flight>();
     }
 
     public ArrayList<FlightCrew> browseCrews(int flightId)
     {
         // TODO: Implement
+        return new ArrayList<FlightCrew>();
     }
 
     public ArrayList<Aircraft> browseAircrafts()
     {
         // TODO: Implement
+        return new ArrayList<Aircraft>();
     }
 
     public void addCrew(int flightId, FlightCrew flightCrew)
@@ -86,7 +90,9 @@ public class AdminController {
 
     public ArrayList<RegisteredCustomer> retrieveRegisteredUsers()
     {
-        // TODO: Implement
+        // TODO:
+
+        return new ArrayList<RegisteredCustomer>();
     }
     
 }

@@ -1,6 +1,5 @@
 package flightapp.gui.panel;
 
-import flightapp.gui.navigation.NavigationController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,19 +13,42 @@ public class AttendantPanel extends JPanel {
     public AttendantPanel() {
         setLayout(new BorderLayout());
 
-        // Flight selector - dropdown to select a flight
-        flightSelector = new JComboBox<>();
-        // Populate flightSelector with flight IDs or names here...
-
-        flightSelector.addActionListener(e -> updatePassengerList());
 
         // Passenger list - to display passengers of the selected flight
         passengerListModel = new DefaultListModel<>();
         passengerList = new JList<>(passengerListModel);
+        passengerList.setLayoutOrientation(JList.VERTICAL_WRAP);
         JScrollPane passengerScrollPane = new JScrollPane(passengerList);
 
-        add(flightSelector, BorderLayout.NORTH);
+
+        add(createSeatMapPanel(), BorderLayout.NORTH);
         add(passengerScrollPane, BorderLayout.CENTER);
+    }
+
+    private JPanel createSeatMapPanel() {
+        JPanel seatMapPanel = new JPanel();
+        int rows = 5; // Example: 5 rows
+        int cols = 4; // Example: 4 seats per row
+
+        seatMapPanel.setLayout(new GridLayout(rows, cols));
+
+        // Example seat statuses (you will fetch these from your data model)
+        boolean[][] seatStatuses = new boolean[rows][cols]; // true for occupied, false for free
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                JLabel seatLabel = new JLabel(String.format("%d%c", i + 1, 'A' + j), SwingConstants.CENTER);
+                seatLabel.setOpaque(true);
+                if (seatStatuses[i][j]) {
+                    seatLabel.setBackground(Color.RED); // Occupied seat
+                } else {
+                    seatLabel.setBackground(Color.GREEN); // Free seat
+                }
+                seatMapPanel.add(seatLabel);
+            }
+        }
+
+        return seatMapPanel;
     }
 
     private void updatePassengerList() {
@@ -38,7 +60,15 @@ public class AttendantPanel extends JPanel {
         for (String passenger : passengers) {
             passengerListModel.addElement(passenger);
         }
+
+        //updateSeatMap("32");
+
     }
+
+    private void updateSeatMap(String selectedFlight) {
+        // TDO: Fetch updated seat statuses
+    }
+
 
     private List<String> getPassengersForFlight(String flight) {
         // TODO: Implement logic to fetch passengers based on the selected flight

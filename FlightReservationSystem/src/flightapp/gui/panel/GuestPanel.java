@@ -1,37 +1,37 @@
 package flightapp.gui.panel;
 
+import flightapp.gui.main.MainView;
 import flightapp.gui.navigation.NavigationController;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CustomerPanel extends JPanel {
+public class GuestPanel extends JPanel {
+
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    private JList<String> flightList; // Placeholder for flight list
-    private JButton selectFlightButton;
-    private JButton selectSeatButton;
-    private JButton makePaymentButton;
-
     private NavigationController navigationController;
-    private JButton backButton;
+    private JButton browseFlightsButton;
+    private JButton registerButton;
 
-    public CustomerPanel() {
+    private JList<String> flightList;
+    private MainView parent;
+
+    public GuestPanel(MainView parent) {
+        this.parent = parent;
+
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
         // Initialize and add sub-panels
         cardPanel.add(createMainMenuPanel(), "MainMenu");
         cardPanel.add(createFlightSelectionPanel(), "FlightSelection");
-        cardPanel.add(createSeatSelectionPanel(), "SeatSelection");
-        cardPanel.add(createPaymentPanel(), "Payment");
 
         setLayout(new BorderLayout());
         add(cardPanel, BorderLayout.CENTER);
 
-        backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> navigationController.goBack());
         add(backButton, BorderLayout.SOUTH);
         navigationController = new NavigationController(cardPanel, cardLayout, backButton);
@@ -44,9 +44,15 @@ public class CustomerPanel extends JPanel {
         JPanel mainMenuPanel = new JPanel();
         mainMenuPanel.setLayout(new GridLayout(3, 1)); // 3 options, one per row
 
-        JButton browseFlightsButton = new JButton("Browse Flights");
-        JButton becomeMemberButton = new JButton("Become Member");
-        JButton applyCreditCardButton = new JButton("Apply for Company Credit Card");
+        browseFlightsButton = new JButton("Browse Flights");
+        registerButton = new JButton("Register");
+
+        browseFlightsButton.addActionListener(e -> navigationController.navigateTo("FlightSelection"));
+        registerButton.addActionListener(e -> parent.onRegister());
+
+        add(browseFlightsButton);
+        add(registerButton);
+
 
         // Set up action listeners for each button
         browseFlightsButton.addActionListener(e -> navigationController.navigateTo("FlightSelection"));
@@ -54,8 +60,7 @@ public class CustomerPanel extends JPanel {
         //applyCreditCardButton.addActionListener(e -> );
 
         mainMenuPanel.add(browseFlightsButton);
-        mainMenuPanel.add(becomeMemberButton);
-        mainMenuPanel.add(applyCreditCardButton);
+        mainMenuPanel.add(registerButton);
 
         return mainMenuPanel;
     }
@@ -67,7 +72,7 @@ public class CustomerPanel extends JPanel {
         String[] flights = {"Flight 1", "Flight 2", "Flight 3"};
         flightList = new JList<>(flights);
 
-        selectFlightButton = new JButton("Select Flight");
+        JButton selectFlightButton = new JButton("Select Flight");
         selectFlightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -103,7 +108,7 @@ public class CustomerPanel extends JPanel {
             seatSelectionPanel.add(seatButton);
         }
 
-        selectSeatButton = new JButton("Confirm Seat");
+        JButton selectSeatButton = new JButton("Confirm Seat");
         selectSeatButton.addActionListener(e -> {
             // Confirm the selected seat and move to the next step
             navigationController.navigateTo("Payment");
@@ -139,7 +144,7 @@ public class CustomerPanel extends JPanel {
             // Add more options for registered users
         }
 
-        makePaymentButton = new JButton("Make Payment");
+        JButton makePaymentButton = new JButton("Make Payment");
         // Add ActionListener to handle payment logic
 
         paymentPanel.add(makePaymentButton); // Add other components as needed
@@ -150,5 +155,10 @@ public class CustomerPanel extends JPanel {
     private boolean userIsRegistered() {
         // Implement logic to determine if the current user is a registered customer
         return false; // Placeholder
+    }
+
+    private void onRegister() {
+        // Logic to open the registration form or panel
+        // Example: new RegistrationForm(this, ...).setVisible(true);
     }
 }

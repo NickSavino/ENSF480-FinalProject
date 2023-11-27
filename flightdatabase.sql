@@ -35,6 +35,12 @@ CREATE TABLE EMPLOYEES (
       PRIMARY KEY (employeeId)
 );
 
+INSERT INTO EMPLOYEES (employeeId, flightcrewID, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email) VALUES
+(101, NULL, 'password123', 'Admin', 'John', 'Doe', 123, 'Main St', 'Anytown', 'AB', 'Canada', 'john.doe@email.com'),
+(102, 201, 'pw456', 'Flight Attendant', 'Jane', 'Smith', 456, 'Oak Ave', 'Anytown', 'BC', 'Canada', 'jane.smith@email.com'),
+(103, 201, 'secure789', 'Airline', 'Alice', 'Johnson', 789, 'Pine Rd', 'Anytown', 'ON', 'Canada', 'alice.johnson@email.com');
+
+
 -- 2. Add table for registered customers
 -- 2.1 Field for customerId
 -- 2.2 Field for status ("Unregistered", "Registered", "Airline Member")
@@ -76,6 +82,12 @@ CREATE TABLE CUSTOMERS (
       PRIMARY KEY (customerId)
 );
 
+INSERT INTO CUSTOMERS (customerId, status, username, password, creditCardNumber, creditCardSecurityCode, isAirlineMember, companionVoucherUsable, firstName, lastName, houseNumber, street, city, province, country, email, purchaseId) VALUES
+(1001, 'Registered', 'user1', 'pass1', '1111222233334444', 123, FALSE, FALSE, 'Tom', 'Brown', 10, 'Maple St', 'CityA', 'ON', 'Canada', 'tom.brown@email.com', 'P001'),
+(1002, 'Airline Member', 'user2', 'pass2', '4444333322221111', 456, TRUE, TRUE, 'Emily', 'White', 20, 'Elm St', 'CityB', 'AB', 'Canada', 'emily.white@email.com', 'P002'),
+(1003, 'Unregistered', 'user3', 'pass3', '2222333344445555', 789, FALSE, FALSE, 'Kyle', 'Green', 30, 'Birch Ave', 'CityC', 'BC', 'Canada', 'kyle.green@email.com', 'P003');
+
+
 -- 3. Add table for aircrafts
 -- 3.1 Field for aircraftId
 -- 3.2 Field for aircraft model
@@ -95,6 +107,12 @@ CREATE TABLE AIRCRAFTS (
       PRIMARY KEY (aircraftId)
 );
 
+INSERT INTO AIRCRAFTS (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats, totalSeats) VALUES
+(1, 'Boeing 737', 100, 20, 10, 130),
+(2, 'Airbus A320', 120, 30, 15, 165),
+(3, 'Boeing 787', 200, 50, 25, 275);
+
+
 -- 4. Add table for locations
 -- 4.1 Add field for location name (String)
 -- 4.2 Add field for locationID (String; e.g. YYC, YVR, etc.)
@@ -105,6 +123,12 @@ CREATE TABLE LOCATIONS (
       locationName        VARCHAR(25),
       PRIMARY KEY (locationId)
 );
+
+INSERT INTO LOCATIONS (locationId, locationName) VALUES
+('YYZ', 'Toronto Pearson International Airport'),
+('YVR', 'Vancouver International Airport'),
+('JFK', 'John F. Kennedy International Airport');
+
 
 -- 5. Add table for purchases
 -- 5.1 Add field for purchaseId (String)
@@ -129,6 +153,12 @@ CREATE TABLES (
       PRIMARY KEY (purchaseId)
 );
 
+INSERT INTO PURCHASES (purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, itemsPurchased, ticketId) VALUES
+('P001', TRUE, '1111222233334444', 123, 500, FALSE, 'Ticket, Meal', 'T001'),
+('P002', FALSE, '4444333322221111', 456, 800, TRUE, 'Ticket, Extra Baggage', 'T002'),
+('P003', TRUE, '2222333344445555', 789, 300, FALSE, 'Ticket', 'T003');
+
+
 -- 6. Add table for tickets
 -- 6.1 Add field for ticketId (String)
 -- 6.2 Add field for seatNumber (int)
@@ -152,6 +182,12 @@ CREATE TABLE TICKETS (
       PRIMARY KEY (ticketId)
 );
 
+INSERT INTO TICKETS (ticketId, seatNumber, flightNumber, flightDay, flightMonth, flightYear, flightHour, flightMinute) VALUES
+('T001', 12, 100, 15, 12, 2023, 10, 30),
+('T002', 15, 101, 20, 12, 2023, 12, 45),
+('T003', 18, 102, 25, 12, 2023, 14, 00);
+
+
 -- 8. Add table for flights
 -- 8.1 Add field for flightId (int)
 -- 8.2 Add foreign key reference to aircraftId
@@ -166,7 +202,7 @@ CREATE TABLE TICKETS (
 -- 8.11 Add field for flight departure hour
 -- 8.12 Add field for flight departure minute
 
-DROP TABLE IF EXISTS FLIGHTSEATS
+DROP TABLE IF EXISTS FLIGHTS
 CREATE TABLE FLIGHTS (
       flightId            INT,
       aircraftId          INT,
@@ -182,6 +218,12 @@ CREATE TABLE FLIGHTS (
       flightDepartureMinute INT,
       PRIMARY KEY (flightId)
 );
+
+INSERT INTO FLIGHTS (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES
+(100, 1, 'YYZ', 'YVR', 240, 201, 300, 12, 15, 2023, 10, 30),
+(101, 2, 'YVR', 'JFK', 300, 202, 400, 12, 20, 2023, 12, 45),
+(102, 3, 'JFK', 'YYZ', 180, 203, 250, 12, 25, 2023, 14, 00);
+
 
 -- 10. Add table for flights and seats (PK is flightId and seatId)
 -- 10.1 Add field for flightId (int)
@@ -200,6 +242,8 @@ CREATE TABLE FLIGHTSEATS (
       PRIMARY KEY (flightId, seatId)
 );
 
-
-
+INSERT INTO FLIGHTSEATS (flightId, seatId, seatIsBooked, seatType, passengerId) VALUES
+(100, 1, TRUE, 'Business', 1001),
+(101, 2, FALSE, 'Ordinary', NULL),
+(102, 3, TRUE, 'Comfort', 1002);
 

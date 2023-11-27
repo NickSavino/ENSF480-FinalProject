@@ -2,7 +2,7 @@ package flightapp.domain.valueobject;
 
 public class Address {
 
-    private String houseNumber;
+    private int houseNumber;
     private String street;
     private String city;
     private String province;
@@ -17,7 +17,7 @@ public class Address {
      * analyzes string and splits into data members
      * 
      */
-    public Address(String address) {
+    public Address(int houseNumber, String street, String city, String province, String country) {
         this.houseNumber = houseNumber;
         this.street = street;
         this.city = city;

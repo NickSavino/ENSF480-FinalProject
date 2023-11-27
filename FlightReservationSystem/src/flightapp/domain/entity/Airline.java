@@ -12,24 +12,30 @@ public class Airline {
     private ArrayList<FlightCrew> flightCrew;
     private ArrayList<Location> locations;
     private ArrayList<Purchase> purchases;
-    private ArrayList<AirlineMember> airlineMembers;
     private ArrayList<FlightAttendant> flightAttendants;
     private ArrayList<AirlineAgent> airlineAgents;
     private ArrayList<NonAdmin> nonAdmins;
+    private ArrayList<Admin> admins;
+    private ArrayList<RegisteredCustomer> registeredCustomers;
     
     public Airline() {
-
         this.flights = new ArrayList<Flight>();
         this.employees = new ArrayList<Employee>();
         this.customers = new ArrayList<Customer>();
+        this.registeredCustomers = new ArrayList<RegisteredCustomer>();
         this.aircrafts = new ArrayList<Aircraft>();
         this.flightCrew = new ArrayList<FlightCrew>();
         this.locations = new ArrayList<Location>();
         this.purchases = new ArrayList<Purchase>();
-        this.airlineMembers = new ArrayList<AirlineMember>();
         this.flightAttendants = new ArrayList<FlightAttendant>();
         this.airlineAgents = new ArrayList<AirlineAgent>();
         this.nonAdmins = new ArrayList<NonAdmin>();
+        this.admins = new ArrayList<Admin>();
+    }
+
+    public ArrayList<RegisteredCustomer> getRegisteredCustomers()
+    {
+        return this.registeredCustomers;
     }
 
     public ArrayList<Flight> getFlights() 
@@ -67,11 +73,6 @@ public class Airline {
         return this.purchases;
     }
 
-    public ArrayList<AirlineMember> getAirlineMembers()
-    {
-        return this.airlineMembers;
-    }
-
     public ArrayList<AirlineAgent> getAirlineAgents()
     {
         return this.airlineAgents;
@@ -85,6 +86,16 @@ public class Airline {
     public ArrayList<NonAdmin> getNonAdmins()
     {
         return this.nonAdmins;
+    }
+
+    public ArrayList<Customer> getCusotmers()
+    {
+        return this.customers;
+    }
+
+    public ArrayList<Admin> getAdmins()
+    {
+        return this.admins;
     }
 
 }

@@ -93,7 +93,7 @@ public class FlightController {
         // Mark companion voucher as used or don't use it at all if unavailable
         if (useCompanionVoucher && this.selectedSeats.size() > 1)
         {
-            for (AirlineMember member : this.airline.getAirlineMembers())
+            for (RegisteredCustomer member : this.airline.getRegisteredCustomers())
             {
                 if (member.getCustomerId() == this.customer.getCustomerId())
                 {

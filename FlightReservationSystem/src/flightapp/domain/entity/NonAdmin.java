@@ -9,8 +9,9 @@ public abstract class NonAdmin extends Employee {
 
     protected BrowsePassengersStrategy browseStrategy;
 
-    public NonAdmin(String firstName, String lastName, String address, String email, int age, String phoneNumber, int employeeId) {
-        super(firstName, lastName, address, email, age, phoneNumber, employeeId);
+    public NonAdmin(String firstName, String lastName, int houseNumber, String street, String city, String province, 
+        String country, String email, int age, String phoneNumber, String password) {
+        super(firstName, lastName, houseNumber, street, city, province, country, email, age, phoneNumber, password);
     }
 
     public ArrayList<Customer> performBrowse(ArrayList<Customer> customers, int flightId)

@@ -6,11 +6,11 @@ import flightapp.domain.entity.*;
 import flightapp.domain.valueobject.*;
 import flightapp.domain.pattern.*;
 
-public class AdminController {
+public class EmployeeController {
     private Airline airline;
     private Employee employee;
 
-    public AdminController(Airline airline) {
+    public EmployeeController(Airline airline) {
         this.airline = airline;
     }
 

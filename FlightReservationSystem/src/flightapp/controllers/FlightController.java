@@ -10,7 +10,6 @@ public class FlightController {
     private Airline airline;
     private Flight selectedFlight = null;
     private ArrayList<Seat> selectedSeats;
-    // private String userRole;
     private RegisteredCustomer customer;
 
     public FlightController(Airline airline) {

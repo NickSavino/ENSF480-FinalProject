@@ -11,13 +11,13 @@ public class FlightController {
     private Flight selectedFlight = null;
     private ArrayList<Seat> selectedSeats;
     // private String userRole;
-    private Customer customer;
+    private RegisteredCustomer customer;
 
     public FlightController(Airline airline) {
         this.airline = airline;
     }
 
-    public void setCustomer(Customer customer)
+    public void setCustomer(RegisteredCustomer customer)
     {
         this.customer = customer;
     }

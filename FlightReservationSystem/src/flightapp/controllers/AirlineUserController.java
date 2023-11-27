@@ -6,16 +6,34 @@ import flightapp.domain.entity.*;
 import flightapp.domain.valueobject.*;
 import flightapp.domain.pattern.*;
 
-public class UserAccountController {
+
+public class AirlineUserController {
+    private EmployeeController employeeController;
+    private FlightController flightController;
     private Airline airline;
-    private Customer currentCustomer;
+
+    private RegisteredCustomer currentCustomer;
     private Employee currentEmployee;
     private boolean isCustomerLoggedIn = false;
     private boolean isEmployeeLoggedIn = false;
-    
-    public UserAccountController(Airline airline) {
-        this.airline = airline;
+
+    public AirlineUserController() {
+        // Initialize Airline object with database values
+        airline = new Airline();
+        initializeDataOnStartup(airline);
+
+        // Initialize controllers
+        employeeController = new EmployeeController(airline);
+        flightController = new FlightController(airline);
     }
+
+    private void initializeDataOnStartup(Airline airline)
+    {
+        // TODO: Need to pull all data from the database to populate the airline object
+        return;
+    }
+
+    // TODO: Need to direct functionality into the proper controllers from here
 
     public boolean customerLogin(int userId, String password)
     {
@@ -24,8 +42,8 @@ public class UserAccountController {
 
         if (validCustomer)
         {
-            ArrayList<Customer> customers = this.airline.getCustomers();
-            for (Customer customer : customers)
+            ArrayList<RegisteredCustomer> customers = this.airline.getRegisteredCustomers();
+            for (RegisteredCustomer customer : customers)
             {
                 if (customer.getCustomerId() == userId)
                 {
@@ -36,6 +54,7 @@ public class UserAccountController {
             this.currentEmployee = null;
             this.isCustomerLoggedIn = true;
             this.isEmployeeLoggedIn = false;
+            this.flightController.setCustomer(this.currentCustomer);
         }
         return validCustomer;
     }
@@ -59,6 +78,7 @@ public class UserAccountController {
             this.currentCustomer = null;
             this.isCustomerLoggedIn = false;
             this.isEmployeeLoggedIn = true;
+            this.employeeController.setEmployee(this.currentEmployee);
         }
         return validEmployee;
     }
@@ -79,6 +99,8 @@ public class UserAccountController {
         this.isEmployeeLoggedIn = false;
         this.currentCustomer = null;
         this.currentEmployee = null;
+        this.employeeController.setEmployee(null);
+        this.flightController.setCustomer(null);
     }
 
     public void customerSignup(String firstName, String lastName, int houseNumber, String street, String city, String province,
@@ -105,6 +127,7 @@ public class UserAccountController {
             LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
             loginSingleton.addEmployee(newEmployee.getEmployeeId(), newEmployee.getPassword());
             employeeLogin(newEmployee.getEmployeeId(), newEmployee.getPassword());
+            this.employeeController.setEmployee(newEmployee);
             return;
         }
         else if (role.equals("FlightAttendant"))
@@ -115,6 +138,7 @@ public class UserAccountController {
             LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
             loginSingleton.addEmployee(newEmployee.getEmployeeId(), newEmployee.getPassword());
             employeeLogin(newEmployee.getEmployeeId(), newEmployee.getPassword());
+            this.employeeController.setEmployee(newEmployee);
             return;
         }
         else if (role.equals("Admin"))
@@ -125,32 +149,22 @@ public class UserAccountController {
             LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
             loginSingleton.addEmployee(newEmployee.getEmployeeId(), newEmployee.getPassword());
             employeeLogin(newEmployee.getEmployeeId(), newEmployee.getPassword());
+            this.employeeController.setEmployee(newEmployee);
             return;
         }
 
         // TODO: Still need to add to database
     }
 
-    public void becomeAirlineMember()
+    public void upgradeToAirlineMember()
     {
-        RegisteredCustomer currentRegCustomer = null;
-        for (Customer customer : this.airline.getCustomers())
-        {
-            if (customer.getCustomerId() == this.currentCustomer.getCustomerId())
-            {
-                currentRegCustomer = (RegisteredCustomer) customer;
-                break;
-            }
-        }
-        if (currentRegCustomer != null)
-        {
-            currentRegCustomer.becomeAirlineMember();
-        }
+        this.currentCustomer.becomeAirlineMember();
+        // TODO: Still need to edit database
+        
     }
 
     public void applyForAirlineCreditCard(String newCreditCardNumber, int newSecurityCode, RegisteredCustomer customer)
     {
         customer.setCreditCard(newCreditCardNumber, newSecurityCode);
     }
-
 }

@@ -31,7 +31,7 @@ public class LoginSingleton {
     // Method to authenticate a customer
     public boolean authenticateCustomer(int customerId, String password)
     {
-        if (this.customerIdToPassword.get(customerId) == password)
+        if (this.customerIdToPassword.get(customerId).equals(password))
         {
             return true;
         }
@@ -41,7 +41,7 @@ public class LoginSingleton {
     // Method to authenticate an employee
     public boolean authenticateEmployee(int employeeId, String password)
     {
-        if (this.employeeIdToPassword.get(employeeId) == password)
+        if (this.employeeIdToPassword.get(employeeId).equals(password))
         {
             return true;
         }

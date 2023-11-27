@@ -58,11 +58,11 @@ public class Date {
         this.minutes = minutes;
     }
 
-    public String getDate() {
+    public String getDateString() {
         String date;
         if (this.hour != -1 && this.minutes != -1)
         {
-            date = this.day + "/" + this.month + "/" + this.year + " " + this.hour + ":" + this.minutes;
+            date = this.year + "/" + this.month + "/" + this.day + " " + this.hour + ":" + this.minutes;
         }
         else
         {

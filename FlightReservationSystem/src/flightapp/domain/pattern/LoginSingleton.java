@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class LoginSingleton {
     private static LoginSingleton onlyInstance;
-    private Map<Integer, String> customerIdToPassword;
+    private Map<String, String> customerIdToPassword;
     private Map<Integer, String> employeeIdToPassword;
 
     public static LoginSingleton getOnlyInstance()
@@ -23,13 +23,13 @@ public class LoginSingleton {
     }
 
     // Method to add a customer to the system
-    public void addCustomer(int customerId, String password)
+    public void addCustomer(String customerUsername, String password)
     {
-        this.customerIdToPassword.put(customerId, password);
+        this.customerIdToPassword.put(customerUsername, password);
     }
 
     // Method to authenticate a customer
-    public boolean authenticateCustomer(int customerId, String password)
+    public boolean authenticateCustomer(String customerId, String password)
     {
         if (this.customerIdToPassword.get(customerId).equals(password))
         {

@@ -20,12 +20,12 @@ public class FlightController {
         this.customer = customer;
     }
 
-    public ArrayList<Flight> browseFlights(Location destination)
+    public ArrayList<Flight> browseFlights(String destinationId)
     {
         ArrayList<Flight> flightsToDestination = new ArrayList<Flight>();
         for (Flight flight : this.airline.getFlights())
         {
-            if (flight.getDestination() == destination)
+            if (flight.getDestination().getLocationId().equals(destinationId))
             {
                 flightsToDestination.add(flight);
             }
@@ -33,7 +33,7 @@ public class FlightController {
         return flightsToDestination;
     }
 
-    public void selectFlight(int flightId)
+    public void selectFlight(int flightId) // Selecting flight and saving it locally as a variable in this class
     {
         for (Flight flight : this.airline.getFlights())
         {
@@ -53,19 +53,19 @@ public class FlightController {
         int seatInRowCounter = 0;
         for (int i = 0; i < this.selectedFlight.getAircraft().getNumberOfSeats(); i++)
         {
-            if (seatInRowCounter == 6)
+            if (seatInRowCounter == 6) // Making rows of 6 (can be customized later)
             {
                 rowCounter++;
                 seatInRowCounter = 1;
             }
             // Add Seat object at seatMap[rowCounter][seatInRowCounter]
-            seatMap.get(rowCounter).add(this.selectedFlight.getSeatList().get(i));
+            seatMap.get(rowCounter).add(this.selectedFlight.getSeatList().get(i)); // Adding in a graphical format
             seatInRowCounter++;
         }
         return seatMap;
     }
 
-    public void selectSeats(ArrayList<Integer> seatIds)
+    public void selectSeats(ArrayList<Integer> seatIds) // Selecting seats and saving it locally
     {
         this.selectedSeats.clear();
         for (int seatId : seatIds)
@@ -89,7 +89,7 @@ public class FlightController {
         CreditCard creditCard = new CreditCard(creditCardNumber, creditCardSecurityCode);
 
         // Mark companion voucher as used or don't use it at all if unavailable
-        if (useCompanionVoucher && this.selectedSeats.size() > 1)
+        if (useCompanionVoucher && this.selectedSeats.size() > 1 && this.customer.getStatus().equals("Airline Member"))
         {
             for (RegisteredCustomer member : this.airline.getRegisteredCustomers())
             {
@@ -107,16 +107,20 @@ public class FlightController {
                 }
             }
         }
-        if (this.selectedSeats.size() < 2)
-        {
-            useCompanionVoucher = false;
-        }
 
         Purchase currentPurchase = new Purchase(this.selectedFlight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCard, this.selectedSeats, this.customer);
         this.airline.getPurchases().add(currentPurchase);
         sendReceiptAndTicket(currentPurchase.getTickets(), currentPurchase.getReceipt());
         selectedSeats.clear();
         this.customer.addPurchase(currentPurchase);
+        for (Flight flight : this.airline.getFlights())
+        {
+            if (flight.getFlightId() == this.selectedFlight.getFlightId())
+            {
+                flight.addPassenger(this.customer);
+                break;
+            }
+        }
         // TODO: Need to update database
         
     }

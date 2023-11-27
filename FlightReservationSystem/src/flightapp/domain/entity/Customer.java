@@ -4,12 +4,8 @@ import java.util.UUID;
 import java.util.ArrayList;
 
 public class Customer extends Person {
-
-    private String viewLevel = "Guest";
-
     private int customerId;
-    private String status = "Unregistered";
-
+    protected String status = "Unregistered"; // Other statuses are: "Registered", "Airline Member
     private ArrayList<Purchase> purchases;
 
     

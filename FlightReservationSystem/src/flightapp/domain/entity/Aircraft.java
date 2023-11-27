@@ -4,18 +4,16 @@ public class Aircraft {
 
     private String model;
     private int aircraftId;
-    private String condition;
     private int amountOfOrdinarySeats;
     private int amountOfBusinessSeats;
     private int amountOfComfortSeats;
     private int amountOfSeats;
 
-    public Aircraft(String model, int id, String condition, int amountOfOrdinarySeats,
+    public Aircraft(String model, int id, int amountOfOrdinarySeats,
         int amountOfBusinessSeats, int amountOfComfortSeats) {
 
         this.model = model;
         this.aircraftId = id;
-        this.condition = condition;
         this.amountOfOrdinarySeats = amountOfOrdinarySeats;
         this.amountOfBusinessSeats = amountOfBusinessSeats;
         this.amountOfComfortSeats = amountOfComfortSeats;

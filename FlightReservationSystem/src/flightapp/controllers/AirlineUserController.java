@@ -35,7 +35,7 @@ public class AirlineUserController {
 
     // TODO: Need to direct functionality into the proper controllers from here
 
-    public boolean customerLogin(int userId, String password)
+    public boolean customerLogin(String userId, String password)
     {
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
         boolean validCustomer = loginSingleton.authenticateCustomer(userId, password);
@@ -45,7 +45,7 @@ public class AirlineUserController {
             ArrayList<RegisteredCustomer> customers = this.airline.getRegisteredCustomers();
             for (RegisteredCustomer customer : customers)
             {
-                if (customer.getCustomerId() == userId)
+                if (customer.getCustomerUsername().equals(userId))
                 {
                     this.currentCustomer = customer;
                     break;
@@ -103,15 +103,17 @@ public class AirlineUserController {
         this.flightController.setCustomer(null);
     }
 
-    public void customerSignup(String firstName, String lastName, int houseNumber, String street, String city, String province,
+    public void customerSignup(String username, String firstName, String lastName, int houseNumber, String street, String city, String province,
         String country, String email, int age, String phoneNumber, String password)
     {
-        RegisteredCustomer newCustomer = new RegisteredCustomer(firstName, lastName, houseNumber, street, 
+        RegisteredCustomer newCustomer = new RegisteredCustomer(username, firstName, lastName, houseNumber, street, 
             city, province, country, email, age, phoneNumber, password);
         this.airline.getCustomers().add(newCustomer);
+        this.airline.getRegisteredCustomers().add(newCustomer);
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
-        loginSingleton.addCustomer(newCustomer.getCustomerId(), newCustomer.getPassword());
-        customerLogin(newCustomer.getCustomerId(), newCustomer.getPassword());
+        loginSingleton.addCustomer(newCustomer.getCustomerUsername(), newCustomer.getPassword());
+        customerLogin(newCustomer.getCustomerUsername(), newCustomer.getPassword());
+        this.flightController.setCustomer(newCustomer);
 
         // TODO: Still need to add to database
     }
@@ -119,39 +121,12 @@ public class AirlineUserController {
     public void employeeSignup(String firstName, String lastName, String email, int age, String password, int houseNumber,
         String street, String city, String province, String country, String phoneNumber, String role)
     {
-        if (role.equals("AirlineAgent"))
-        {
-            AirlineAgent newEmployee = new AirlineAgent(firstName, lastName, houseNumber, street, city, province, country, email, age, phoneNumber, password);
-            this.airline.getEmployees().add(newEmployee);
-            this.airline.getAirlineAgents().add(newEmployee);
-            LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
-            loginSingleton.addEmployee(newEmployee.getEmployeeId(), newEmployee.getPassword());
-            employeeLogin(newEmployee.getEmployeeId(), newEmployee.getPassword());
-            this.employeeController.setEmployee(newEmployee);
-            return;
-        }
-        else if (role.equals("FlightAttendant"))
-        {
-            FlightAttendant newEmployee = new FlightAttendant(firstName, lastName, houseNumber, street, city, province, country, email, age, phoneNumber, password);
-            this.airline.getEmployees().add(newEmployee);
-            this.airline.getFlightAttendants().add(newEmployee);
-            LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
-            loginSingleton.addEmployee(newEmployee.getEmployeeId(), newEmployee.getPassword());
-            employeeLogin(newEmployee.getEmployeeId(), newEmployee.getPassword());
-            this.employeeController.setEmployee(newEmployee);
-            return;
-        }
-        else if (role.equals("Admin"))
-        {
-            Admin newEmployee = new Admin(firstName, lastName, houseNumber, street, city, province, country, email, age, phoneNumber, password);
-            this.airline.getEmployees().add(newEmployee);
-            this.airline.getAdmins().add(newEmployee);
-            LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
-            loginSingleton.addEmployee(newEmployee.getEmployeeId(), newEmployee.getPassword());
-            employeeLogin(newEmployee.getEmployeeId(), newEmployee.getPassword());
-            this.employeeController.setEmployee(newEmployee);
-            return;
-        }
+        Employee newEmployee = new Employee(firstName, lastName, houseNumber, street, city, province, country, email, age, phoneNumber, password, role);
+        this.airline.getEmployees().add(newEmployee);
+        LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
+        loginSingleton.addEmployee(newEmployee.getEmployeeId(), newEmployee.getPassword());
+        employeeLogin(newEmployee.getEmployeeId(), newEmployee.getPassword());
+        this.employeeController.setEmployee(newEmployee);
 
         // TODO: Still need to add to database
     }

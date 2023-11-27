@@ -15,7 +15,7 @@ public class Flight {
     private int flightDuration;
     private FlightCrew flightCrew;
     private int baseFlightCost;
-
+    private ArrayList<Customer> passengers;
     private Date departureTime;
 
     public Flight(Aircraft aircraft, int flightId, Location origin, int baseFlightCost,
@@ -29,6 +29,7 @@ public class Flight {
         this.flightCrew = flightCrew;
         this.departureTime = date;
         this.baseFlightCost = baseFlightCost;
+        this.passengers = new ArrayList<Customer>();
 
         int numberOfSeats = aircraft.getNumberOfSeats();
         int numberOfBusinessSeats = aircraft.getNumberOfBusinessSeats();
@@ -67,11 +68,6 @@ public class Flight {
         return this.departureTime;
     }
 
-    public FlightCrew getFlightCrew()
-    {
-        return this.flightCrew;
-    }
-
     public int getFlightId()
     {
         return this.flightId;
@@ -80,6 +76,11 @@ public class Flight {
     public void setFlightCrew(FlightCrew newCrew)
     {
         this.flightCrew = newCrew;
+    }
+
+    public FlightCrew getFlightCrew()
+    {
+        return this.flightCrew;
     }
 
     public void setDate(Date newDate)
@@ -106,5 +107,16 @@ public class Flight {
     {
         return this.baseFlightCost;
     }
+
+    public ArrayList<Customer> getPassengers()
+    {
+        return this.passengers;
+    }
+
+    public void addPassenger(Customer passenger)
+    {
+        this.passengers.add(passenger);
+    }
+    
 
 }

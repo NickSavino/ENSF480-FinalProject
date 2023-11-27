@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class FlightCrew {
     private int flightCrewId;
-    private ArrayList<FlightAttendant> flightAttendants;
+    private ArrayList<Employee> flightAttendants;
 
-    public FlightCrew(int crewId, ArrayList<FlightAttendant> flightAttendants) {
+    public FlightCrew(int crewId, ArrayList<Employee> flightAttendants) {
         this.flightCrewId = crewId;
         this.flightAttendants = flightAttendants;
     }
@@ -16,5 +16,8 @@ public class FlightCrew {
         return this.flightCrewId;
     }
 
-
+    public ArrayList<Employee> getFlightAttendants()
+    {
+        return this.flightAttendants;
+    }
 }

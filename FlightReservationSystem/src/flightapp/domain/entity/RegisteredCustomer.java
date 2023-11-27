@@ -3,17 +3,17 @@ package flightapp.domain.entity;
 import flightapp.domain.valueobject.*;
 
 public class RegisteredCustomer extends Customer {
-
-    private String viewLevel = "User";
     private String password;
+    String username;
     private CreditCard creditCard = null;
     private boolean isAirlineMember = false;
     private CompanionVoucher companionVoucher;
 
-    public RegisteredCustomer(String firstName, String lastName, int houseNumber, String street, String city, String province, 
+    public RegisteredCustomer(String username, String firstName, String lastName, int houseNumber, String street, String city, String province, 
         String country, String email, int age, String phoneNumber, String password) {
         super(firstName, lastName, houseNumber, street, city, province, country, email, age, phoneNumber);
         this.password = password;
+        this.username = username;
     }
 
     public String getPassword()
@@ -26,9 +26,15 @@ public class RegisteredCustomer extends Customer {
         this.creditCard = new CreditCard(cardNumber, securityCode);
     }
 
+    public String getCustomerUsername()
+    {
+        return this.username;
+    }
+
     public void becomeAirlineMember()
     {
         this.isAirlineMember = true;
+        super.status = "Airline Member";
         this.companionVoucher = new CompanionVoucher();
     }
 

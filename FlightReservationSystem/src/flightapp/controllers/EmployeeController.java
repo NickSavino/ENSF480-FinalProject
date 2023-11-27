@@ -33,19 +33,22 @@ public class EmployeeController {
         return filteredFlights;
     }
 
-    public ArrayList<FlightCrew> browseCrews(int flightId)
+    public ArrayList<Employee> browseCrew(int flightId)
     {
         // TODO: How does it make sense that we're returning a bunch of list flights for a single flight? Isn't there only one?
-        ArrayList<Flight> flights = this.airline.getFlights();
-        ArrayList<FlightCrew> flightCrews = new ArrayList<FlightCrew>();
-        for (Flight flight : flights)
+        ArrayList<Employee> flightCrew = new ArrayList<Employee>();
+        for (Flight flight : this.airline.getFlights())
         {
             if (flight.getFlightId() == flightId)
             {
-                flightCrews.add(flight.getFlightCrew());
+                FlightCrew foundFlightCrew = flight.getFlightCrew();
+                for (Employee employee : foundFlightCrew.getFlightAttendants())
+                {
+                    flightCrew.add(employee);
+                }
             }
         }
-        return flightCrews;
+        return flightCrew;
     }
 
     public ArrayList<Aircraft> browseAircrafts()
@@ -64,14 +67,15 @@ public class EmployeeController {
             }
         }
 
-        ArrayList<FlightAttendant> flightAttendants = new ArrayList<FlightAttendant>();
+        ArrayList<Employee> flightAttendants = new ArrayList<Employee>();
+        
         for (Integer id : employeeIds)
         {
             for (Employee employee : this.airline.getEmployees())
             {
-                if (employee.getEmployeeId() == id && employee instanceof FlightAttendant)
+                if (employee.getEmployeeId() == id)
                 {
-                    flightAttendants.add((FlightAttendant)employee);
+                    flightAttendants.add(employee);
                 }
             }
         }
@@ -96,7 +100,7 @@ public class EmployeeController {
         // TODO: Need to update database
     }
 
-    public void addAircraft(String aircraftModel, int newAircraftId, String condition, int amountOfOrdinarySeats,
+    public void addAircraft(String aircraftModel, int newAircraftId, int amountOfOrdinarySeats,
         int amountOfBusinessSeats, int amountOfComfortSeats)
     {
         // Add aircraft (do nothing if aircraft id already exists in airline)
@@ -108,7 +112,7 @@ public class EmployeeController {
             }
         }
 
-        Aircraft newAircraft = new Aircraft(aircraftModel, newAircraftId, condition, amountOfOrdinarySeats,
+        Aircraft newAircraft = new Aircraft(aircraftModel, newAircraftId, amountOfOrdinarySeats,
             amountOfBusinessSeats, amountOfComfortSeats);
         this.airline.getAircrafts().add(newAircraft);
         
@@ -161,7 +165,7 @@ public class EmployeeController {
         // TODO: Need to update database
     }
 
-    public void addFlight(int flightId, int aircraftId, int originId, String destinationId, 
+    public void addFlight(int flightId, int aircraftId, String originId, String destinationId, 
         int year, int day, int month, int crewId, int flightDuration, int baseFlightCost)
     {
         // Add flight to airline flight list (Don't do anything if flightId already exists)
@@ -195,6 +199,7 @@ public class EmployeeController {
             if (aircraftObj.getAircraftId() == aircraftId)
             {
                 aircraft = aircraftObj;
+                break;
             }
         }
 
@@ -205,6 +210,7 @@ public class EmployeeController {
             if (crew.getFlightCrewId() == crewId)
             {
                 flightCrew = crew;
+                break;
             }
         }
 
@@ -236,11 +242,12 @@ public class EmployeeController {
     public void modifyFlightDate(int flightId, int day, int month, int year)
     {
         // Update data associated with flight object
+        Date newDate = new Date(day, month, year);
         for (Flight flight : this.airline.getFlights())
         {
             if (flight.getFlightId() == flightId)
             {
-                flight.setDate(new Date(day, month, year));
+                flight.setDate(newDate);
                 break;
             }
         }
@@ -263,32 +270,21 @@ public class EmployeeController {
 
     public ArrayList<RegisteredCustomer> retrieveRegisteredUsers()
     {
-        ArrayList<Customer> customers = this.airline.getCustomers();
-        ArrayList<RegisteredCustomer> registeredCustomers = new ArrayList<RegisteredCustomer>();
-        for (Customer customer : customers)
-        {
-            if (customer instanceof RegisteredCustomer)
-            {
-                registeredCustomers.add((RegisteredCustomer)customer);
-            }
-        }
-        return registeredCustomers;
+        return this.airline.getRegisteredCustomers();
     }
 
     // This method is for airline agents and flight attendants
     public ArrayList<Customer> browsePassengers(int flightId)
     {
-        // MAY NOT WORK DEPENDING ON POLYMORPHISM (CHECK THIS LATER)
-        NonAdmin currentNonAdmin = null;
-        for (NonAdmin nonAdmin : this.airline.getNonAdmins())
+        ArrayList<Customer> passengers = null;
+        for (Flight flight : this.airline.getFlights())
         {
-            if (nonAdmin.getEmployeeId() == this.employee.getEmployeeId())
+            if (flight.getFlightId() == flightId)
             {
-                currentNonAdmin = nonAdmin;
+                passengers = flight.getPassengers();
+                break;
             }
         }
-        ArrayList<Customer> browsePassengers = currentNonAdmin.performBrowse(this.airline.getCustomers(), flightId);
-            
-        return browsePassengers;
+        return passengers;
     }
 }

@@ -147,18 +147,16 @@ CREATE TABLE PURCHASES (
       creditCardSecurityCode INT,
       totalPurchaseCost   INT,
       ticketInsurance     BOOLEAN,
-      itemsPurchased      VARCHAR(25),
-      ticketId            VARCHAR(25),
       flightId			  INT,
       customerId		  INT,
       useCompanionVoucher	BOOLEAN,
       PRIMARY KEY (purchaseId)
 );
 
-INSERT INTO PURCHASES (purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, itemsPurchased, ticketId, customerId, useCompanionVoucher) VALUES
-('P001', TRUE, '1111222233334444', 123, 500, FALSE, 'Ticket, Meal', 'T001', '1001', FALSE),
-('P002', FALSE, '4444333322221111', 456, 800, TRUE, 'Ticket, Extra Baggage', 'T002', '1001', FALSE),
-('P003', TRUE, '2222333344445555', 789, 300, FALSE, 'Ticket', 'T003', '1003', FALSE);
+INSERT INTO PURCHASES (purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, flightId, customerId, useCompanionVoucher) VALUES
+('P001', TRUE, '1111222233334444', 123, 500, FALSE, 101, 1001, FALSE),
+('P002', FALSE, '4444333322221111', 456, 800, TRUE, 100, 1001, FALSE),
+('P003', TRUE, '2222333344445555', 789, 300, FALSE, 100, 1003, FALSE);
 
 
 -- 6. Add table for tickets

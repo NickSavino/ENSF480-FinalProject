@@ -75,30 +75,33 @@ public class MainView extends JFrame implements RegistrationCallback {
 
     }
     public void onLogin(String username, String password) {
-        cardLayout.show(cardPanel, "Admin");
-//        userController = new AirlineUserController();
-//
-//        int userId;
-//        try {
-//            userId = Integer.parseInt(username); // Assuming the username is a user ID
-//        } catch (NumberFormatException e) {
-//            JOptionPane.showMessageDialog(this, "Invalid User ID", "Login Error", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-//
-//        boolean loginSuccess = userController.customerLogin(userId, password) ||
-//                userController.employeeLogin(userId, password);
-//
-//        if (loginSuccess) {
-//            if (userController.isCustomerLoggedIn()) {
-//                cardLayout.show(cardPanel, "Customer");
-//            } else if (userController.isEmployeeLoggedIn()) {
-//                cardLayout.show(cardPanel, "Employee");
-//            }
-//            logoutButton.setVisible(true);
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        boolean loginSuccess = userController.customerLogin(username, password);
+
+        if (loginSuccess) {
+            if (userController.isCustomerLoggedIn()) {
+                cardLayout.show(cardPanel, "Customer");
+            }
+            logoutButton.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void onLogin(int employeeId, String password) {
+        boolean loginSuccess = userController.employeeLogin(employeeId, password);
+
+        if (loginSuccess) {
+            if (userController.getEmployeeType().equals("Admin")) {
+                cardLayout.show(cardPanel, "Admin");
+            } else if (userController.getEmployeeType().equals("Flight Attendant")) {
+                cardLayout.show(cardPanel, "Attendant");
+            } else if (userController.getEmployeeType().equals("Airline Agent")) {
+                cardLayout.show(cardPanel, "AirlineAgent");
+            }
+            logoutButton.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void performLogout() {
@@ -121,10 +124,11 @@ public class MainView extends JFrame implements RegistrationCallback {
         userController.customerSignup( username,  password,  creditCardNumber, creditCardSecurityCode, firstName, lastName,
          houseNumber, street, city, province, country, email);
         JOptionPane.showMessageDialog(this, "Registration Successful!");
+        cardLayout.show(cardPanel, "Customer");
     }
 
     public void browseAsGuest() {
-        cardLayout.show(cardPanel, "Customer");
+        cardLayout.show(cardPanel, "Guest");
     }
     public static void main(String[] args) {
         // Set the look and feel to the system look and feel

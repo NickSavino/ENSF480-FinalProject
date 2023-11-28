@@ -1,11 +1,19 @@
 package flightapp.domain.pattern;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class LoginSingleton {
     private static LoginSingleton onlyInstance;
-    private Map<String, String> customerIdToPassword;
+    private Map<String, String> usernameToPassword;
     private Map<Integer, String> employeeIdToPassword;
+
+    private LoginSingleton() {
+        usernameToPassword = new HashMap<>();
+        employeeIdToPassword = new HashMap<>();
+
+        onlyInstance = this;
+    }
 
     public static LoginSingleton getOnlyInstance()
     {
@@ -25,26 +33,20 @@ public class LoginSingleton {
     // Method to add a customer to the system
     public void addCustomer(String customerUsername, String password)
     {
-        this.customerIdToPassword.put(customerUsername, password);
+        this.usernameToPassword.put(customerUsername, password);
     }
 
     // Method to authenticate a customer
-    public boolean authenticateCustomer(String customerId, String password)
+    public boolean authenticateCustomer(String username, String password)
     {
-        if (this.customerIdToPassword.get(customerId).equals(password))
-        {
-            return true;
-        }
-        return false;
+        String storedPassword = this.usernameToPassword.get(username);
+        return storedPassword != null && storedPassword.equals(password);
     }
 
     // Method to authenticate an employee
     public boolean authenticateEmployee(int employeeId, String password)
     {
-        if (this.employeeIdToPassword.get(employeeId).equals(password))
-        {
-            return true;
-        }
-        return false;
+        String storedPassword = this.employeeIdToPassword.get(employeeId);
+        return storedPassword != null && storedPassword.equals(password);
     }
 }

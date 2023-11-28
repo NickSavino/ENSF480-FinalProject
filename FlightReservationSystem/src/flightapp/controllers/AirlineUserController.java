@@ -41,40 +41,23 @@ public class AirlineUserController {
         try (Connection conn = DatabaseConnection.getConnection()) {
             populateEmployees();
             populateRegisteredCustomers();
-            for (RegisteredCustomer customer : airline.getRegisteredCustomers())
-            {
-                System.out.println(customer.toString());
-            }
+
             populateFlightCrews();
-            for ( FlightCrew flightCrew:
-                    airline.getFlightCrew()) {
-                System.out.println(flightCrew.getFlightCrewId());
-            }
+
             populateAircrafts();
-            for ( Aircraft aircraft:
-                    airline.getAircrafts()) {
-                System.out.println(aircraft.getAircraftId());
-            }
+
             populateLocations();
-            for ( Location location:
-                    airline.getLocations()) {
-                System.out.println(location.getName());
-            }
+
             populateFlights();
-            for ( Flight flight:
-                    airline.getFlights()) {
-                System.out.println(flight);
-            }
+
             populatePurchases();
-            for (Purchase purchases : airline.getPurchases()) {
-                System.out.print("Purchase ID:");
-                System.out.println(purchases.getPurchaseId());
-            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         initializationComplete = true;
+        System.out.println("Initialization Complete");
         return;
     }
 
@@ -119,6 +102,9 @@ public class AirlineUserController {
             String province = rs.getString("province");
             String country = rs.getString("country");
             String email = rs.getString("email");
+
+            LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
+            loginSingleton.addEmployee(employeeId, password);
 
             airline.addEmployee(employeeId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email);
         }
@@ -239,7 +225,12 @@ public class AirlineUserController {
             {
                 airline.addRegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, creditCardNumber, creditCardSecurityCode, status, hasCompanyCreditCard);
             }
-            
+
+            //Add Customer credentials to LoginSingleton Hashmap
+            LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
+            System.out.println(username);
+            loginSingleton.addCustomer(username, password);
+
             if (isAirlineMember)
             {
                 for (RegisteredCustomer customer : airline.getRegisteredCustomers())
@@ -258,17 +249,18 @@ public class AirlineUserController {
         }
     }
 
-    public boolean customerLogin(String userId, String password)
+    public boolean customerLogin(String username, String password)
     {
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
-        boolean validCustomer = loginSingleton.authenticateCustomer(userId, password);
+        boolean validCustomer = loginSingleton.authenticateCustomer(username, password);
+        System.out.println(validCustomer);
 
         if (validCustomer)
         {
             ArrayList<RegisteredCustomer> customers = this.airline.getRegisteredCustomers();
             for (RegisteredCustomer customer : customers)
             {
-                if (customer.getUsername().equals(userId))
+                if (customer.getUsername().equals(username))
                 {
                     this.currentCustomer = customer;
                     break;
@@ -342,10 +334,10 @@ public class AirlineUserController {
 
         // Adding customer credentials to the LoginSingleton
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
-        //loginSingleton.addCustomer(newCustomer.getUsername(), newCustomer.getPassword());
+        loginSingleton.addCustomer(newCustomer.getUsername(), newCustomer.getPassword());
 
         // Logging in the new customer
-        //customerLogin(newCustomer.getUsername(), newCustomer.getPassword());
+        customerLogin(newCustomer.getUsername(), newCustomer.getPassword());
         this.flightController.setCustomer(newCustomer);
 
         DatabaseController.insertCustomer(newCustomer);
@@ -421,9 +413,15 @@ public class AirlineUserController {
         
         ArrayList<String> registeredUserStrings = new ArrayList<>();
         for (RegisteredCustomer registeredCustomer : airline.getRegisteredCustomers()) {
-            System.out.println("REGISTERED CUSTOMER: " + registeredCustomer.toString());
             registeredUserStrings.add(registeredCustomer.toString());
         }
         return registeredUserStrings;
+    }
+
+    public String getEmployeeType() {
+        if (currentEmployee != null)
+            return currentEmployee.getEmployeeType();
+        else
+            return null;
     }
 }

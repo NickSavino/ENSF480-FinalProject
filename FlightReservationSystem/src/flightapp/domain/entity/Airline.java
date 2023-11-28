@@ -83,7 +83,6 @@ public class Airline {
     public Location getLocationByID(String locationId)
     {
         for (Location location : this.locations) {
-            System.out.println(location.getLocationId());
             if (location.getLocationId().equals(locationId))
                 return location;
         }
@@ -106,7 +105,6 @@ public class Airline {
 
         Location origin = getLocationByID(originId);
         Location destination = getLocationByID(destinationId);
-        System.out.println("ORIGIN AND DEST: " + origin + "-" + destination);
         FlightCrew flightCrew = getFlightCrewByID(flightCrewId);
         Date departureTime = new Date(flightDepartureDay, flightDepartureMonth, 
         flightDepartureYear, flightDepartureHour, flightDepartureMinute);
@@ -147,6 +145,17 @@ public class Airline {
         String province, String country, String email, String password, String status, boolean hasCompanyCreditCard)
     {
         this.registeredCustomers.add(new RegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, status, hasCompanyCreditCard));
+    }
+
+    public Customer getCustomerByID(int customerId) {
+
+        for (Customer customer : registeredCustomers) {
+            if (customer.getCustomerId() == customerId) {
+                return customer;
+            }
+        }
+
+        return null;
     }
 
     public void addPurchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,

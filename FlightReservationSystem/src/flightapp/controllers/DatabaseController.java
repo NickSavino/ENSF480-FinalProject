@@ -307,7 +307,7 @@ public class DatabaseController {
     public static void removeAircraft(int aircraftId)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("DELETE FROM AIRCRAFTS WHERE aircraftId = ?");
+            String query = "DELETE FROM AIRCRAFTS WHERE aircraftId = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, aircraftId);
                 stmt.executeUpdate();
@@ -323,7 +323,7 @@ public class DatabaseController {
     public static void removeCrew(int crewId)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("DELETE FROM FLIGHTCREW WHERE flightCrewId = ?");
+            String query = "DELETE FROM FLIGHTCREW WHERE flightCrewId = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, crewId);
                 stmt.executeUpdate();
@@ -339,7 +339,7 @@ public class DatabaseController {
     public static void modifyFlightDuration(int flightId, int newFlightDuration)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("UPDATE FLIGHTS SET flightDuration = ? WHERE flightId = ?");
+            String query = "UPDATE FLIGHTS SET flightDuration = ? WHERE flightId = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, newFlightDuration);
                 stmt.setInt(2, flightId);
@@ -362,7 +362,7 @@ public class DatabaseController {
         int minutes = newDate.getMinutes();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("UPDATE FLIGHTS SET flightDepartureDay = ?, flightDepartureMonth = ?, flightDepartureYear = ?, flightDepartureHour = ?, flightDepartureMinute = ? WHERE flightId = ?");
+            String query = "UPDATE FLIGHTS SET flightDepartureDay = ?, flightDepartureMonth = ?, flightDepartureYear = ?, flightDepartureHour = ?, flightDepartureMinute = ? WHERE flightId = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, day);
                 stmt.setInt(2, month);
@@ -383,7 +383,7 @@ public class DatabaseController {
     public static void deletePurchase(String purchaseId)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("DELETE FROM PURCHASES WHERE purchaseId = ?");
+            String query = "DELETE FROM PURCHASES WHERE purchaseId = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, purchaseId);
                 stmt.executeUpdate();

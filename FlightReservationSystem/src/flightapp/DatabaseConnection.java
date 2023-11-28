@@ -26,6 +26,19 @@ public class DatabaseConnection {
     }
 
     public static Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                // Connection parameters
+                String url = "jdbc:mysql://localhost:3306/airline";
+                String user = "user";
+                String password = "password";
+
+                connection = DriverManager.getConnection(url, user, password);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Or handle it in a more sophisticated way
+        }
+
         return connection;
     }
 }

@@ -2,13 +2,15 @@ package flightapp.gui.main;
 
 import flightapp.DatabaseConnection;
 import flightapp.controllers.AirlineUserController;
+import flightapp.gui.form.FormCallback;
+import flightapp.gui.form.RegistrationCallback;
 import flightapp.gui.form.RegistrationForm;
 import flightapp.gui.panel.*;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MainView extends JFrame{
+public class MainView extends JFrame implements RegistrationCallback {
 
     AirlineUserController userController;
     private CardLayout cardLayout;
@@ -104,8 +106,19 @@ public class MainView extends JFrame{
     }
 
     public void onRegister() {
-        RegistrationForm registrationForm = new RegistrationForm(this);
+        RegistrationForm registrationForm = new RegistrationForm(this, this);
         registrationForm.setVisible(true);
+    }
+
+    public void onRegistrationComplete(String username, String password, String creditCardNumber,
+                                String creditCardSecurityCode, String firstName, String lastName,
+                                int houseNumber, String street, String city,
+                                String province, String country, String email) {
+        System.out.println("Registration Complete");
+
+        userController.customerSignup( username,  password,  creditCardNumber, creditCardSecurityCode, firstName, lastName,
+         houseNumber, street, city, province, country, email);
+        JOptionPane.showMessageDialog(this, "Registration Successful!");
     }
 
     public void browseAsGuest() {

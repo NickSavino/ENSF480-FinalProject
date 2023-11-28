@@ -116,7 +116,7 @@ public class AirlineUserController {
             ArrayList<RegisteredCustomer> customers = this.airline.getRegisteredCustomers();
             for (RegisteredCustomer customer : customers)
             {
-                if (customer.getCustomerUsername().equals(userId))
+                if (customer.getUsername().equals(userId))
                 {
                     this.currentCustomer = customer;
                     break;
@@ -174,18 +174,29 @@ public class AirlineUserController {
         this.flightController.setCustomer(null);
     }
 
-    public void customerSignup(String username, String firstName, String lastName, int houseNumber, String street, String city, String province,
-        String country, String email, int age, String phoneNumber, String password)
-    {
-        RegisteredCustomer newCustomer = new RegisteredCustomer(username, firstName, lastName, houseNumber, street, 
-            city, province, country, email, password);
+    public void customerSignup(String username, String password, String creditCardNumber,
+                               String creditCardSecurityCode, String firstName, String lastName,
+                               int houseNumber, String street, String city, String province,
+                               String country, String email) {
+
+        // Constructing new customer object with the additional fields
+        RegisteredCustomer newCustomer = new RegisteredCustomer(username, password, creditCardNumber,
+                creditCardSecurityCode,
+                firstName, lastName, houseNumber, street,
+                city, province, country, email);
+
+        // Adding new customer to the airline's customer list
         this.airline.getRegisteredCustomers().add(newCustomer);
+
+        // Adding customer credentials to the LoginSingleton
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
-        loginSingleton.addCustomer(newCustomer.getCustomerUsername(), newCustomer.getPassword());
-        customerLogin(newCustomer.getCustomerUsername(), newCustomer.getPassword());
+        //loginSingleton.addCustomer(newCustomer.getUsername(), newCustomer.getPassword());
+
+        // Logging in the new customer
+        //customerLogin(newCustomer.getUsername(), newCustomer.getPassword());
         this.flightController.setCustomer(newCustomer);
 
-        // TODO: Still need to add to database
+        DatabaseController.insertCustomer(newCustomer);
     }
 
     public void employeeSignup(String firstName, String lastName, String email, int age, String password, int houseNumber,

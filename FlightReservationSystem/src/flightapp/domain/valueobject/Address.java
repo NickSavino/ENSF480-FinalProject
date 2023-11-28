@@ -19,4 +19,24 @@ public class Address {
     public String getAddress() {
         return String.format("%s %s %s %s %s", houseNumber, street, city, province, country);
     }
+
+    public int getHouseNumber() {
+        return houseNumber;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public String getStreet() {
+        return street;
+    }
 }

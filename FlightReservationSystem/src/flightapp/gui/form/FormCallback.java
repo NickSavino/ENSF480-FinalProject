@@ -5,4 +5,5 @@ public interface FormCallback {
     void onCrewAdded(String crewName, String assignedFlight);
 
     void onAircraftAdded(String model, int seats);
+
 }

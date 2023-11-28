@@ -89,7 +89,7 @@ public class DatabaseController {
 
             // Set parameters
             stmt.setInt(1, customer.getCustomerId());
-            stmt.setString(2, "PlaceHolder");
+            stmt.setString(2, "Registered");
             stmt.setString(3, customer.getUsername());
             stmt.setString(4, customer.getPassword()); // Consider encrypting the password
             stmt.setString(5, customer.getCreditCardNumber());

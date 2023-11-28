@@ -1,7 +1,15 @@
 package flightapp.controllers;
 
 import java.util.List;
+
+import com.mysql.cj.xdevapi.Statement;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import flightapp.DatabaseConnection;
 import flightapp.domain.entity.*;
 import flightapp.domain.valueobject.*;
 import flightapp.domain.pattern.*;
@@ -86,6 +94,25 @@ public class EmployeeController {
         // TODO: Need to implement update to database
     }
 
+    public static void addCrew(FlightCrew newCrew)
+    {
+        int crewId = newCrew.getFlightCrewId();
+        String flightCrewName = newCrew.getCrewName();
+        int assignflightID = newCrew.getAssignflightId();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES (%d, '%d', %s)", crewId, assignflightID, flightCrewName);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully added new flight crew.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new flight crew.", e);
+        }
+    }
+
     public void removeCrew(int crewId)
     {
         // Remove crew from flight
@@ -117,6 +144,29 @@ public class EmployeeController {
         this.airline.getAircrafts().add(newAircraft);
         
         // TODO: Need to update database
+
+    }
+
+    public static void addAircraft(Aircraft newAircraft)
+    {
+        int aircraftId = newAircraft.getAircraftId();
+        String aircraftModel = newAircraft.getModel();
+        int amountOfOrdinarySeats = newAircraft.getNumberOfOrdinarySeats();
+        int amountOfBusinessSeats = newAircraft.getNumberOfBusinessSeats();
+        int amountOfComfortSeats = newAircraft.getNumberOfComfortSeats();
+        int amountOfSeats = newAircraft.getNumberOfSeats();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO AIRCRAFT (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats, totalSeats) VALUES (%d, '%s', %d, %d, %d, %d)", aircraftId, aircraftModel, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully added new aircraft.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new aircraft.", e);
+        }
     }
 
     public void removeAircraft(int aircraftId)
@@ -163,6 +213,24 @@ public class EmployeeController {
         this.airline.getLocations().add(newLocation);
 
         // TODO: Need to update database
+    }
+
+    public static void addFlightDestination(Location newLocation)
+    {
+        String locationId = newLocation.getLocationId();
+        String locationName = newLocation.getName();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO LOCATION (locationId, locationName) VALUES ('%s', '%s')", locationId, locationName);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully added new location.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new location.", e);
+        }
     }
 
     public void addFlight(int flightId, int aircraftId, String originId, String destinationId, 
@@ -223,6 +291,34 @@ public class EmployeeController {
             this.airline.getFlights().add(newFlight);
         }
         // TODO: Need to update database
+    }
+
+    public static void addFlight(Flight newFlight)
+    {
+        int flightId = newFlight.getFlightId();
+        int aircraftId = newFlight.getAircraft().getAircraftId();
+        String originId = newFlight.getOrigin().getLocationId();
+        String destinationId = newFlight.getDestination().getLocationId();
+        int flightDuration = newFlight.getDuration();
+        int flightCrewId = newFlight.getFlightCrew().getFlightCrewId();
+        int baseFlightCost = newFlight.getBaseFlightCost();
+        int flightDepartureMonth = newFlight.getDate().getMonth();
+        int flightDepartureDay = newFlight.getDate().getDay();
+        int flightDepartureYear = newFlight.getDate().getYear();
+        int flightDepartureHour = newFlight.getDate().getHour();
+        int flightDepartureMinute = newFlight.getDate().getMinutes();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO FLIGHT (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (%d, %d, '%s', '%s', %d, %d, %d, %d, %d, %d)", flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully added new flight.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new flight.", e);
+        }
     }
 
     public void removeFlight(int flightId)

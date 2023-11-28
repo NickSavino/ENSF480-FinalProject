@@ -94,6 +94,11 @@ public class Flight {
         this.flightDuration = newDuration;
     }
 
+    public int getDuration()
+    {
+        return this.flightDuration;
+    }
+
     public Aircraft getAircraft()
     {
         return this.aircraft;

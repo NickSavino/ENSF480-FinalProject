@@ -76,7 +76,10 @@ public class RegisteredCustomer extends Customer {
         return creditCard.getSecurityCode();
     }
 
-
+    public String getCustomerUsername()
+    {
+        return this.username;
+    }
 
     public boolean hasCompanyCreditCard()
     {

@@ -293,8 +293,9 @@ public class DatabaseController {
     public static void removeAircraft(int aircraftId)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("DELETE FROM AIRCRAFTS WHERE aircraftId = %d", aircraftId);
+            String query = String.format("DELETE FROM AIRCRAFTS WHERE aircraftId = ?");
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, aircraftId);
                 stmt.executeUpdate();
                 System.out.println("Successfully removed aircraft.");
             }
@@ -308,8 +309,9 @@ public class DatabaseController {
     public static void removeCrew(int crewId)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("DELETE FROM FLIGHTCREW WHERE flightCrewId = %d", crewId);
+            String query = String.format("DELETE FROM FLIGHTCREW WHERE flightCrewId = ?");
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, crewId);
                 stmt.executeUpdate();
                 System.out.println("Successfully removed flight crew.");
             }
@@ -323,8 +325,10 @@ public class DatabaseController {
     public static void modifyFlightDuration(int flightId, int newFlightDuration)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("UPDATE FLIGHTS SET flightDuration = %d WHERE flightId = %d", newFlightDuration, flightId);
+            String query = String.format("UPDATE FLIGHTS SET flightDuration = ? WHERE flightId = ?");
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, newFlightDuration);
+                stmt.setInt(2, flightId);
                 stmt.executeUpdate();
                 System.out.println("Successfully modified flight duration.");
             }
@@ -344,8 +348,14 @@ public class DatabaseController {
         int minutes = newDate.getMinutes();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("UPDATE FLIGHTS SET flightDepartureDay = %d, flightDepartureMonth = %d, flightDepartureYear = %d, flightDepartureHour = %d, flightDepartureMinute = %d WHERE flightId = %d", day, month, year, hour, minutes, flightId);
+            String query = String.format("UPDATE FLIGHTS SET flightDepartureDay = ?, flightDepartureMonth = ?, flightDepartureYear = ?, flightDepartureHour = ?, flightDepartureMinute = ? WHERE flightId = ?");
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, day);
+                stmt.setInt(2, month);
+                stmt.setInt(3, year);
+                stmt.setInt(4, hour);
+                stmt.setInt(5, minutes);
+                stmt.setInt(6, flightId);
                 stmt.executeUpdate();
                 System.out.println("Successfully modified flight duration.");
             }
@@ -359,8 +369,9 @@ public class DatabaseController {
     public static void deletePurchase(String purchaseId)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("DELETE FROM PURCHASES WHERE purchaseId = '%s'", purchaseId);
+            String query = String.format("DELETE FROM PURCHASES WHERE purchaseId = ?");
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, purchaseId);
                 stmt.executeUpdate();
                 System.out.println("Successfully deleted purchase.");
             }
@@ -382,9 +393,17 @@ public class DatabaseController {
         boolean ticketInsurance = newPurchase.getTicketInsurance();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO PURCHASES (purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, flightId, customerId, useCompanionVoucher) VALUES ('%s', %b, '%s', %d, %d, %b, %d, %d, %b)", 
-                purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, flightId, customerId, useCompanionVoucher);
+            String query = "INSERT INTO PURCHASES (purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, flightId, customerId, useCompanionVoucher) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"; 
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, purchaseId);
+                stmt.setBoolean(2, loungeAccess);
+                stmt.setString(3, creditCardNumber);
+                stmt.setInt(4, creditCardSecurityCode);
+                stmt.setInt(5, totalPurchaseCost);
+                stmt.setBoolean(6, ticketInsurance);
+                stmt.setInt(7, flightId);
+                stmt.setInt(8, customerId);
+                stmt.setBoolean(9, useCompanionVoucher);
                 stmt.executeUpdate();
                 System.out.println("Successfully added new purchase.");
             }

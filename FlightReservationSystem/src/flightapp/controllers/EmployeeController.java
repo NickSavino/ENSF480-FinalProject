@@ -2,8 +2,6 @@ package flightapp.controllers;
 
 import java.util.List;
 
-import com.mysql.cj.xdevapi.Statement;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -98,7 +96,7 @@ public class EmployeeController {
     {
         int crewId = newCrew.getFlightCrewId();
         String flightCrewName = newCrew.getCrewName();
-        int assignflightID = newCrew.getAssignflightId();
+        int assignflightID = newCrew.getAssignFlightId();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             String query = String.format("INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES (%d, '%d', %s)", crewId, assignflightID, flightCrewName);

@@ -198,8 +198,20 @@ public class DatabaseController {
         int flightDepartureMinute = newFlight.getDate().getMinutes();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO FLIGHT (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (%d, %d, '%s', '%s', %d, %d, %d, %d, %d, %d)", flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute);
+            String query = "INSERT INTO FLIGHT (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, flightId);
+                stmt.setInt(2, aircraftId);
+                stmt.setString(3, originId);
+                stmt.setString(4, destinationId);
+                stmt.setInt(5, flightDuration);
+                stmt.setInt(6, flightCrewId);
+                stmt.setInt(7, baseFlightCost);
+                stmt.setInt(8, flightDepartureMonth);
+                stmt.setInt(9, flightDepartureDay);
+                stmt.setInt(10, flightDepartureYear);
+                stmt.setInt(11, flightDepartureHour);
+                stmt.setInt(12, flightDepartureMinute);
                 stmt.executeUpdate();
                 System.out.println("Successfully added new flight.");
             }
@@ -216,8 +228,10 @@ public class DatabaseController {
         String locationName = newLocation.getName();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO LOCATION (locationId, locationName) VALUES ('%s', '%s')", locationId, locationName);
+            String query = "INSERT INTO LOCATION (locationId, locationName) VALUES (?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, locationId);
+                stmt.setString(2, locationName);
                 stmt.executeUpdate();
                 System.out.println("Successfully added new location.");
             }

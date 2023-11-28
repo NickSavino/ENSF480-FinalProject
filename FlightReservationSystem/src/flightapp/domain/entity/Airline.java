@@ -61,13 +61,13 @@ public class Airline {
     public void addFlight() {
     }
 
-    public void addEmployee(int employeeId, int flightCrewId,
+    public void addEmployee(int employeeId,
                             String password, String employeeType,
                             String firstName, String lastName,
                             int houseNumber, String street,
                             String city, String province,
                             String country, String email) {
-        this.employees.add(new Employee(employeeId, flightCrewId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email));
+        this.employees.add(new Employee(employeeId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email));
     }
 
     public void addAircraft(int aircraftID, String model, int amountOfOrdinarySeats, int amountOfBusinessSeats,
@@ -75,9 +75,9 @@ public class Airline {
         this.aircrafts.add(new Aircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats));
     }
 
-    //public void addFlightCrew(int crewId, ArrayList<Employee> flightAttendants) {
-        //this.flightCrew.add(new FlightCrew(crewId, flightAttendants));
-    //}
+    public void addFlightCrew(int flightcrewId, int flightId, String crewName) {
+        this.flightCrew.add(new FlightCrew(flightcrewId, flightId, crewName));
+    }
 
     public void addLocation(String name, String locationId) {
         this.locations.add(new Location(name, locationId));

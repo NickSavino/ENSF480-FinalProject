@@ -13,4 +13,6 @@ public class CreditCard {
     public String getCreditCardNumber() {
         return this.cardNumber;
     }
+
+    public int getSecurityCode() { return this.securityCode; }
 }

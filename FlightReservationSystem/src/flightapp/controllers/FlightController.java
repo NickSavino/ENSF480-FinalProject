@@ -97,12 +97,12 @@ public class FlightController {
                     if (member.getCompanionVoucher().isUsable())
                     {
                         member.getCompanionVoucher().use();
-                        break;
                     }
                     else
                     {
                         useCompanionVoucher = false;
                     }
+                    break;
                 }
             }
         }
@@ -170,7 +170,14 @@ public class FlightController {
 
     public String sendPromotionalNews()
     {
-        String promotionalNews = "New flights to Hawaii! Find your new vacation destination today for cheap! Variety of options provided and high-class flying!";
-        return promotionalNews;
+        if (this.customer.getStatus().equals("Airline Member"))
+        {
+            this.airline.getPromotionalNews().setContentStrategy(new ContentShort());
+        }
+        else
+        {
+            this.airline.getPromotionalNews().setContentStrategy(new ContentLong());
+        }
+        return this.airline.getPromotionalNews().getPromotionalContent();
     }
 }

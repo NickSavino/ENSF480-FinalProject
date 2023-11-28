@@ -124,6 +124,21 @@ public class Flight {
         this.passengers.add(passenger);
     }
 
+    public void setAircraft(Aircraft aircraft)
+    {
+        this.aircraft = aircraft;
+    }
+
+    public void setDestination(Location destination)
+    {
+        this.destination = destination;
+    }
+
+    public void setOrigin(Location origin)
+    {
+        this.origin = origin;
+    }
+
     public String toString() {
         System.out.println(origin);
         System.out.println(destination);

@@ -47,7 +47,6 @@ public class EmployeeController {
             if (flightCrew.getAssignFlightId() == flightId)
             {
                 foundFlightCrew = flightCrew;
-                return foundFlightCrew;
             }
         }
         return foundFlightCrew;
@@ -78,6 +77,14 @@ public class EmployeeController {
     public void removeCrew(int crewId)
     {
         // Remove crew from flight
+        for (FlightCrew flightCrews : this.airline.getFlightCrew())
+        {
+            if (flightCrews.getFlightCrewId() == crewId)
+            {
+                this.airline.getFlightCrew().remove(flightCrews);
+                break;
+            }
+        }
         for (Flight flight : this.airline.getFlights())
         {
             if (flight.getFlightCrew().getFlightCrewId() == crewId)
@@ -120,6 +127,14 @@ public class EmployeeController {
                 break;
             }
         }
+        for (Flight flight : this.airline.getFlights())
+        {
+            if (flight.getAircraft().getAircraftId() == aircraftId)
+            {
+                flight.setAircraft(null);
+                break;
+            }
+        }
         DatabaseController.removeAircraft(aircraftId);
     }
 
@@ -131,6 +146,19 @@ public class EmployeeController {
             if (location.getLocationId() == destinationId)
             {
                 this.airline.getLocations().remove(location);
+                break;
+            }
+        }
+        for (Flight flight : this.airline.getFlights())
+        {
+            if (flight.getDestination().getLocationId() == destinationId)
+            {
+                flight.setDestination(null);
+                break;
+            }
+            if (flight.getOrigin().getLocationId() == destinationId)
+            {
+                flight.setOrigin(null);
                 break;
             }
         }

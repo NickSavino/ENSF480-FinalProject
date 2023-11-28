@@ -1,17 +1,20 @@
 package flightapp.domain.entity;
 
 import java.util.ArrayList;
+
+import flightapp.domain.pattern.*;
 import flightapp.domain.valueobject.*;
 
 public class Airline {
 
-    private ArrayList<Flight> flights; // Person 1 - Nick
-    private ArrayList<Employee> employees; // Person 1
-    private ArrayList<Aircraft> aircrafts; // Person 3 - Bruce
-    private ArrayList<FlightCrew> flightCrew; // Person 3
-    private ArrayList<Location> locations; // Person 3
-    private ArrayList<Purchase> purchases; // Person 2 - Liam
-    private ArrayList<RegisteredCustomer> registeredCustomers; // Person 2
+    private ArrayList<Flight> flights; 
+    private ArrayList<Employee> employees; 
+    private ArrayList<Aircraft> aircrafts;
+    private ArrayList<FlightCrew> flightCrew;
+    private ArrayList<Location> locations;
+    private ArrayList<Purchase> purchases; 
+    private ArrayList<RegisteredCustomer> registeredCustomers;
+    private PromotionalNews promotionalNews;
     
     public Airline() {
         this.flights = new ArrayList<Flight>();
@@ -21,6 +24,7 @@ public class Airline {
         this.flightCrew = new ArrayList<FlightCrew>();
         this.locations = new ArrayList<Location>();
         this.purchases = new ArrayList<Purchase>();
+        this.promotionalNews = new PromotionalNews("Monthly Promotion", new ContentShort());
     }
 
     public ArrayList<RegisteredCustomer> getRegisteredCustomers()
@@ -33,7 +37,10 @@ public class Airline {
         return this.flights;
     }
 
-    
+    public PromotionalNews getPromotionalNews()
+    {
+        return this.promotionalNews;
+    }
 
     public ArrayList<Aircraft> getAircrafts() 
     {

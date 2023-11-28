@@ -41,6 +41,7 @@ public class AirlineUserController {
             populateRegisteredCustomers();
             for (RegisteredCustomer customer : airline.getRegisteredCustomers())
             {
+                System.out.println(customer.hasCompanyCreditCard());
                 System.out.println(customer.getCustomerId());
                 System.out.println(customer.getCustomerUsername());
                 System.out.println(customer.getStatus());
@@ -113,31 +114,32 @@ public class AirlineUserController {
         // }
 
 
-        ResultSet rs = DatabaseController.queryPurchases();
+        // ResultSet rs = DatabaseController.queryPurchases();
         
-        while (rs.next())
-        {
-            String purchaseId = rs.getString("purchaseId");
-            boolean loungeAccess = rs.getBoolean("loungeAccess");
-            String creditCardNumber = rs.getString("creditCardNumber");
-            int creditCardSecurityCode = rs.getInt("creditCardSecurityCode");
-            int totalPurchaseCost = rs.getInt("totalPurchaseCost");
-            boolean ticketInsurance = rs.getBoolean("ticketInsurance");
-            String itemsPurchased = rs.getString("itemsPurchased");
-            String ticketId = rs.getString("ticketId");
-            int flightId = rs.getInt("flightId");
+        // while (rs.next())
+        // {
+        //     String purchaseId = rs.getString("purchaseId");
+        //     boolean loungeAccess = rs.getBoolean("loungeAccess");
+        //     String creditCardNumber = rs.getString("creditCardNumber");
+        //     int creditCardSecurityCode = rs.getInt("creditCardSecurityCode");
+        //     int totalPurchaseCost = rs.getInt("totalPurchaseCost");
+        //     boolean ticketInsurance = rs.getBoolean("ticketInsurance");
+        //     String itemsPurchased = rs.getString("itemsPurchased");
+        //     String ticketId = rs.getString("ticketId");
+        //     int customerId = rs.getInt("customerId");
+        //     int flightId = rs.getInt("flightId");
             
-            Flight currentFlight = null;
-            for (Flight flight : airline.getFlights())
-            {
-                if (flight.getFlightId() == (flightId))
-                {
-                    currentFlight = flight;
-                    break;
-                }
-            }
+        //     Flight currentFlight = null;
+        //     for (Flight flight : airline.getFlights())
+        //     {
+        //         if (flight.getFlightId() == (flightId))
+        //         {
+        //             currentFlight = flight;
+        //             break;
+        //         }
+        //     }
 
-        }
+        // }
 
     }
 
@@ -162,15 +164,16 @@ public class AirlineUserController {
             String country = rs.getString("country");
             String province = rs.getString("province");
             String email = rs.getString("email");
+            boolean hasCompanyCreditCard = rs.getBoolean("hasCompanyCreditCard");
 
             // TODO: Still need to populate all purchases
             if (creditCardNumber.equals(""))
             {
-                airline.addRegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, status);
+                airline.addRegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, status, hasCompanyCreditCard);
             }
             else
             {
-                airline.addRegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, creditCardNumber, creditCardSecurityCode, status);
+                airline.addRegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, creditCardNumber, creditCardSecurityCode, status, hasCompanyCreditCard);
             }
             
             if (isAirlineMember)

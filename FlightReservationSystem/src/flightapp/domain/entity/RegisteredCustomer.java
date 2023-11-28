@@ -7,6 +7,7 @@ public class RegisteredCustomer extends Customer {
     String username;
     private CreditCard creditCard = null;
     private boolean isAirlineMember = false;
+    boolean hasCompanyCreditCard = false;
     private CompanionVoucher companionVoucher;
 
     public RegisteredCustomer(String username, String firstName, String lastName, int houseNumber, String street, String city, String province, 
@@ -18,20 +19,22 @@ public class RegisteredCustomer extends Customer {
     }
 
     public RegisteredCustomer(int customerId, String username, String firstName, String lastName, int houseNumber, String street, String city, String province, 
-        String country, String email, String password, String creditCardNumber, int securityCode, String status) {
+        String country, String email, String password, String creditCardNumber, int securityCode, String status, boolean hasCompanyCreditCard) {
         super(customerId, firstName, lastName, houseNumber, street, city, province, country, email);
         this.password = password;
         this.username = username;
         super.status = status;
+        this.hasCompanyCreditCard = hasCompanyCreditCard;
         this.creditCard = new CreditCard(creditCardNumber, securityCode);
     }
 
     public RegisteredCustomer(int customerId, String username, String firstName, String lastName, int houseNumber, String street, String city, String province, 
-        String country, String email, String password, String status) {
+        String country, String email, String password, String status, boolean hasCompanyCreditCard) {
         super(customerId, firstName, lastName, houseNumber, street, city, province, country, email);
         this.password = password;
         this.username = username;
         super.status = status;
+        this.hasCompanyCreditCard = hasCompanyCreditCard;
     }
 
     public String getPassword()
@@ -59,5 +62,10 @@ public class RegisteredCustomer extends Customer {
     public CompanionVoucher getCompanionVoucher()
     {
         return this.companionVoucher;
+    }
+
+    public boolean hasCompanyCreditCard()
+    {
+        return this.hasCompanyCreditCard;
     }
 }

@@ -69,4 +69,11 @@ public class Airline {
                             String country, String email) {
         this.employees.add(new Employee(employeeId, flightCrewId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email));
     }
+
+    public void addAircraft(int aircraftID, String model, int amountOfOrdinarySeats, int amountOfBusinessSeats,
+            int amountOfComfortSeats) {
+        this.aircrafts.add(new Aircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats));
+    }
+
+
 }

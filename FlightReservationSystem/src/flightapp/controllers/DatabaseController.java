@@ -33,4 +33,17 @@ public class DatabaseController {
             throw new RuntimeException("Error Querying Employees", e);
         }
     }
+
+    public static ResultSet queryAircrafts() {
+        String query = "SELECT * FROM AIRCRAFTS";
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            return stmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Aircrafts", e);
+        }
+    }
 }

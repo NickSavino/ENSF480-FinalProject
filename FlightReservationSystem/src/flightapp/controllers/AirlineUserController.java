@@ -41,6 +41,11 @@ public class AirlineUserController {
                     airline.getEmployees()) {
                 System.out.println(employee.getEmployeeId());
             }
+            populateAircrafts();
+            for ( Aircraft aircraft:
+                    airline.getAircrafts()) {
+                System.out.println(aircraft.getAircraftId());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -75,8 +80,18 @@ public class AirlineUserController {
         }
     }
 
-    private void populateAircrafts() // Bruce
+    private void populateAircrafts() throws SQLException // Bruce
     {
+        ResultSet rs = DatabaseController.queryAircrafts();
+        while (rs.next()) {
+            int aircraftID = rs.getInt("aircraftID");
+            String model = rs.getString("aircraftModel");
+            int amountOfOrdinarySeats = rs.getInt("ordinarySeats");
+            int amountOfBusinessSeats = rs.getInt("businessSeats");
+            int amountOfComfortSeats = rs.getInt("comfortSeats");
+            
+            airline.addAircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats);
+        }
 
     }
 

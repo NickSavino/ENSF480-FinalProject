@@ -238,8 +238,16 @@ public class DatabaseController {
         int amountOfSeats = newAircraft.getNumberOfSeats();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO AIRCRAFT (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats, totalSeats) VALUES (%d, '%s', %d, %d, %d, %d)", aircraftId, aircraftModel, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats);
+            String query = "INSERT INTO AIRCRAFT (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats, totalSeats) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+
+                stmt.setInt(1, aircraftId);
+                stmt.setString(2, aircraftModel);
+                stmt.setInt(3, amountOfOrdinarySeats);
+                stmt.setInt(4, amountOfBusinessSeats);
+                stmt.setInt(5, amountOfComfortSeats);
+                stmt.setInt(6, amountOfSeats);
+
                 stmt.executeUpdate();
                 System.out.println("Successfully added new aircraft.");
             }
@@ -253,8 +261,9 @@ public class DatabaseController {
     public static void removeFlight(int flightId)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("DELETE FROM FLIGHTS WHERE flightId = %d", flightId);
+            String query = "DELETE FROM FLIGHTS WHERE flightId = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, flightId);
                 stmt.executeUpdate();
                 System.out.println("Successfully removed flight.");
             }
@@ -268,8 +277,9 @@ public class DatabaseController {
     public static void removeFlightDestination(String destinationId)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("DELETE FROM LOCATIONS WHERE locationId = '%s'", destinationId);
+            String query = "DELETE FROM LOCATIONS WHERE locationId = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, destinationId);
                 stmt.executeUpdate();
                 System.out.println("Successfully removed location.");
             }

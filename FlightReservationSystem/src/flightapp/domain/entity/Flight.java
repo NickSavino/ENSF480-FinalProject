@@ -18,8 +18,8 @@ public class Flight {
     private ArrayList<Customer> passengers;
     private Date departureTime;
 
-    public Flight(Aircraft aircraft, int flightId, Location origin, int baseFlightCost,
-        Location destination, FlightCrew flightCrew, Date date, int flightDuration) 
+    public Flight(Aircraft aircraft, int flightId, Location origin,
+        Location destination, int baseFlightCost, FlightCrew flightCrew, Date date, int flightDuration)
     {
         this.aircraft = aircraft;
         this.flightId = flightId;
@@ -30,6 +30,7 @@ public class Flight {
         this.departureTime = date;
         this.baseFlightCost = baseFlightCost;
         this.passengers = new ArrayList<Customer>();
+        this.seatList = new ArrayList<>();
 
         int numberOfSeats = aircraft.getNumberOfSeats();
         int numberOfBusinessSeats = aircraft.getNumberOfBusinessSeats();
@@ -122,6 +123,11 @@ public class Flight {
     {
         this.passengers.add(passenger);
     }
-    
 
+    public String toString() {
+        System.out.println(origin);
+        System.out.println(destination);
+        System.out.println(departureTime.getDateString());
+        return new String(origin.getLocationId() + "- " + destination.getLocationId() + " " + departureTime.getDateString());
+    }
 }

@@ -12,7 +12,7 @@ import java.awt.*;
 
 public class MainView extends JFrame implements RegistrationCallback {
 
-    AirlineUserController userController;
+    private AirlineUserController userController;
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private JButton exitButton;
@@ -21,6 +21,11 @@ public class MainView extends JFrame implements RegistrationCallback {
     public MainView() {
         // Initialize the main frame
         super("Flight Reservation System");
+        userController = new AirlineUserController();
+
+        while (!userController.getInitalizationStatus()) {
+            //Wait for initialization to finish
+        }
         //Specify on action on close
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Specify Minimum Size
@@ -68,12 +73,9 @@ public class MainView extends JFrame implements RegistrationCallback {
         setVisible(true);
         cardLayout.show(cardPanel, "Login");
 
-        userController = new AirlineUserController();
-
-
     }
     public void onLogin(String username, String password) {
-        cardLayout.show(cardPanel, "Attendant");
+        cardLayout.show(cardPanel, "Admin");
 //        userController = new AirlineUserController();
 //
 //        int userId;
@@ -141,5 +143,9 @@ public class MainView extends JFrame implements RegistrationCallback {
                 new MainView();
             }
         });
+    }
+
+    public AirlineUserController getUserController() {
+        return userController;
     }
 }

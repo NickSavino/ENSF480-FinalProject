@@ -24,16 +24,21 @@ public class FlightCrew {
         return this.flightCrewId;
     }
 
-    public int getAssignflightId() {
-        return this.assignflightId;
-    }
-
     public String getCrewName() {
         return this.crewName;
+    }
+
+    public int getAssignFlightId()
+    {
+        return this.assignflightId;
     }
 
     public ArrayList<Employee> getFlightAttendants()
     {
         return this.flightAttendants;
+    }
+
+    public String toString() {
+        return crewName + "-" + flightCrewId;
     }
 }

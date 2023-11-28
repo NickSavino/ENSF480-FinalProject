@@ -15,12 +15,12 @@ public class Purchase {
     CreditCard creditCard;
 
     public Purchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
-        CreditCard creditCard, ArrayList<Seat> seats, Customer customer) 
+        String creditCardNumber, int creditCardSecurityCode, ArrayList<Seat> seats, Customer customer) 
     {
         this.loungeAccess = buyAirportLoungeAccess;
         this.ticketInsurance = buyInsurance;
         this.tickets = new ArrayList<Ticket>();
-        this.creditCard = creditCard;
+        this.creditCard = new CreditCard(creditCardNumber, creditCardSecurityCode);
         this.purchaseId = UUID.randomUUID().toString();
 
         int baseFlightCost = flight.getBaseFlightCost();

@@ -33,14 +33,34 @@ public class Airline {
         return this.flights;
     }
 
+    
+
     public ArrayList<Aircraft> getAircrafts() 
     {
         return this.aircrafts;
     }
 
+    public Aircraft getAircraftByID(int aircraftID) 
+    {
+        for (Aircraft aircraft : this.aircrafts) {
+            if (aircraft.getAircraftId() == aircraftID)
+                return aircraft;
+        }
+        return null;
+    }
+
     public ArrayList<FlightCrew> getFlightCrew() 
     {
         return this.flightCrew;
+    }
+
+    public FlightCrew getFlightCrewByID(int flightCrewId) 
+    {
+        for (FlightCrew flightCrew : this.flightCrew) {
+            if (flightCrew.getFlightCrewId() == flightCrewId)
+                return flightCrew;
+        }
+        return null;
     }
 
     public ArrayList<Employee> getEmployees()
@@ -53,12 +73,39 @@ public class Airline {
         return this.locations;
     }
 
+    public Location getLocationByID(String locationId)
+    {
+        for (Location location : this.locations) {
+            System.out.println(location.getLocationId());
+            if (location.getLocationId().equals(locationId))
+                return location;
+        }
+        return null;
+    }
+
     public ArrayList<Purchase> getPurchases()
     {
         return this.purchases;
     }
 
-    public void addFlight() {
+    public void addFlight(int flightId, int aircraftId, String originId, 
+                        String destinationId, int flightDuration,
+                         int flightCrewId, int baseFlightCost, 
+                         int flightDepartureDay, int flightDepartureMonth, 
+                         int flightDepartureYear, int flightDepartureHour, int flightDepartureMinute) {
+
+        
+        Aircraft aircraft = getAircraftByID(aircraftId);
+
+        Location origin = getLocationByID(originId);
+        Location destination = getLocationByID(destinationId);
+        System.out.println("ORIGIN AND DEST: " + origin + "-" + destination);
+        FlightCrew flightCrew = getFlightCrewByID(flightCrewId);
+        Date departureTime = new Date(flightDepartureDay, flightDepartureMonth, 
+        flightDepartureYear, flightDepartureHour, flightDepartureMinute);
+
+        Flight flight = new Flight(aircraft, flightId, origin, destination, baseFlightCost, flightCrew, departureTime, flightDuration);
+        this.flights.add(flight);
     }
 
     public void addEmployee(int employeeId,
@@ -96,8 +143,10 @@ public class Airline {
     }
 
     public void addPurchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
-        CreditCard creditCard, ArrayList<Seat> seats, Customer customer)
+        String creditCardNumber, int securityCode, ArrayList<Seat> seats, Customer customer)
     {
-        this.purchases.add(new Purchase(flight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCard, seats, customer));
+        Purchase newPurchase = new Purchase(flight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, securityCode, seats, customer);
+        this.purchases.add(newPurchase);
+        customer.addPurchase(newPurchase);
     }
 }

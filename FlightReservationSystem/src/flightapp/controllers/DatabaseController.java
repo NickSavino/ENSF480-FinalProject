@@ -2,7 +2,7 @@ package flightapp.controllers;
 
 
 import flightapp.DatabaseConnection;
-import flightapp.domain.entity.RegisteredCustomer;
+import flightapp.domain.entity.*;
 
 import javax.xml.crypto.Data;
 import java.sql.*;
@@ -19,23 +19,10 @@ public class DatabaseController {
             e.printStackTrace();
             throw new RuntimeException("Error Querying Flights", e);
         }
-
     }
 
-    public static ResultSet queryEmployees() {
-        String query = "SELECT * FROM EMPLOYEES";
-
-        try {
-            Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query);
-            return stmt.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error Querying Employees", e);
-        }
-    }
-
-    public static ResultSet queryAircrafts() {
+    public static ResultSet queryAircrafts() 
+    {
         String query = "SELECT * FROM AIRCRAFTS";
 
         try {
@@ -61,8 +48,23 @@ public class DatabaseController {
         }
     }
 
-    public static ResultSet queryLocations() {
+    public static ResultSet queryLocations()
+    {
         String query = "SELECT * FROM LOCATIONS";
+
+        try
+        {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            return stmt.executeQuery();
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Locations", e);
+        }
+    }
+    public static ResultSet queryEmployees() {
+        String query = "SELECT * FROM EMPLOYEES";
 
         try {
             Connection conn = DatabaseConnection.getConnection();
@@ -70,7 +72,7 @@ public class DatabaseController {
             return stmt.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error Querying Locations", e);
+            throw new RuntimeException("Error Querying Employees", e);
         }
     }
 
@@ -87,7 +89,7 @@ public class DatabaseController {
 
             // Set parameters
             stmt.setInt(1, customer.getCustomerId());
-            stmt.setString(2, "PlaceHolder");
+            stmt.setString(2, "Registered");
             stmt.setString(3, customer.getUsername());
             stmt.setString(4, customer.getPassword()); // Consider encrypting the password
             stmt.setString(5, customer.getCreditCardNumber());
@@ -157,6 +159,24 @@ public class DatabaseController {
         {
             e.printStackTrace();
             throw new RuntimeException("Error Querying Flight Seats", e);
+        }
+    }
+
+    public static void addCrew(FlightCrew newCrew)
+    {
+        int flightCrewid = newCrew.getFlightCrewId();
+        String flightCrewName = newCrew.getCrewName();
+        int assignFlightId = newCrew.getAssignFlightId();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES (%d, %d, %s)", flightCrewid, assignFlightId, flightCrewName);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("New flight crew added successfully.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new flight crew.");
         }
     }
 }

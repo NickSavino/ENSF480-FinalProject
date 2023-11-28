@@ -59,4 +59,8 @@ public class Aircraft {
     {
         return this.amountOfComfortSeats;
     }
+
+    public String toString() {
+        return model + "-" + aircraftId;
+    }
 }

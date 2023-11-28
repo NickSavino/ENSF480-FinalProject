@@ -9,6 +9,8 @@ import flightapp.gui.main.MainView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 
 public class AdminPanel extends JPanel implements FormCallback {
@@ -101,18 +103,28 @@ public class AdminPanel extends JPanel implements FormCallback {
         //fetch and add data to the model based on the 'type'
         if ("Flight".equals(type)) {
             flightsModel = new DefaultListModel<>();
-            flightsModel.addElement("Flight 1");
-            flightsModel.addElement("Flight 2");
+            for (String flight : mainView.getUserController().getFlightsString()) {
+                flightsModel.addElement(flight);
+            }
             // Add more flight items...
             return flightsModel;
         } else if ("Crew".equals(type)) {
             crewsModel = new DefaultListModel<>();
+            for (String crew : mainView.getUserController().getFlightCrewsString()) {
+                crewsModel.addElement(crew);
+            }
             return crewsModel;
         } else if ("Aircraft".equals(type)) {
             aircraftsModel = new DefaultListModel<>();
+            for (String aircraft : mainView.getUserController().getAircraftsString()) {
+                aircraftsModel.addElement(aircraft);
+            }
             return aircraftsModel;
         } else if ("Registered User".equals(type)) {
             usersModel = new DefaultListModel<>();
+            for (String user : mainView.getUserController().getRegisteredUsersString()) {
+                usersModel.addElement(user);
+            }
             return usersModel;
         }
 
@@ -133,7 +145,8 @@ public class AdminPanel extends JPanel implements FormCallback {
 
         // Initialize destinations model and combo box for removal
         destinationsModel = new DefaultComboBoxModel<>();
-        destinationsComboBox = new JComboBox<>(destinationsModel);
+        Object[] destinations = mainView.getUserController().getLocationsString().toArray();
+        destinationsComboBox = new JComboBox<>(destinations);
         // Populate destinationsModel with data...
 
         return panel;
@@ -207,7 +220,7 @@ public class AdminPanel extends JPanel implements FormCallback {
         System.out.println(type);
         if (type != null) {
             if (type.equals("Flight")) {
-                AddFlightForm flightForm = new AddFlightForm(this.mainView, this);
+                AddFlightForm flightForm = new AddFlightForm(this.mainView, this, this.mainView);
                 flightForm.setVisible(true);
             }
             else if (type.equals("Crew")) {

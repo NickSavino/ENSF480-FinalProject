@@ -22,6 +22,8 @@ public class AirlineUserController {
     private boolean isCustomerLoggedIn = false;
     private boolean isEmployeeLoggedIn = false;
 
+    private boolean initializationComplete = false;
+
     public AirlineUserController() {
         // Initialize Airline object with database values
         this.airline = new Airline();
@@ -38,7 +40,6 @@ public class AirlineUserController {
         System.out.println("Initializing Data");
         try (Connection conn = DatabaseConnection.getConnection()) {
             populateEmployees();
-            // populatePurchases();
             populateRegisteredCustomers();
             for (RegisteredCustomer customer : airline.getRegisteredCustomers())
             {
@@ -62,16 +63,47 @@ public class AirlineUserController {
                     airline.getLocations()) {
                 System.out.println(location.getName());
             }
+            populateFlights();
+            for ( Flight flight:
+                    airline.getFlights()) {
+                System.out.println(flight);
+            }
+            populatePurchases();
+            for (Purchase purchases : airline.getPurchases()) {
+                System.out.print("Purchase ID:");
+                System.out.println(purchases.getPurchaseId());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        initializationComplete = true;
         return;
+    }
+
+    public boolean getInitalizationStatus() {
+        return initializationComplete;
     }
     private void populateFlights() throws SQLException // Nick
     {
         // Might be easier to call this after RegisteredCustomers is already initialized (for passengers) (I could be wrong)
         ResultSet rs = DatabaseController.queryFlights();
         while (rs.next()) {
+            int flightId = rs.getInt("flightId");
+            int aircraftId = rs.getInt("aircraftId");
+            String originId = rs.getString("originId");
+            String destinationId = rs.getString("destinationId");
+            int flightDuration = rs.getInt("flightDuration");
+            int flightCrewId = rs.getInt("flightCrewId");
+            int baseFlightCost = rs.getInt("baseFlightCost");
+            int flightDepartureDay = rs.getInt("flightDepartureDay");
+            int flightDepartureMonth = rs.getInt("flightDepartureMonth");
+            int flightDepartureYear = rs.getInt("flightDepartureYear");
+            int flightDepartureHour = rs.getInt("flightDepartureHour");
+            int flightDepartureMinute = rs.getInt("flightDepartureMinute");
+            airline.addFlight(flightId, aircraftId, originId, destinationId,
+            flightDuration, flightCrewId, baseFlightCost, flightDepartureDay, 
+            flightDepartureMonth, flightDepartureYear, flightDepartureHour, flightDepartureMinute);    
         }
     }
 
@@ -130,53 +162,52 @@ public class AirlineUserController {
             String locationID = rs.getString("locationID");
             String name = rs.getString("locationName");
 
-            airline.addLocation(locationID, name);
+            airline.addLocation(name, locationID);
         }
     }
 
     private void populatePurchases() throws SQLException // Liam
     {
-        // Need to initialize Ticket object before populating Purchase object
-        // Need to initialize Receipt object before populating Purchase object
-        // Need to initialize CreditCard object before populating Purchase object
-        // Need to make sure we're adding purchases to the corresponding Customer object
+        ResultSet rs = DatabaseController.queryPurchases();
         
-
-        // Need to initialize Flight object before populating Purchase object
-        // ArrayList<Seat> seats = new ArrayList<Seat>();
-        // ResultSet rsFlightSeats = DatabaseController.queryFlightSeats();
-        // while (rsFlightSeats.next())
-        // {
-
-        // }
-
-
-        // ResultSet rs = DatabaseController.queryPurchases();
-        
-        // while (rs.next())
-        // {
-        //     String purchaseId = rs.getString("purchaseId");
-        //     boolean loungeAccess = rs.getBoolean("loungeAccess");
-        //     String creditCardNumber = rs.getString("creditCardNumber");
-        //     int creditCardSecurityCode = rs.getInt("creditCardSecurityCode");
-        //     int totalPurchaseCost = rs.getInt("totalPurchaseCost");
-        //     boolean ticketInsurance = rs.getBoolean("ticketInsurance");
-        //     String itemsPurchased = rs.getString("itemsPurchased");
-        //     String ticketId = rs.getString("ticketId");
-        //     int customerId = rs.getInt("customerId");
-        //     int flightId = rs.getInt("flightId");
+        while (rs.next())
+        {
+            String purchaseId = rs.getString("purchaseId");
+            boolean loungeAccess = rs.getBoolean("loungeAccess");
+            String creditCardNumber = rs.getString("creditCardNumber");
+            int creditCardSecurityCode = rs.getInt("creditCardSecurityCode");
+            int totalPurchaseCost = rs.getInt("totalPurchaseCost");
+            boolean ticketInsurance = rs.getBoolean("ticketInsurance");
+            String itemsPurchased = rs.getString("itemsPurchased");
+            int customerId = rs.getInt("customerId");
+            int flightId = rs.getInt("flightId");
+            boolean useCompanionVoucher = rs.getBoolean("useCompanionVoucher");
+            Flight currentFlight = null;
+            ArrayList<Seat> seats = null;
+            for (Flight flight : airline.getFlights())
+            {
+                if (flight.getFlightId() == (flightId))
+                {
+                    currentFlight = flight;
+                    seats = flight.getSeatList();
+                    break;
+                }
+            }
+            RegisteredCustomer currentCustomer = null;
+            for (RegisteredCustomer customer :  airline.getRegisteredCustomers())
+            {
+                if (customer.getCustomerId() == customerId)
+                {
+                    currentCustomer = customer;
+                    break;
+                }
+            }
             
-        //     Flight currentFlight = null;
-        //     for (Flight flight : airline.getFlights())
-        //     {
-        //         if (flight.getFlightId() == (flightId))
-        //         {
-        //             currentFlight = flight;
-        //             break;
-        //         }
-        //     }
-
-        // }
+            if (currentFlight != null && currentCustomer != null)
+            {
+                airline.addPurchase(currentFlight, ticketInsurance, loungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, seats, currentCustomer);
+            }
+        }
 
     }
 
@@ -347,5 +378,54 @@ public class AirlineUserController {
     public void applyForAirlineCreditCard(String newCreditCardNumber, int newSecurityCode, RegisteredCustomer customer)
     {
         customer.setCreditCard(newCreditCardNumber, newSecurityCode);
+    }
+
+    public Airline getAirline() {
+        return airline;
+    }
+
+    public ArrayList<String> getFlightsString() {
+
+        ArrayList<String> flightStrings = new ArrayList<>();
+        for (Flight flight : airline.getFlights()) {
+            flightStrings.add(flight.toString());
+        }
+        return flightStrings;
+    }
+
+    public ArrayList<String> getAircraftsString() {
+
+        ArrayList<String> aircraftStrings = new ArrayList<>();
+        for (Aircraft aircraft : airline.getAircrafts()) {
+            aircraftStrings.add(aircraft.toString());
+        }
+        return aircraftStrings;
+    }
+
+    public ArrayList<String> getLocationsString() {
+
+        ArrayList<String> locationStrings = new ArrayList<>();
+        for (Location location : airline.getLocations()) {
+            locationStrings.add(location.getLocationId());
+        }
+        return locationStrings;
+    }
+
+    public ArrayList<String> getFlightCrewsString() {
+
+        ArrayList<String> flightCrewStrings = new ArrayList<>();
+        for (FlightCrew flightCrew : airline.getFlightCrew()) {
+            flightCrewStrings.add(flightCrew.toString());
+        }
+        return flightCrewStrings;
+    }
+
+    public ArrayList<String> getRegisteredUsersString() {
+        
+        ArrayList<String> registeredUserStrings = new ArrayList<>();
+        for (RegisteredCustomer registeredCustomer : airline.getRegisteredCustomers()) {
+            registeredUserStrings.add(registeredCustomer.toString());
+        }
+        return registeredUserStrings;
     }
 }

@@ -85,4 +85,8 @@ public class RegisteredCustomer extends Customer {
     {
         return this.hasCompanyCreditCard;
     }
+
+    public String toString() {
+        return username + "-" + getEmail() + "-" + getName().getFirstName() + getName().getLastName();
+    }
 }

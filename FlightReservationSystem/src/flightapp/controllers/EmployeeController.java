@@ -287,7 +287,7 @@ public class EmployeeController {
 
         if (origin != null && destination != null && aircraft != null && flightCrew != null)
         {
-            Flight newFlight = new Flight(aircraft, flightId, origin, baseFlightCost, destination, flightCrew, timeOfDeparture, flightDuration);
+            Flight newFlight = new Flight(aircraft, flightId, origin, destination, baseFlightCost, flightCrew, timeOfDeparture, flightDuration);
             this.airline.getFlights().add(newFlight);
         }
         // TODO: Need to update database

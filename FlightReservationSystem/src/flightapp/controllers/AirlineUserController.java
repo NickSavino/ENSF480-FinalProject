@@ -38,9 +38,14 @@ public class AirlineUserController {
         System.out.println("Initializing Data");
         try (Connection conn = DatabaseConnection.getConnection()) {
             populateEmployees();
-            for ( Employee employee:
-                    airline.getEmployees()) {
-                System.out.println(employee.getEmployeeId());
+            // populatePurchases();
+            populateRegisteredCustomers();
+            for (RegisteredCustomer customer : airline.getRegisteredCustomers())
+            {
+                System.out.println(customer.hasCompanyCreditCard());
+                System.out.println(customer.getCustomerId());
+                System.out.println(customer.getCustomerUsername());
+                System.out.println(customer.getStatus());
             }
             populateFlightCrews();
             for ( FlightCrew flightCrew:
@@ -129,19 +134,101 @@ public class AirlineUserController {
         }
     }
 
-    private void populatePurchases() // Liam
+    private void populatePurchases() throws SQLException // Liam
     {
         // Need to initialize Ticket object before populating Purchase object
         // Need to initialize Receipt object before populating Purchase object
-        // Need to initialize CreditCard object before populating Purchase objecte
+        // Need to initialize CreditCard object before populating Purchase object
+        // Need to make sure we're adding purchases to the corresponding Customer object
+        
+
+        // Need to initialize Flight object before populating Purchase object
+        // ArrayList<Seat> seats = new ArrayList<Seat>();
+        // ResultSet rsFlightSeats = DatabaseController.queryFlightSeats();
+        // while (rsFlightSeats.next())
+        // {
+
+        // }
+
+
+        // ResultSet rs = DatabaseController.queryPurchases();
+        
+        // while (rs.next())
+        // {
+        //     String purchaseId = rs.getString("purchaseId");
+        //     boolean loungeAccess = rs.getBoolean("loungeAccess");
+        //     String creditCardNumber = rs.getString("creditCardNumber");
+        //     int creditCardSecurityCode = rs.getInt("creditCardSecurityCode");
+        //     int totalPurchaseCost = rs.getInt("totalPurchaseCost");
+        //     boolean ticketInsurance = rs.getBoolean("ticketInsurance");
+        //     String itemsPurchased = rs.getString("itemsPurchased");
+        //     String ticketId = rs.getString("ticketId");
+        //     int customerId = rs.getInt("customerId");
+        //     int flightId = rs.getInt("flightId");
+            
+        //     Flight currentFlight = null;
+        //     for (Flight flight : airline.getFlights())
+        //     {
+        //         if (flight.getFlightId() == (flightId))
+        //         {
+        //             currentFlight = flight;
+        //             break;
+        //         }
+        //     }
+
+        // }
 
     }
 
-    private void populateRegisteredCustomers() // Liam
+    private void populateRegisteredCustomers() throws SQLException // Liam
     {
-        // Need to check if customer is an airline member; if so then create CompanionVoucher object
-        // Need to create a CreditCard after checking to ensure it is not null
+        ResultSet rs = DatabaseController.queryCustomers();
+        while (rs.next())
+        {
+            int customerId = rs.getInt("customerId");
+            String status = rs.getString("status");
+            String username = rs.getString("username");
+            String password = rs.getString("password");
+            String creditCardNumber = rs.getString("creditCardNumber");
+            int creditCardSecurityCode = rs.getInt("creditCardSecurityCode");
+            boolean isAirlineMember = rs.getBoolean("isAirlineMember");
+            boolean companionVoucherUsable = rs.getBoolean("companionVoucherUsable");
+            String firstName = rs.getString("firstName");
+            String lastName = rs.getString("lastName");
+            int houseNumber = rs.getInt("houseNumber");
+            String street = rs.getString("street");
+            String city = rs.getString("city");
+            String country = rs.getString("country");
+            String province = rs.getString("province");
+            String email = rs.getString("email");
+            boolean hasCompanyCreditCard = rs.getBoolean("hasCompanyCreditCard");
 
+            // TODO: Still need to populate all purchases
+            if (creditCardNumber.equals(""))
+            {
+                airline.addRegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, status, hasCompanyCreditCard);
+            }
+            else
+            {
+                airline.addRegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, creditCardNumber, creditCardSecurityCode, status, hasCompanyCreditCard);
+            }
+            
+            if (isAirlineMember)
+            {
+                for (RegisteredCustomer customer : airline.getRegisteredCustomers())
+                {
+                    if (customer.getCustomerId() == customerId)
+                    {
+                        customer.becomeAirlineMember();
+                        if (!companionVoucherUsable)
+                        {
+                            customer.getCompanionVoucher().use();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public boolean customerLogin(String userId, String password)
@@ -154,7 +241,7 @@ public class AirlineUserController {
             ArrayList<RegisteredCustomer> customers = this.airline.getRegisteredCustomers();
             for (RegisteredCustomer customer : customers)
             {
-                if (customer.getCustomerUsername().equals(userId))
+                if (customer.getUsername().equals(userId))
                 {
                     this.currentCustomer = customer;
                     break;
@@ -212,18 +299,29 @@ public class AirlineUserController {
         this.flightController.setCustomer(null);
     }
 
-    public void customerSignup(String username, String firstName, String lastName, int houseNumber, String street, String city, String province,
-        String country, String email, int age, String phoneNumber, String password)
-    {
-        RegisteredCustomer newCustomer = new RegisteredCustomer(username, firstName, lastName, houseNumber, street, 
-            city, province, country, email, password);
+    public void customerSignup(String username, String password, String creditCardNumber,
+                               String creditCardSecurityCode, String firstName, String lastName,
+                               int houseNumber, String street, String city, String province,
+                               String country, String email) {
+
+        // Constructing new customer object with the additional fields
+        RegisteredCustomer newCustomer = new RegisteredCustomer(username, password, creditCardNumber,
+                creditCardSecurityCode,
+                firstName, lastName, houseNumber, street,
+                city, province, country, email);
+
+        // Adding new customer to the airline's customer list
         this.airline.getRegisteredCustomers().add(newCustomer);
+
+        // Adding customer credentials to the LoginSingleton
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
-        loginSingleton.addCustomer(newCustomer.getCustomerUsername(), newCustomer.getPassword());
-        customerLogin(newCustomer.getCustomerUsername(), newCustomer.getPassword());
+        //loginSingleton.addCustomer(newCustomer.getUsername(), newCustomer.getPassword());
+
+        // Logging in the new customer
+        //customerLogin(newCustomer.getUsername(), newCustomer.getPassword());
         this.flightController.setCustomer(newCustomer);
 
-        // TODO: Still need to add to database
+        DatabaseController.insertCustomer(newCustomer);
     }
 
     public void employeeSignup(String firstName, String lastName, String email, int age, String password, int houseNumber,

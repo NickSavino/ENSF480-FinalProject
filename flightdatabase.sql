@@ -67,6 +67,7 @@ CREATE TABLE CUSTOMERS (
       password            VARCHAR(25),
       creditCardNumber    VARCHAR(25),
       creditCardSecurityCode INT,
+      hasCompanyCreditCard	BOOLEAN,
       isAirlineMember     BOOLEAN,
       companionVoucherUsable BOOLEAN,
       firstName           VARCHAR(25),
@@ -77,14 +78,13 @@ CREATE TABLE CUSTOMERS (
       province            VARCHAR(25),
       country             VARCHAR(25),
       email               VARCHAR(25),
-      purchaseId          VARCHAR(25),
       PRIMARY KEY (customerId)
 );
 
-INSERT INTO CUSTOMERS (customerId, status, username, password, creditCardNumber, creditCardSecurityCode, isAirlineMember, companionVoucherUsable, firstName, lastName, houseNumber, street, city, province, country, email, purchaseId) VALUES
-(1001, 'Registered', 'user1', 'pass1', '1111222233334444', 123, FALSE, FALSE, 'Tom', 'Brown', 10, 'Maple St', 'CityA', 'ON', 'Canada', 'tom.brown@email.com', 'P001'),
-(1002, 'Airline Member', 'user2', 'pass2', '4444333322221111', 456, TRUE, TRUE, 'Emily', 'White', 20, 'Elm St', 'CityB', 'AB', 'Canada', 'emily.white@email.com', 'P002'),
-(1003, 'Unregistered', 'user3', 'pass3', '2222333344445555', 789, FALSE, FALSE, 'Kyle', 'Green', 30, 'Birch Ave', 'CityC', 'BC', 'Canada', 'kyle.green@email.com', 'P003');
+INSERT INTO CUSTOMERS (customerId, status, username, password, creditCardNumber, creditCardSecurityCode, hasCompanyCreditCard, isAirlineMember, companionVoucherUsable, firstName, lastName, houseNumber, street, city, province, country, email) VALUES
+(1001, 'Registered', 'user1', 'pass1', "", 123, FALSE, FALSE, FALSE, 'Tom', 'Brown', 10, 'Maple St', 'CityA', 'ON', 'Canada', 'tom.brown@email.com'),
+(1002, 'Airline Member', 'user2', 'pass2', '4444333322221111', 456, TRUE, TRUE, TRUE, 'Emily', 'White', 20, 'Elm St', 'CityB', 'AB', 'Canada', 'emily.white@email.com'),
+(1003, 'Registered', 'user3', 'pass3', '2222333344445555', 789, TRUE, FALSE, FALSE, 'Kyle', 'Green', 30, 'Birch Ave', 'CityC', 'BC', 'Canada', 'kyle.green@email.com');
 
 
 -- 3. Add table for aircrafts
@@ -149,13 +149,15 @@ CREATE TABLE PURCHASES (
       ticketInsurance     BOOLEAN,
       itemsPurchased      VARCHAR(25),
       ticketId            VARCHAR(25),
+      flightId			  INT,
+      customerId		  INT,
       PRIMARY KEY (purchaseId)
 );
 
-INSERT INTO PURCHASES (purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, itemsPurchased, ticketId) VALUES
-('P001', TRUE, '1111222233334444', 123, 500, FALSE, 'Ticket, Meal', 'T001'),
-('P002', FALSE, '4444333322221111', 456, 800, TRUE, 'Ticket, Extra Baggage', 'T002'),
-('P003', TRUE, '2222333344445555', 789, 300, FALSE, 'Ticket', 'T003');
+INSERT INTO PURCHASES (purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, itemsPurchased, ticketId, customerId) VALUES
+('P001', TRUE, '1111222233334444', 123, 500, FALSE, 'Ticket, Meal', 'T001', '1001'),
+('P002', FALSE, '4444333322221111', 456, 800, TRUE, 'Ticket, Extra Baggage', 'T002', '1001'),
+('P003', TRUE, '2222333344445555', 789, 300, FALSE, 'Ticket', 'T003', '1003');
 
 
 -- 6. Add table for tickets

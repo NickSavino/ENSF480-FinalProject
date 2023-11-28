@@ -8,12 +8,20 @@ public class Customer extends Person {
     protected String status = "Unregistered"; // Other statuses are: "Registered", "Airline Member
     private ArrayList<Purchase> purchases;
 
-    
+
     public Customer(String firstName, String lastName, int houseNumber, String street, String city, 
         String province, String country, String email)
     {
         super(firstName, lastName, houseNumber, street, city, province, country, email);
         this.customerId = UUID.randomUUID().hashCode();
+        this.purchases = new ArrayList<Purchase>();
+    }
+
+    public Customer(int customerId, String firstName, String lastName, int houseNumber, String street, String city, 
+        String province, String country, String email)
+    {
+        super(firstName, lastName, houseNumber, street, city, province, country, email);
+        this.customerId = customerId;
         this.purchases = new ArrayList<Purchase>();
     }
 
@@ -34,4 +42,6 @@ public class Customer extends Person {
     {
         return this.status;
     }
+
+
 }

@@ -17,6 +17,14 @@ public class Customer extends Person {
         this.purchases = new ArrayList<Purchase>();
     }
 
+    public Customer(int customerId, String firstName, String lastName, int houseNumber, String street, String city, 
+        String province, String country, String email)
+    {
+        super(firstName, lastName, houseNumber, street, city, province, country, email);
+        this.customerId = customerId;
+        this.purchases = new ArrayList<Purchase>();
+    }
+
     public void addPurchase(Purchase purchase) {
         this.purchases.add(purchase);
     }

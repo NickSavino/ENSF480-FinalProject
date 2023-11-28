@@ -33,4 +33,52 @@ public class DatabaseController {
             throw new RuntimeException("Error Querying Employees", e);
         }
     }
+
+    public static ResultSet queryCustomers()
+    {
+        String query = "SELECT * FROM CUSTOMERS";
+        try
+        {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            return stmt.executeQuery();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Customers", e);
+        }
+    }
+
+    public static ResultSet queryPurchases()
+    {
+        String query = "SELECT * FROM PURCHASES";
+        try
+        {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            return stmt.executeQuery();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Purchases", e);
+        }
+    }
+    
+    public static ResultSet queryFlightSeats()
+    {
+        String query = "SELECT * FROM FLIGHTSEATS";
+        try
+        {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            return stmt.executeQuery();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Flight Seats", e);
+        }
+    }
 }

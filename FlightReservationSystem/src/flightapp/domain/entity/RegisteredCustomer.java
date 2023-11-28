@@ -14,6 +14,24 @@ public class RegisteredCustomer extends Customer {
         super(firstName, lastName, houseNumber, street, city, province, country, email);
         this.password = password;
         this.username = username;
+        super.status = "Registered";
+    }
+
+    public RegisteredCustomer(int customerId, String username, String firstName, String lastName, int houseNumber, String street, String city, String province, 
+        String country, String email, String password, String creditCardNumber, int securityCode, String status) {
+        super(customerId, firstName, lastName, houseNumber, street, city, province, country, email);
+        this.password = password;
+        this.username = username;
+        super.status = status;
+        this.creditCard = new CreditCard(creditCardNumber, securityCode);
+    }
+
+    public RegisteredCustomer(int customerId, String username, String firstName, String lastName, int houseNumber, String street, String city, String province, 
+        String country, String email, String password, String status) {
+        super(customerId, firstName, lastName, houseNumber, street, city, province, country, email);
+        this.password = password;
+        this.username = username;
+        super.status = status;
     }
 
     public String getPassword()

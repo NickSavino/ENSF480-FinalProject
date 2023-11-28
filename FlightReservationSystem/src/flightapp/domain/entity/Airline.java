@@ -69,4 +69,22 @@ public class Airline {
                             String country, String email) {
         this.employees.add(new Employee(employeeId, flightCrewId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email));
     }
+
+    public void addRegisteredCustomer(int customerId, String username, String firstName, String lastName, int houseNumber, String street, String city, 
+        String province, String country, String email, String password, String creditCardNumber, int securityCode, String status)
+    {
+        this.registeredCustomers.add(new RegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, creditCardNumber, securityCode, status));
+    }
+
+    public void addRegisteredCustomer(int customerId, String username, String firstName, String lastName, int houseNumber, String street, String city, 
+        String province, String country, String email, String password, String status)
+    {
+        this.registeredCustomers.add(new RegisteredCustomer(customerId, username, firstName, lastName, houseNumber, street, city, province, country, email, password, status));
+    }
+
+    public void addPurchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
+        CreditCard creditCard, ArrayList<Seat> seats, Customer customer)
+    {
+        this.purchases.add(new Purchase(flight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCard, seats, customer));
+    }
 }

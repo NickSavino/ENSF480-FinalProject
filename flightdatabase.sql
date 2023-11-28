@@ -37,7 +37,7 @@ CREATE TABLE EMPLOYEES (
 INSERT INTO EMPLOYEES (employeeId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email) VALUES
 (101, 'password123', 'Admin', 'John', 'Doe', 123, 'Main St', 'Anytown', 'AB', 'Canada', 'john.doe@email.com'),
 (102, 'pw456', 'Flight Attendant', 'Jane', 'Smith', 456, 'Oak Ave', 'Anytown', 'BC', 'Canada', 'jane.smith@email.com'),
-(103, 'secure789', 'Airline', 'Alice', 'Johnson', 789, 'Pine Rd', 'Anytown', 'ON', 'Canada', 'alice.johnson@email.com');
+(103, 'secure789', 'Airline Agent', 'Alice', 'Johnson', 789, 'Pine Rd', 'Anytown', 'ON', 'Canada', 'alice.johnson@email.com');
 
 
 -- 2. Add table for registered customers

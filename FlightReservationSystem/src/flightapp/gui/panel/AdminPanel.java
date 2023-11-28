@@ -1,6 +1,5 @@
 package flightapp.gui.panel;
 
-import flightapp.DatabaseConnection;
 import flightapp.controllers.DatabaseController;
 import flightapp.gui.form.AddAircraftForm;
 import flightapp.gui.form.AddCrewForm;
@@ -10,10 +9,7 @@ import flightapp.gui.navigation.NavigationController;
 import flightapp.gui.main.MainView;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Vector;
 
 
 public class AdminPanel extends JPanel implements FormCallback {

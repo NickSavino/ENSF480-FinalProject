@@ -1,5 +1,7 @@
 package flightapp.gui.panel;
 
+import com.sun.tools.javac.Main;
+import flightapp.gui.main.MainView;
 import flightapp.gui.navigation.NavigationController;
 
 import javax.swing.*;
@@ -10,7 +12,6 @@ import java.awt.event.ActionListener;
 public class CustomerPanel extends JPanel {
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    private JList<String> flightList; // Placeholder for flight list
     private JButton selectFlightButton;
     private JButton selectSeatButton;
     private JButton makePaymentButton;
@@ -18,7 +19,12 @@ public class CustomerPanel extends JPanel {
     private NavigationController navigationController;
     private JButton backButton;
 
-    public CustomerPanel() {
+    private MainView mainView;
+
+    private DefaultListModel<String> flightsModel;
+
+    public CustomerPanel(MainView mainView) {
+        this.mainView = mainView;
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
@@ -64,8 +70,12 @@ public class CustomerPanel extends JPanel {
         JPanel flightSelectionPanel = new JPanel(new BorderLayout());
 
         // Dummy data for flights
-        String[] flights = {"Flight 1", "Flight 2", "Flight 3"};
-        flightList = new JList<>(flights);
+        flightsModel = new DefaultListModel<>();
+        for (String flight : mainView.getUserController().getFlightsString()) {
+            flightsModel.addElement(flight);
+        }
+        JList<String> list = new JList<>(flightsModel);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         selectFlightButton = new JButton("Select Flight");
         selectFlightButton.addActionListener(new ActionListener() {
@@ -76,7 +86,7 @@ public class CustomerPanel extends JPanel {
             }
         });
 
-        flightSelectionPanel.add(new JScrollPane(flightList), BorderLayout.CENTER);
+        flightSelectionPanel.add(new JScrollPane(list), BorderLayout.CENTER);
         flightSelectionPanel.add(selectFlightButton, BorderLayout.SOUTH);
 
         return flightSelectionPanel;

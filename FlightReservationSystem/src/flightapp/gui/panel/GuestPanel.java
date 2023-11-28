@@ -15,11 +15,12 @@ public class GuestPanel extends JPanel {
     private JButton browseFlightsButton;
     private JButton registerButton;
 
-    private JList<String> flightList;
-    private MainView parent;
+    private MainView mainView;
+    private DefaultListModel<String> flightsModel;
 
-    public GuestPanel(MainView parent) {
-        this.parent = parent;
+
+    public GuestPanel(MainView mainView) {
+        this.mainView = mainView;
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
@@ -27,6 +28,7 @@ public class GuestPanel extends JPanel {
         // Initialize and add sub-panels
         cardPanel.add(createMainMenuPanel(), "MainMenu");
         cardPanel.add(createFlightSelectionPanel(), "FlightSelection");
+        cardPanel.add(createSeatSelectionPanel(), "SeatSelection");
 
         setLayout(new BorderLayout());
         add(cardPanel, BorderLayout.CENTER);
@@ -48,7 +50,7 @@ public class GuestPanel extends JPanel {
         registerButton = new JButton("Register");
 
         browseFlightsButton.addActionListener(e -> navigationController.navigateTo("FlightSelection"));
-        registerButton.addActionListener(e -> parent.onRegister());
+        registerButton.addActionListener(e -> mainView.onRegister());
 
         add(browseFlightsButton);
         add(registerButton);
@@ -68,9 +70,12 @@ public class GuestPanel extends JPanel {
     private JPanel createFlightSelectionPanel() {
         JPanel flightSelectionPanel = new JPanel(new BorderLayout());
 
-        // Dummy data for flights
-        String[] flights = {"Flight 1", "Flight 2", "Flight 3"};
-        flightList = new JList<>(flights);
+        flightsModel = new DefaultListModel<>();
+        for (String flight : mainView.getUserController().getFlightsString()) {
+            flightsModel.addElement(flight);
+        }
+        JList<String> flightList = new JList<>(flightsModel);
+        flightList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JButton selectFlightButton = new JButton("Select Flight");
         selectFlightButton.addActionListener(new ActionListener() {
@@ -157,8 +162,4 @@ public class GuestPanel extends JPanel {
         return false; // Placeholder
     }
 
-    private void onRegister() {
-        // Logic to open the registration form or panel
-        // Example: new RegistrationForm(this, ...).setVisible(true);
-    }
 }

@@ -18,7 +18,7 @@ USE AIRLINEDATABASE;
 -- 1.11 Field for email
 -- 1.12 Field for flight crew ID
 
-DROP TABLE IF EXISTS EMPLOYEES
+DROP TABLE IF EXISTS EMPLOYEES;
 CREATE TABLE EMPLOYEES (
       employeeId          INT,
       flightcrewID        INT DEFAULT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE EMPLOYEES (
       city                VARCHAR(25),
       province            VARCHAR(25),
       country             VARCHAR(25),
-      email               VARCHAR(25)
+      email               VARCHAR(25),
       PRIMARY KEY (employeeId)
 );
 
@@ -60,7 +60,7 @@ INSERT INTO EMPLOYEES (employeeId, flightcrewID, password, employeeType, firstNa
 -- 2.16 Field for email
 -- 2.17 Add foreign key referencing PurchaseId
 
-DROP TABLE IF EXISTS CUSTOMERS
+DROP TABLE IF EXISTS CUSTOMERS;
 CREATE TABLE CUSTOMERS (
       customerId          INT,
       status              VARCHAR(25),
@@ -96,7 +96,7 @@ INSERT INTO CUSTOMERS (customerId, status, username, password, creditCardNumber,
 -- 3.5 Field for amount of comfort seats
 -- 3.6 Field for total amount of seats
 
-DROP TABLE IF EXISTS AIRCRAFTS
+DROP TABLE IF EXISTS AIRCRAFTS;
 CREATE TABLE AIRCRAFTS (
       aircraftId          INT,
       aircraftModel       VARCHAR(25),
@@ -117,10 +117,10 @@ INSERT INTO AIRCRAFTS (aircraftId, aircraftModel, ordinarySeats, businessSeats, 
 -- 4.1 Add field for location name (String)
 -- 4.2 Add field for locationID (String; e.g. YYC, YVR, etc.)
 
-DROP TABLE IF EXISTS LOCATIONS
+DROP TABLE IF EXISTS LOCATIONS;
 CREATE TABLE LOCATIONS (
       locationId          VARCHAR(25),
-      locationName        VARCHAR(25),
+      locationName        VARCHAR(50),
       PRIMARY KEY (locationId)
 );
 
@@ -140,8 +140,8 @@ INSERT INTO LOCATIONS (locationId, locationName) VALUES
 -- 5.7 Add field for items purchased (String)
 -- 5.8 Add foreign key reference for ticketId in tickets table
 
-DROP TABLE IF EXISTS PURCHASES
-CREATE TABLES (
+DROP TABLE IF EXISTS PURCHASES;
+CREATE TABLE PURCHASES (
       purchaseId          VARCHAR(25),
       loungeAccess        BOOLEAN,
       creditCardNumber    VARCHAR(25),
@@ -149,7 +149,7 @@ CREATE TABLES (
       totalPurchaseCost   INT,
       ticketInsurance     BOOLEAN,
       itemsPurchased      VARCHAR(25),
-      ticketId            INT,
+      ticketId            VARCHAR(25),
       PRIMARY KEY (purchaseId)
 );
 
@@ -169,7 +169,7 @@ INSERT INTO PURCHASES (purchaseId, loungeAccess, creditCardNumber, creditCardSec
 -- 6.7 Add field for flight hour (int)
 -- 6.8 Add field for flight minute (int)
 
-DROP TABLE IF EXISTS TICKETS
+DROP TABLE IF EXISTS TICKETS;
 CREATE TABLE TICKETS (
       ticketId            VARCHAR(25),
       seatNumber          INT,
@@ -202,7 +202,7 @@ INSERT INTO TICKETS (ticketId, seatNumber, flightNumber, flightDay, flightMonth,
 -- 8.11 Add field for flight departure hour
 -- 8.12 Add field for flight departure minute
 
-DROP TABLE IF EXISTS FLIGHTS
+DROP TABLE IF EXISTS FLIGHTS;
 CREATE TABLE FLIGHTS (
       flightId            INT,
       aircraftId          INT,
@@ -232,7 +232,7 @@ INSERT INTO FLIGHTS (flightId, aircraftId, originId, destinationId, flightDurati
 -- 10.4 Add field for seatType (String)
 -- 10.5 Add field for passengerId
 
-DROP TABLE IF EXISTS FLIGHTSEATS
+DROP TABLE IF EXISTS FLIGHTSEATS;
 CREATE TABLE FLIGHTSEATS (
       flightId            INT,
       seatId              INT,
@@ -247,3 +247,7 @@ INSERT INTO FLIGHTSEATS (flightId, seatId, seatIsBooked, seatType, passengerId) 
 (101, 2, FALSE, 'Ordinary', NULL),
 (102, 3, TRUE, 'Comfort', 1002);
 
+DROP USER IF EXISTS 'user'@'localhost';
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+GRANT SELECT, INSERT, UPDATE, DELETE ON airline.* TO 'user'@'localhost';
+FLUSH PRIVILEGES;

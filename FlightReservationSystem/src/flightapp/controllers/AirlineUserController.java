@@ -38,7 +38,6 @@ public class AirlineUserController {
         System.out.println("Initializing Data");
         try (Connection conn = DatabaseConnection.getConnection()) {
             populateEmployees();
-            // populatePurchases();
             populateRegisteredCustomers();
             for (RegisteredCustomer customer : airline.getRegisteredCustomers())
             {
@@ -66,6 +65,11 @@ public class AirlineUserController {
             for ( Flight flight:
                     airline.getFlights()) {
                 System.out.println(flight.getFlightId());
+            }
+            populatePurchases();
+            for (Purchase purchases : airline.getPurchases()) {
+                System.out.print("Purchase ID:");
+                System.out.println(purchases.getPurchaseId());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -157,47 +161,46 @@ public class AirlineUserController {
 
     private void populatePurchases() throws SQLException // Liam
     {
-        // Need to initialize Ticket object before populating Purchase object
-        // Need to initialize Receipt object before populating Purchase object
-        // Need to initialize CreditCard object before populating Purchase object
-        // Need to make sure we're adding purchases to the corresponding Customer object
+        ResultSet rs = DatabaseController.queryPurchases();
         
-
-        // Need to initialize Flight object before populating Purchase object
-        // ArrayList<Seat> seats = new ArrayList<Seat>();
-        // ResultSet rsFlightSeats = DatabaseController.queryFlightSeats();
-        // while (rsFlightSeats.next())
-        // {
-
-        // }
-
-
-        // ResultSet rs = DatabaseController.queryPurchases();
-        
-        // while (rs.next())
-        // {
-        //     String purchaseId = rs.getString("purchaseId");
-        //     boolean loungeAccess = rs.getBoolean("loungeAccess");
-        //     String creditCardNumber = rs.getString("creditCardNumber");
-        //     int creditCardSecurityCode = rs.getInt("creditCardSecurityCode");
-        //     int totalPurchaseCost = rs.getInt("totalPurchaseCost");
-        //     boolean ticketInsurance = rs.getBoolean("ticketInsurance");
-        //     String itemsPurchased = rs.getString("itemsPurchased");
-        //     String ticketId = rs.getString("ticketId");
-        //     int customerId = rs.getInt("customerId");
-        //     int flightId = rs.getInt("flightId");
+        while (rs.next())
+        {
+            String purchaseId = rs.getString("purchaseId");
+            boolean loungeAccess = rs.getBoolean("loungeAccess");
+            String creditCardNumber = rs.getString("creditCardNumber");
+            int creditCardSecurityCode = rs.getInt("creditCardSecurityCode");
+            int totalPurchaseCost = rs.getInt("totalPurchaseCost");
+            boolean ticketInsurance = rs.getBoolean("ticketInsurance");
+            String itemsPurchased = rs.getString("itemsPurchased");
+            int customerId = rs.getInt("customerId");
+            int flightId = rs.getInt("flightId");
+            boolean useCompanionVoucher = rs.getBoolean("useCompanionVoucher");
+            Flight currentFlight = null;
+            ArrayList<Seat> seats = null;
+            for (Flight flight : airline.getFlights())
+            {
+                if (flight.getFlightId() == (flightId))
+                {
+                    currentFlight = flight;
+                    seats = flight.getSeatList();
+                    break;
+                }
+            }
+            RegisteredCustomer currentCustomer = null;
+            for (RegisteredCustomer customer :  airline.getRegisteredCustomers())
+            {
+                if (customer.getCustomerId() == customerId)
+                {
+                    currentCustomer = customer;
+                    break;
+                }
+            }
             
-        //     Flight currentFlight = null;
-        //     for (Flight flight : airline.getFlights())
-        //     {
-        //         if (flight.getFlightId() == (flightId))
-        //         {
-        //             currentFlight = flight;
-        //             break;
-        //         }
-        //     }
-
-        // }
+            if (currentFlight != null && currentCustomer != null)
+            {
+                airline.addPurchase(currentFlight, ticketInsurance, loungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, seats, currentCustomer);
+            }
+        }
 
     }
 

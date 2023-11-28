@@ -140,8 +140,10 @@ public class Airline {
     }
 
     public void addPurchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
-        CreditCard creditCard, ArrayList<Seat> seats, Customer customer)
+        String creditCardNumber, int securityCode, ArrayList<Seat> seats, Customer customer)
     {
-        this.purchases.add(new Purchase(flight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCard, seats, customer));
+        Purchase newPurchase = new Purchase(flight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, securityCode, seats, customer);
+        this.purchases.add(newPurchase);
+        customer.addPurchase(newPurchase);
     }
 }

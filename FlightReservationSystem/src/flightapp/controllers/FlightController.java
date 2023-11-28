@@ -86,7 +86,6 @@ public class FlightController {
     {  
         // REQUIRES: Purchase parameters
         // RETURNS: Total cost of the purchase
-        CreditCard creditCard = new CreditCard(creditCardNumber, creditCardSecurityCode);
 
         // Mark companion voucher as used or don't use it at all if unavailable
         if (useCompanionVoucher && this.selectedSeats.size() > 1 && this.customer.getStatus().equals("Airline Member"))
@@ -108,7 +107,7 @@ public class FlightController {
             }
         }
 
-        Purchase currentPurchase = new Purchase(this.selectedFlight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCard, this.selectedSeats, this.customer);
+        Purchase currentPurchase = new Purchase(this.selectedFlight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, this.selectedSeats, this.customer);
         this.airline.getPurchases().add(currentPurchase);
         sendReceiptAndTicket(currentPurchase.getTickets(), currentPurchase.getReceipt());
         selectedSeats.clear();

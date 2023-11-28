@@ -3,6 +3,8 @@ package flightapp.controllers;
 
 import flightapp.DatabaseConnection;
 import flightapp.domain.entity.*;
+import flightapp.domain.valueobject.*;
+import flightapp.domain.valueobject.Date;
 
 import javax.xml.crypto.Data;
 import java.sql.*;
@@ -178,5 +180,230 @@ public class DatabaseController {
             e.printStackTrace();
             throw new RuntimeException("Error adding new flight crew.");
         }
+    }
+
+    public static void addFlight(Flight newFlight)
+    {
+        int flightId = newFlight.getFlightId();
+        int aircraftId = newFlight.getAircraft().getAircraftId();
+        String originId = newFlight.getOrigin().getLocationId();
+        String destinationId = newFlight.getDestination().getLocationId();
+        int flightDuration = newFlight.getDuration();
+        int flightCrewId = newFlight.getFlightCrew().getFlightCrewId();
+        int baseFlightCost = newFlight.getBaseFlightCost();
+        int flightDepartureMonth = newFlight.getDate().getMonth();
+        int flightDepartureDay = newFlight.getDate().getDay();
+        int flightDepartureYear = newFlight.getDate().getYear();
+        int flightDepartureHour = newFlight.getDate().getHour();
+        int flightDepartureMinute = newFlight.getDate().getMinutes();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO FLIGHT (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (%d, %d, '%s', '%s', %d, %d, %d, %d, %d, %d)", flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully added new flight.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new flight.", e);
+        }
+    }
+
+    public static void addFlightDestination(Location newLocation)
+    {
+        String locationId = newLocation.getLocationId();
+        String locationName = newLocation.getName();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO LOCATION (locationId, locationName) VALUES ('%s', '%s')", locationId, locationName);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully added new location.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new location.", e);
+        }
+    }
+
+    public static void addAircraft(Aircraft newAircraft)
+    {
+        int aircraftId = newAircraft.getAircraftId();
+        String aircraftModel = newAircraft.getModel();
+        int amountOfOrdinarySeats = newAircraft.getNumberOfOrdinarySeats();
+        int amountOfBusinessSeats = newAircraft.getNumberOfBusinessSeats();
+        int amountOfComfortSeats = newAircraft.getNumberOfComfortSeats();
+        int amountOfSeats = newAircraft.getNumberOfSeats();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO AIRCRAFT (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats, totalSeats) VALUES (%d, '%s', %d, %d, %d, %d)", aircraftId, aircraftModel, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully added new aircraft.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new aircraft.", e);
+        }
+    }
+
+    public static void addCrew(FlightCrew newCrew)
+    {
+        int crewId = newCrew.getFlightCrewId();
+        String flightCrewName = newCrew.getCrewName();
+        int assignflightID = newCrew.getAssignFlightId();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES (%d, '%d', %s)", crewId, assignflightID, flightCrewName);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully added new flight crew.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new flight crew.", e);
+        }
+    }
+
+    public static void removeFlight(int flightId)
+    {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("DELETE FROM FLIGHTS WHERE flightId = %d", flightId);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully removed flight.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error removing flight.", e);
+        }
+    }
+
+    public static void removeFlightDestination(String destinationId)
+    {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("DELETE FROM LOCATIONS WHERE locationId = '%s'", destinationId);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully removed location.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error removing location.", e);
+        }
+    }
+
+    public static void removeAircraft(int aircraftId)
+    {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("DELETE FROM AIRCRAFTS WHERE aircraftId = %d", aircraftId);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully removed aircraft.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error removing aircraft.", e);
+        }
+    }
+
+    public static void removeCrew(int crewId)
+    {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("DELETE FROM FLIGHTCREW WHERE flightCrewId = %d", crewId);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully removed flight crew.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error removing flight crew.", e);
+        }
+    }
+
+    public static void modifyFlightDuration(int flightId, int newFlightDuration)
+    {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("UPDATE FLIGHTS SET flightDuration = %d WHERE flightId = %d", newFlightDuration, flightId);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully modified flight duration.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error modifying flight duration.", e);
+        }
+    }
+
+    public static void modifyFlightDate(int flightId, Date newDate)
+    {
+        int day = newDate.getDay();
+        int month = newDate.getMonth();
+        int year = newDate.getYear();
+        int hour = newDate.getHour();
+        int minutes = newDate.getMinutes();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("UPDATE FLIGHTS SET flightDepartureDay = %d, flightDepartureMonth = %d, flightDepartureYear = %d, flightDepartureHour = %d, flightDepartureMinute = %d WHERE flightId = %d", day, month, year, hour, minutes, flightId);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully modified flight duration.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error modifying flight duration.", e);
+        }
+    }
+
+    public static void deletePurchase(String purchaseId)
+    {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("DELETE FROM PURCHASES WHERE purchaseId = '%s'", purchaseId);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully deleted purchase.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error deleting purchase.", e);
+        }
+    }
+
+    public static void addPurchase(Purchase newPurchase, int flightId, int customerId, boolean useCompanionVoucher)
+    {
+        CreditCard creditCard = newPurchase.getCreditCard();
+        String purchaseId = newPurchase.getPurchaseId();
+        boolean loungeAccess = newPurchase.getLoungeAccess();
+        String creditCardNumber = creditCard.getCreditCardNumber();
+        int creditCardSecurityCode = creditCard.getSecurityCode();
+        int totalPurchaseCost = newPurchase.getTotalPurchaseCost();
+        boolean ticketInsurance = newPurchase.getTicketInsurance();
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = String.format("INSERT INTO PURCHASES (purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, flightId, customerId, useCompanionVoucher) VALUES ('%s', %b, '%s', %d, %d, %b, %d, %d, %b)", 
+                purchaseId, loungeAccess, creditCardNumber, creditCardSecurityCode, totalPurchaseCost, ticketInsurance, flightId, customerId, useCompanionVoucher);
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.executeUpdate();
+                System.out.println("Successfully added new purchase.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new purchase.", e);
+        }
+
+
+        
     }
 }

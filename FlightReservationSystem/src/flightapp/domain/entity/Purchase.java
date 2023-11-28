@@ -99,4 +99,19 @@ public class Purchase {
     {
         return this.purchaseId;
     }
+
+    public boolean getLoungeAccess()
+    {
+        return this.loungeAccess;
+    }
+
+    public CreditCard getCreditCard()
+    {
+        return this.creditCard;
+    }
+
+    public boolean getTicketInsurance()
+    {
+        return this.ticketInsurance;    
+    }
 }

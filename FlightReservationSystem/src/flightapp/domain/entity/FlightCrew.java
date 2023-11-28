@@ -7,12 +7,6 @@ public class FlightCrew {
     private int flightCrewId;
     private int assignflightId;
     private String crewName;
-    private ArrayList<Employee> flightAttendants;
-
-    public FlightCrew(int crewId, ArrayList<Employee> flightAttendants) {
-        this.flightCrewId = crewId;
-        this.flightAttendants = flightAttendants;
-    }
 
     public FlightCrew(int crewId, int flightId, String crewName) {
         this.flightCrewId = crewId;
@@ -31,11 +25,6 @@ public class FlightCrew {
     public int getAssignFlightId()
     {
         return this.assignflightId;
-    }
-
-    public ArrayList<Employee> getFlightAttendants()
-    {
-        return this.flightAttendants;
     }
 
     public String toString() {

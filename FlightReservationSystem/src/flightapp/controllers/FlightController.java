@@ -106,6 +106,10 @@ public class FlightController {
                 }
             }
         }
+        else
+        {
+            useCompanionVoucher = false;
+        }
 
         Purchase currentPurchase = new Purchase(this.selectedFlight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, this.selectedSeats, this.customer);
         this.airline.getPurchases().add(currentPurchase);
@@ -120,7 +124,7 @@ public class FlightController {
                 break;
             }
         }
-        // TODO: Need to update database
+        DatabaseController.addPurchase(currentPurchase, this.selectedFlight.getFlightId(), this.customer.getCustomerId(), useCompanionVoucher);
         
     }
 
@@ -161,7 +165,7 @@ public class FlightController {
                 }
             }
         }
-        // Need to find purchase and refund; update database
+        DatabaseController.deletePurchase(purchaseId);
     }
 
     public String sendPromotionalNews()

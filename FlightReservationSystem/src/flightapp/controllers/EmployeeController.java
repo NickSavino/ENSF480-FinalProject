@@ -39,22 +39,18 @@ public class EmployeeController {
         return filteredFlights;
     }
 
-    public ArrayList<Employee> browseCrew(int flightId)
+    public FlightCrew browseCrew(int flightId)
     {
-        // TODO: How does it make sense that we're returning a bunch of list flights for a single flight? Isn't there only one?
-        ArrayList<Employee> flightCrew = new ArrayList<Employee>();
-        for (Flight flight : this.airline.getFlights())
+        FlightCrew foundFlightCrew = null;
+        for (FlightCrew flightCrew : this.airline.getFlightCrew())
         {
-            if (flight.getFlightId() == flightId)
+            if (flightCrew.getAssignFlightId() == flightId)
             {
-                FlightCrew foundFlightCrew = flight.getFlightCrew();
-                for (Employee employee : foundFlightCrew.getFlightAttendants())
-                {
-                    flightCrew.add(employee);
-                }
+                foundFlightCrew = flightCrew;
+                return foundFlightCrew;
             }
         }
-        return flightCrew;
+        return foundFlightCrew;
     }
 
     public ArrayList<Aircraft> browseAircrafts()
@@ -62,7 +58,7 @@ public class EmployeeController {
         return this.airline.getAircrafts();
     }
 
-    public void addCrew(int newCrewId, ArrayList<Integer> employeeIds)
+    public void addCrew(int newCrewId, String crewName, int assignFlightId)
     {
         // Add a new crew object to the airline list of flight crews (don't do anything if crewId already exists)
         for (FlightCrew crew : this.airline.getFlightCrew())
@@ -73,43 +69,11 @@ public class EmployeeController {
             }
         }
 
-        ArrayList<Employee> flightAttendants = new ArrayList<Employee>();
-        
-        for (Integer id : employeeIds)
-        {
-            for (Employee employee : this.airline.getEmployees())
-            {
-                if (employee.getEmployeeId() == id)
-                {
-                    flightAttendants.add(employee);
-                }
-            }
-        }
-
-        FlightCrew newCrew = new FlightCrew(newCrewId, flightAttendants);
+        FlightCrew newCrew = new FlightCrew(newCrewId, assignFlightId, crewName);
         this.airline.getFlightCrew().add(newCrew);
-
-        // TODO: Need to implement update to database
+        DatabaseController.addCrew(newCrew);
     }
-
-    public static void addCrew(FlightCrew newCrew)
-    {
-        int crewId = newCrew.getFlightCrewId();
-        String flightCrewName = newCrew.getCrewName();
-        int assignflightID = newCrew.getAssignFlightId();
-
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES (%d, '%d', %s)", crewId, assignflightID, flightCrewName);
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.executeUpdate();
-                System.out.println("Successfully added new flight crew.");
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error adding new flight crew.", e);
-        }
-    }
+    
 
     public void removeCrew(int crewId)
     {
@@ -122,7 +86,7 @@ public class EmployeeController {
                 break;
             }
         }
-        // TODO: Need to update database
+        DatabaseController.removeCrew(crewId);
     }
 
     public void addAircraft(String aircraftModel, int newAircraftId, int amountOfOrdinarySeats,
@@ -140,32 +104,10 @@ public class EmployeeController {
         Aircraft newAircraft = new Aircraft(aircraftModel, newAircraftId, amountOfOrdinarySeats,
             amountOfBusinessSeats, amountOfComfortSeats);
         this.airline.getAircrafts().add(newAircraft);
-        
-        // TODO: Need to update database
-
+        DatabaseController.addAircraft(newAircraft);
     }
 
-    public static void addAircraft(Aircraft newAircraft)
-    {
-        int aircraftId = newAircraft.getAircraftId();
-        String aircraftModel = newAircraft.getModel();
-        int amountOfOrdinarySeats = newAircraft.getNumberOfOrdinarySeats();
-        int amountOfBusinessSeats = newAircraft.getNumberOfBusinessSeats();
-        int amountOfComfortSeats = newAircraft.getNumberOfComfortSeats();
-        int amountOfSeats = newAircraft.getNumberOfSeats();
-
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO AIRCRAFT (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats, totalSeats) VALUES (%d, '%s', %d, %d, %d, %d)", aircraftId, aircraftModel, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats);
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.executeUpdate();
-                System.out.println("Successfully added new aircraft.");
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error adding new aircraft.", e);
-        }
-    }
+    
 
     public void removeAircraft(int aircraftId)
     {
@@ -178,7 +120,7 @@ public class EmployeeController {
                 break;
             }
         }
-        // TODO: Need to update database
+        DatabaseController.removeAircraft(aircraftId);
     }
 
     public void removeFlightDestination(String destinationId)
@@ -192,8 +134,7 @@ public class EmployeeController {
                 break;
             }
         }
-
-        // TODO: Need to update database
+        DatabaseController.removeFlightDestination(destinationId);
     }
 
     public void addFlightDestination(String destinationId, String locationName)
@@ -209,30 +150,11 @@ public class EmployeeController {
 
         Location newLocation = new Location(destinationId, locationName);
         this.airline.getLocations().add(newLocation);
-
-        // TODO: Need to update database
-    }
-
-    public static void addFlightDestination(Location newLocation)
-    {
-        String locationId = newLocation.getLocationId();
-        String locationName = newLocation.getName();
-
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO LOCATION (locationId, locationName) VALUES ('%s', '%s')", locationId, locationName);
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.executeUpdate();
-                System.out.println("Successfully added new location.");
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error adding new location.", e);
-        }
+        DatabaseController.addFlightDestination(newLocation);
     }
 
     public void addFlight(int flightId, int aircraftId, String originId, String destinationId, 
-        int year, int day, int month, int crewId, int flightDuration, int baseFlightCost)
+        int year, int day, int month, int min, int sec, int crewId, int flightDuration, int baseFlightCost)
     {
         // Add flight to airline flight list (Don't do anything if flightId already exists)
         for (Flight flight : this.airline.getFlights())
@@ -287,35 +209,7 @@ public class EmployeeController {
         {
             Flight newFlight = new Flight(aircraft, flightId, origin, destination, baseFlightCost, flightCrew, timeOfDeparture, flightDuration);
             this.airline.getFlights().add(newFlight);
-        }
-        // TODO: Need to update database
-    }
-
-    public static void addFlight(Flight newFlight)
-    {
-        int flightId = newFlight.getFlightId();
-        int aircraftId = newFlight.getAircraft().getAircraftId();
-        String originId = newFlight.getOrigin().getLocationId();
-        String destinationId = newFlight.getDestination().getLocationId();
-        int flightDuration = newFlight.getDuration();
-        int flightCrewId = newFlight.getFlightCrew().getFlightCrewId();
-        int baseFlightCost = newFlight.getBaseFlightCost();
-        int flightDepartureMonth = newFlight.getDate().getMonth();
-        int flightDepartureDay = newFlight.getDate().getDay();
-        int flightDepartureYear = newFlight.getDate().getYear();
-        int flightDepartureHour = newFlight.getDate().getHour();
-        int flightDepartureMinute = newFlight.getDate().getMinutes();
-
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO FLIGHT (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (%d, %d, '%s', '%s', %d, %d, %d, %d, %d, %d)", flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute);
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.executeUpdate();
-                System.out.println("Successfully added new flight.");
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error adding new flight.", e);
+            DatabaseController.addFlight(newFlight);
         }
     }
 
@@ -330,13 +224,13 @@ public class EmployeeController {
                 break;
             }
         }
-        // TODO: Need to update database
+        DatabaseController.removeFlight(flightId);
     }
 
-    public void modifyFlightDate(int flightId, int day, int month, int year)
+    public void modifyFlightDate(int flightId, int day, int month, int year, int hour, int min)
     {
         // Update data associated with flight object
-        Date newDate = new Date(day, month, year);
+        Date newDate = new Date(day, month, year, hour, min);
         for (Flight flight : this.airline.getFlights())
         {
             if (flight.getFlightId() == flightId)
@@ -345,7 +239,7 @@ public class EmployeeController {
                 break;
             }
         }
-        // TODO: Need to update database
+        DatabaseController.modifyFlightDate(flightId, newDate);
     }
 
     public void modifyFlightDuration(int flightId, int newFlightDuration)
@@ -359,7 +253,7 @@ public class EmployeeController {
                 break;
             }
         }
-        // TODO: Need to update database
+        DatabaseController.modifyFlightDuration(flightId, newFlightDuration);
     }
 
     public ArrayList<RegisteredCustomer> retrieveRegisteredUsers()

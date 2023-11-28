@@ -175,7 +175,6 @@ public class AirlineUserController {
             int creditCardSecurityCode = rs.getInt("creditCardSecurityCode");
             int totalPurchaseCost = rs.getInt("totalPurchaseCost");
             boolean ticketInsurance = rs.getBoolean("ticketInsurance");
-            String itemsPurchased = rs.getString("itemsPurchased");
             int customerId = rs.getInt("customerId");
             int flightId = rs.getInt("flightId");
             boolean useCompanionVoucher = rs.getBoolean("useCompanionVoucher");

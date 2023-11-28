@@ -6,8 +6,9 @@ import java.awt.*;
 public class AddCrewForm extends JDialog {
 
     // Components
+    private JTextField crewIdField;
     private JTextField crewNameField;
-    private JTextField crewPositionField;
+    private JTextField assignedFlightIdField;
     private JButton submitButton;
     private JButton cancelButton;
 
@@ -17,24 +18,27 @@ public class AddCrewForm extends JDialog {
         super(parent, "Add a Crew Member", true);
         this.callback = callback;
         initializeUI();
-        this.setSize(300, 200);
+        this.setSize(300, 250);
         this.setLocationRelativeTo(parent); // Center on parent
     }
 
     private void initializeUI() {
-        this.setLayout(new GridLayout(3, 2, 10, 10));
+        this.setLayout(new GridLayout(4, 2, 10, 10));
 
         // Initialize components
+        crewIdField = new JTextField();
         crewNameField = new JTextField();
-        crewPositionField = new JTextField();
+        assignedFlightIdField = new JTextField();
         submitButton = new JButton("Submit");
         cancelButton = new JButton("Cancel");
 
         // Add components to dialog
+        this.add(new JLabel("Crew ID:"));
+        this.add(crewIdField);
         this.add(new JLabel("Name:"));
         this.add(crewNameField);
-        this.add(new JLabel("Position:"));
-        this.add(crewPositionField);
+        this.add(new JLabel("Assigned Flight ID:"));
+        this.add(assignedFlightIdField);
         this.add(submitButton);
         this.add(cancelButton);
 
@@ -44,14 +48,19 @@ public class AddCrewForm extends JDialog {
     }
 
     private void onSubmit() {
-        // Validate input, etc.
-        String crewName = crewNameField.getText();
-        String crewPosition = crewPositionField.getText();
-        // Return submission information and potentially add to a list
-        if (callback != null) {
-            callback.onCrewAdded(crewName, crewPosition);
+        // Validate input
+        try {
+            int crewId = Integer.parseInt(crewIdField.getText());
+            String crewName = crewNameField.getText();
+            int assignedFlightId = Integer.parseInt(assignedFlightIdField.getText());
+
+            if (callback != null) {
+                callback.onCrewAdded(crewId, crewName, assignedFlightId);
+            }
+            dispose();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter valid numeric values for Crew ID and Assigned Flight ID", "Input Error", JOptionPane.ERROR_MESSAGE);
         }
-        dispose();
     }
 
     private void onCancel() {

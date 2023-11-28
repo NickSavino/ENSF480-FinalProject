@@ -162,15 +162,15 @@ public class DatabaseController {
         }
     }
 
-    public static void addCrew(FlightCrew newCrew)
+    public static void addCrew(int flightCrewid, String flightCrewName, int assignFlightId)
     {
-        int flightCrewid = newCrew.getFlightCrewId();
-        String flightCrewName = newCrew.getCrewName();
-        int assignFlightId = newCrew.getAssignFlightId();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES (%d, %d, %s)", flightCrewid, assignFlightId, flightCrewName);
+            String query = "INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES (?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, flightCrewid);
+                stmt.setInt(2, assignFlightId);
+                stmt.setString(3, flightCrewName);
                 stmt.executeUpdate();
                 System.out.println("New flight crew added successfully.");
             }

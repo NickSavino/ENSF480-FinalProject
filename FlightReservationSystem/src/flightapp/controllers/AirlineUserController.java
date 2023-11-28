@@ -43,10 +43,7 @@ public class AirlineUserController {
             populateRegisteredCustomers();
             for (RegisteredCustomer customer : airline.getRegisteredCustomers())
             {
-                System.out.println(customer.hasCompanyCreditCard());
-                System.out.println(customer.getCustomerId());
-                System.out.println(customer.getCustomerUsername());
-                System.out.println(customer.getStatus());
+                System.out.println(customer.toString());
             }
             populateFlightCrews();
             for ( FlightCrew flightCrew:
@@ -375,6 +372,7 @@ public class AirlineUserController {
         
     }
 
+
     public void applyForAirlineCreditCard(String newCreditCardNumber, int newSecurityCode, RegisteredCustomer customer)
     {
         customer.setCreditCard(newCreditCardNumber, newSecurityCode);
@@ -424,6 +422,7 @@ public class AirlineUserController {
         
         ArrayList<String> registeredUserStrings = new ArrayList<>();
         for (RegisteredCustomer registeredCustomer : airline.getRegisteredCustomers()) {
+            System.out.println("REGISTERED CUSTOMER: " + registeredCustomer.toString());
             registeredUserStrings.add(registeredCustomer.toString());
         }
         return registeredUserStrings;

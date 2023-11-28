@@ -87,6 +87,6 @@ public class RegisteredCustomer extends Customer {
     }
 
     public String toString() {
-        return username + "-" + getEmail() + "-" + getName().getFirstName() + getName().getLastName();
+        return username + " - " + getEmail() + " - " + getName().getFirstName() + " " + getName().getLastName();
     }
 }

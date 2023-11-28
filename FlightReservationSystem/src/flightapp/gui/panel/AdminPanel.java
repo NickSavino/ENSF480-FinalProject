@@ -1,5 +1,7 @@
 package flightapp.gui.panel;
 
+import flightapp.DatabaseConnection;
+import flightapp.controllers.DatabaseController;
 import flightapp.gui.form.AddAircraftForm;
 import flightapp.gui.form.AddCrewForm;
 import flightapp.gui.form.AddFlightForm;
@@ -8,6 +10,7 @@ import flightapp.gui.navigation.NavigationController;
 import flightapp.gui.main.MainView;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -120,7 +123,7 @@ public class AdminPanel extends JPanel implements FormCallback {
                 aircraftsModel.addElement(aircraft);
             }
             return aircraftsModel;
-        } else if ("Registered User".equals(type)) {
+        } else if ("Registered Users".equals(type)) {
             usersModel = new DefaultListModel<>();
             for (String user : mainView.getUserController().getRegisteredUsersString()) {
                 usersModel.addElement(user);
@@ -240,8 +243,12 @@ public class AdminPanel extends JPanel implements FormCallback {
     }
 
     @Override
-    public void onCrewAdded(String crewName, String assignedFlight) {
-        crewsModel.addElement(crewName);
+    public void onCrewAdded(int crewId, String crewName, int assignedFlightId) {
+
+        crewsModel.addElement(crewName + "-" + Integer.toString(crewId));
+        DatabaseController.addCrew(crewId, crewName, assignedFlightId);
+
+
     }
 
     @Override

@@ -21,15 +21,15 @@ public class AirlineUserController {
 
     public AirlineUserController() {
         // Initialize Airline object with database values
-        airline = new Airline();
-        initializeDataOnStartup(airline);
+        this.airline = new Airline();
+        initializeDataOnStartup();
 
         // Initialize controllers
         employeeController = new EmployeeController(airline);
         flightController = new FlightController(airline);
     }
 
-    private void initializeDataOnStartup(Airline airline)
+    private void initializeDataOnStartup()
     {
         // TODO: Need to pull all data from the database to populate the airline object
         System.out.println("Initializing Data");
@@ -41,7 +41,47 @@ public class AirlineUserController {
         return;
     }
 
-    // TODO: Need to direct functionality into the proper controllers from here
+    private void populateFlights() // Nick
+    {
+        // Might be easier to call this after RegisteredCustomers is already initialized (for passengers) (I could be wrong)
+        DatabaseController.queryFlights();
+    }
+
+    private void populateEmployees() // Nick
+    {
+        
+    }
+
+    private void populateAircrafts() // Bruce
+    {
+
+    }
+
+    private void populateFlightCrews() // Bruce
+    {
+        // Might be easier to call this after Employees ArrayList is already initialized
+
+    }
+
+    private void populateLocations() // Bruce
+    {
+
+    }
+
+    private void populatePurchases() // Liam
+    {
+        // Need to initialize Ticket object before populating Purchase object
+        // Need to initialize Receipt object before populating Purchase object
+        // Need to initialize CreditCard object before populating Purchase objecte
+
+    }
+
+    private void populateRegisteredCustomers() // Liam
+    {
+        // Need to check if customer is an airline member; if so then create CompanionVoucher object
+        // Need to create a CreditCard after checking to ensure it is not null
+
+    }
 
     public boolean customerLogin(String userId, String password)
     {
@@ -116,7 +156,6 @@ public class AirlineUserController {
     {
         RegisteredCustomer newCustomer = new RegisteredCustomer(username, firstName, lastName, houseNumber, street, 
             city, province, country, email, password);
-        this.airline.getCustomers().add(newCustomer);
         this.airline.getRegisteredCustomers().add(newCustomer);
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
         loginSingleton.addCustomer(newCustomer.getCustomerUsername(), newCustomer.getPassword());

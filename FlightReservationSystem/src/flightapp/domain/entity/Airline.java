@@ -5,19 +5,17 @@ import flightapp.domain.valueobject.*;
 
 public class Airline {
 
-    private ArrayList<Flight> flights;
-    private ArrayList<Employee> employees;
-    private ArrayList<Customer> customers;
-    private ArrayList<Aircraft> aircrafts;
-    private ArrayList<FlightCrew> flightCrew;
-    private ArrayList<Location> locations;
-    private ArrayList<Purchase> purchases;
-    private ArrayList<RegisteredCustomer> registeredCustomers;
+    private ArrayList<Flight> flights; // Person 1 - Nick
+    private ArrayList<Employee> employees; // Person 1
+    private ArrayList<Aircraft> aircrafts; // Person 3 - Bruce
+    private ArrayList<FlightCrew> flightCrew; // Person 3
+    private ArrayList<Location> locations; // Person 3
+    private ArrayList<Purchase> purchases; // Person 2 - Liam
+    private ArrayList<RegisteredCustomer> registeredCustomers; // Person 2
     
     public Airline() {
         this.flights = new ArrayList<Flight>();
         this.employees = new ArrayList<Employee>();
-        this.customers = new ArrayList<Customer>();
         this.registeredCustomers = new ArrayList<RegisteredCustomer>();
         this.aircrafts = new ArrayList<Aircraft>();
         this.flightCrew = new ArrayList<FlightCrew>();
@@ -43,11 +41,6 @@ public class Airline {
     public ArrayList<FlightCrew> getFlightCrew() 
     {
         return this.flightCrew;
-    }
-
-    public ArrayList<Customer> getCustomers()
-    {
-        return this.customers;
     }
 
     public ArrayList<Employee> getEmployees()

@@ -71,6 +71,8 @@ public class DatabaseController {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error Querying Locations", e);
+        }
+    }
 
     public static void insertCustomer(RegisteredCustomer customer) {
         // SQL INSERT statement

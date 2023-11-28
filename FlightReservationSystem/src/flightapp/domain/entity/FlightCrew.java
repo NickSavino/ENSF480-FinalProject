@@ -24,6 +24,14 @@ public class FlightCrew {
         return this.flightCrewId;
     }
 
+    public int getAssignflightId() {
+        return this.assignflightId;
+    }
+
+    public String getCrewName() {
+        return this.crewName;
+    }
+
     public ArrayList<Employee> getFlightAttendants()
     {
         return this.flightAttendants;

@@ -70,4 +70,24 @@ public class Date {
         }
         return date;
     }
+
+    public int getMonth() {
+        return this.month;
+    }
+
+    public int getYear() {
+        return this.year;
+    }
+
+    public int getDay() {
+        return this.day;
+    }
+
+    public int getHour() {
+        return this.hour;
+    }
+
+    public int getMinutes() {
+        return this.minutes;
+    }
 }

@@ -1,6 +1,8 @@
 package flightapp.controllers;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -34,22 +36,43 @@ public class AirlineUserController {
         // TODO: Need to pull all data from the database to populate the airline object
         System.out.println("Initializing Data");
         try (Connection conn = DatabaseConnection.getConnection()) {
-
+            populateEmployees();
+            for ( Employee employee:
+                    airline.getEmployees()) {
+                System.out.println(employee.getEmployeeId());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return;
     }
-
-    private void populateFlights() // Nick
+    private void populateFlights() throws SQLException // Nick
     {
         // Might be easier to call this after RegisteredCustomers is already initialized (for passengers) (I could be wrong)
-        DatabaseController.queryFlights();
+        ResultSet rs = DatabaseController.queryFlights();
+        while (rs.next()) {
+        }
     }
 
-    private void populateEmployees() // Nick
+    private void populateEmployees() throws SQLException // Nick
     {
-        
+        ResultSet rs = DatabaseController.queryEmployees();
+        while (rs.next()) {
+            int employeeId = rs.getInt("employeeId");
+            int flightCrewId = rs.getInt("flightcrewID");
+            String password = rs.getString("password");
+            String employeeType = rs.getString("employeeType");
+            String firstName = rs.getString("firstName");
+            String lastName = rs.getString("lastName");
+            int houseNumber = rs.getInt("houseNumber");
+            String street = rs.getString("street");
+            String city = rs.getString("city");
+            String province = rs.getString("province");
+            String country = rs.getString("country");
+            String email = rs.getString("email");
+
+            airline.addEmployee(employeeId, flightCrewId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email);
+        }
     }
 
     private void populateAircrafts() // Bruce

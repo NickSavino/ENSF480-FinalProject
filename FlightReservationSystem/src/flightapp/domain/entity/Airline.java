@@ -57,4 +57,16 @@ public class Airline {
     {
         return this.purchases;
     }
+
+    public void addFlight() {
+    }
+
+    public void addEmployee(int employeeId, int flightCrewId,
+                            String password, String employeeType,
+                            String firstName, String lastName,
+                            int houseNumber, String street,
+                            String city, String province,
+                            String country, String email) {
+        this.employees.add(new Employee(employeeId, flightCrewId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email));
+    }
 }

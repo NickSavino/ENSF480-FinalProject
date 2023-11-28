@@ -71,9 +71,16 @@ public class Airline {
     }
 
     public void addAircraft(int aircraftID, String model, int amountOfOrdinarySeats, int amountOfBusinessSeats,
-            int amountOfComfortSeats) {
-        this.aircrafts.add(new Aircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats));
+            int amountOfComfortSeats, int amountOfSeats) {
+        this.aircrafts.add(new Aircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats));
     }
 
+    //public void addFlightCrew(int crewId, ArrayList<Employee> flightAttendants) {
+        //this.flightCrew.add(new FlightCrew(crewId, flightAttendants));
+    //}
+
+    public void addLocation(String name, String locationId) {
+        this.locations.add(new Location(name, locationId));
+    }
 
 }

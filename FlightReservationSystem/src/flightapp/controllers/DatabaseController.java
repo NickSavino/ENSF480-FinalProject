@@ -46,4 +46,30 @@ public class DatabaseController {
             throw new RuntimeException("Error Querying Aircrafts", e);
         }
     }
+
+    //public static ResultSet queryFlightCrews() {
+        //String query = "SELECT * FROM FLIGHT_CREWS";
+
+        //try {
+            //Connection conn = DatabaseConnection.getConnection();
+            //PreparedStatement stmt = conn.prepareStatement(query);
+            //return stmt.executeQuery();
+        //} catch (SQLException e) {
+            //e.printStackTrace();
+            //throw new RuntimeException("Error Querying Flight Crews", e);
+        //}
+    //}
+
+    public static ResultSet queryLocations() {
+        String query = "SELECT * FROM LOCATIONS";
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            return stmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Locations", e);
+        }
+    }
 }

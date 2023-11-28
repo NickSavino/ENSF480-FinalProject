@@ -21,7 +21,7 @@ public class Aircraft {
     }
 
     public Aircraft(int id, String model, int amountOfOrdinarySeats,
-        int amountOfBusinessSeats, int amountOfComfortSeats) {
+        int amountOfBusinessSeats, int amountOfComfortSeats, int amountOfSeats) {
 
         this.model = model;
         this.aircraftId = id;

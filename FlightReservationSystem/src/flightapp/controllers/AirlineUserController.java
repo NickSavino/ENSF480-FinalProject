@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import flightapp.DatabaseConnection;
 import flightapp.domain.entity.*;
 import flightapp.domain.pattern.*;
+import flightapp.domain.valueobject.*;
 
 
 public class AirlineUserController {
@@ -41,10 +42,20 @@ public class AirlineUserController {
                     airline.getEmployees()) {
                 System.out.println(employee.getEmployeeId());
             }
+            //populateFlightCrews();
+            //for ( FlightCrew flightCrew:
+                    //airline.getFlightCrew()) {
+                //System.out.println(flightCrew.getFlightCrewId());
+            //}
             populateAircrafts();
             for ( Aircraft aircraft:
                     airline.getAircrafts()) {
                 System.out.println(aircraft.getAircraftId());
+            }
+            populateLocations();
+            for ( Location location:
+                    airline.getLocations()) {
+                System.out.println(location.getName());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,21 +100,36 @@ public class AirlineUserController {
             int amountOfOrdinarySeats = rs.getInt("ordinarySeats");
             int amountOfBusinessSeats = rs.getInt("businessSeats");
             int amountOfComfortSeats = rs.getInt("comfortSeats");
+            int amountOfSeats = rs.getInt("totalSeats");
             
-            airline.addAircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats);
+            airline.addAircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats);
         }
 
     }
 
-    private void populateFlightCrews() // Bruce
+    //private void populateFlightCrews() throws SQLException // Bruce
+    //{
+        //ResultSet rs = DatabaseController.queryEmployees();
+        //while (rs.next()) {
+            //String employeeType = rs.getString("employeeType");
+
+            // Filter out only flight attendants
+            //if (employeeType.equals("Flight Attendant")) {
+                //int flightCrewId = rs.getInt("flightCrewID");
+
+                
+        //}
+    //}
+
+    private void populateLocations() throws SQLException// Bruce
     {
-        // Might be easier to call this after Employees ArrayList is already initialized
+        ResultSet rs = DatabaseController.queryLocations();
+        while (rs.next()) {
+            String locationID = rs.getString("locationID");
+            String name = rs.getString("locationName");
 
-    }
-
-    private void populateLocations() // Bruce
-    {
-
+            airline.addLocation(locationID, name);
+        }
     }
 
     private void populatePurchases() // Liam

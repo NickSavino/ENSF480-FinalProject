@@ -21,7 +21,6 @@ USE AIRLINE;
 DROP TABLE IF EXISTS EMPLOYEES;
 CREATE TABLE EMPLOYEES (
       employeeId          INT,
-      flightcrewID        INT DEFAULT NULL,
       password            VARCHAR(25),
       employeeType        VARCHAR(25),
       firstName           VARCHAR(25),
@@ -35,10 +34,10 @@ CREATE TABLE EMPLOYEES (
       PRIMARY KEY (employeeId)
 );
 
-INSERT INTO EMPLOYEES (employeeId, flightcrewID, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email) VALUES
-(101, NULL, 'password123', 'Admin', 'John', 'Doe', 123, 'Main St', 'Anytown', 'AB', 'Canada', 'john.doe@email.com'),
-(102, 201, 'pw456', 'Flight Attendant', 'Jane', 'Smith', 456, 'Oak Ave', 'Anytown', 'BC', 'Canada', 'jane.smith@email.com'),
-(103, 201, 'secure789', 'Airline', 'Alice', 'Johnson', 789, 'Pine Rd', 'Anytown', 'ON', 'Canada', 'alice.johnson@email.com');
+INSERT INTO EMPLOYEES (employeeId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email) VALUES
+(101, 'password123', 'Admin', 'John', 'Doe', 123, 'Main St', 'Anytown', 'AB', 'Canada', 'john.doe@email.com'),
+(102, 'pw456', 'Flight Attendant', 'Jane', 'Smith', 456, 'Oak Ave', 'Anytown', 'BC', 'Canada', 'jane.smith@email.com'),
+(103, 'secure789', 'Airline', 'Alice', 'Johnson', 789, 'Pine Rd', 'Anytown', 'ON', 'Canada', 'alice.johnson@email.com');
 
 
 -- 2. Add table for registered customers
@@ -248,6 +247,25 @@ INSERT INTO FLIGHTSEATS (flightId, seatId, seatIsBooked, seatType, passengerId) 
 (100, 1, TRUE, 'Business', 1001),
 (101, 2, FALSE, 'Ordinary', NULL),
 (102, 3, TRUE, 'Comfort', 1002);
+
+
+-- 11. Add table for flight crew
+-- 11.1 Add field for flightcrewID (int)
+-- 11.2 Add field for assignflightID (int)
+-- 11.3 Add field for crewName (String)
+
+DROP TABLE IF EXISTS FLIGHTCREW;
+CREATE TABLE FLIGHTCREW (
+      flightcrewID        INT,
+      assignflightID      INT,
+      crewName            VARCHAR(25),
+      PRIMARY KEY (flightcrewID)
+);
+
+INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES
+(201, 100, 'Alpha'),
+(202, 101, 'Bravo'),
+(203, 102, 'Charlie');
 
 DROP USER IF EXISTS 'user'@'localhost';
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';

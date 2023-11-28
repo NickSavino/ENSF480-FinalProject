@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import flightapp.DatabaseConnection;
 import flightapp.domain.entity.*;
 import flightapp.domain.pattern.*;
+import flightapp.domain.valueobject.*;
 
 
 public class AirlineUserController {
@@ -46,7 +47,21 @@ public class AirlineUserController {
                 System.out.println(customer.getCustomerUsername());
                 System.out.println(customer.getStatus());
             }
-            
+            populateFlightCrews();
+            for ( FlightCrew flightCrew:
+                    airline.getFlightCrew()) {
+                System.out.println(flightCrew.getFlightCrewId());
+            }
+            populateAircrafts();
+            for ( Aircraft aircraft:
+                    airline.getAircrafts()) {
+                System.out.println(aircraft.getAircraftId());
+            }
+            populateLocations();
+            for ( Location location:
+                    airline.getLocations()) {
+                System.out.println(location.getName());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,7 +80,6 @@ public class AirlineUserController {
         ResultSet rs = DatabaseController.queryEmployees();
         while (rs.next()) {
             int employeeId = rs.getInt("employeeId");
-            int flightCrewId = rs.getInt("flightcrewID");
             String password = rs.getString("password");
             String employeeType = rs.getString("employeeType");
             String firstName = rs.getString("firstName");
@@ -77,24 +91,47 @@ public class AirlineUserController {
             String country = rs.getString("country");
             String email = rs.getString("email");
 
-            airline.addEmployee(employeeId, flightCrewId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email);
+            airline.addEmployee(employeeId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email);
         }
     }
 
-    private void populateAircrafts() // Bruce
+    private void populateAircrafts() throws SQLException // Bruce
     {
+        ResultSet rs = DatabaseController.queryAircrafts();
+        while (rs.next()) {
+            int aircraftID = rs.getInt("aircraftID");
+            String model = rs.getString("aircraftModel");
+            int amountOfOrdinarySeats = rs.getInt("ordinarySeats");
+            int amountOfBusinessSeats = rs.getInt("businessSeats");
+            int amountOfComfortSeats = rs.getInt("comfortSeats");
+            int amountOfSeats = rs.getInt("totalSeats");
+            
+            airline.addAircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats);
+        }
 
     }
 
-    private void populateFlightCrews() // Bruce
+    private void populateFlightCrews() throws SQLException // Bruce
     {
-        // Might be easier to call this after Employees ArrayList is already initialized
+        ResultSet rs = DatabaseController.queryFlightCrew();
+        while (rs.next()) {
+            int flightCrewId = rs.getInt("flightCrewID");
+            int assignflightId = rs.getInt("assignflightID");
+            String crewName = rs.getString("crewName");
 
-    }
+            airline.addFlightCrew(flightCrewId, assignflightId, crewName);
+            }     
+        }
 
-    private void populateLocations() // Bruce
+    private void populateLocations() throws SQLException// Bruce
     {
+        ResultSet rs = DatabaseController.queryLocations();
+        while (rs.next()) {
+            String locationID = rs.getString("locationID");
+            String name = rs.getString("locationName");
 
+            airline.addLocation(locationID, name);
+        }
     }
 
     private void populatePurchases() throws SQLException // Liam

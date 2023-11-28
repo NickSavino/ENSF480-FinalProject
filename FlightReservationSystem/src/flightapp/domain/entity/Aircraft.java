@@ -20,6 +20,17 @@ public class Aircraft {
         this.amountOfSeats = amountOfOrdinarySeats + amountOfBusinessSeats + amountOfComfortSeats;
     }
 
+    public Aircraft(int id, String model, int amountOfOrdinarySeats,
+        int amountOfBusinessSeats, int amountOfComfortSeats, int amountOfSeats) {
+
+        this.model = model;
+        this.aircraftId = id;
+        this.amountOfOrdinarySeats = amountOfOrdinarySeats;
+        this.amountOfBusinessSeats = amountOfBusinessSeats;
+        this.amountOfComfortSeats = amountOfComfortSeats;
+        this.amountOfSeats = amountOfOrdinarySeats + amountOfBusinessSeats + amountOfComfortSeats;
+    }
+
     public String getModel() {
         return this.model;
     }

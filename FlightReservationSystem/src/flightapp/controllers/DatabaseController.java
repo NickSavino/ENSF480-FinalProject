@@ -35,6 +35,43 @@ public class DatabaseController {
         }
     }
 
+    public static ResultSet queryAircrafts() {
+        String query = "SELECT * FROM AIRCRAFTS";
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            return stmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Aircrafts", e);
+        }
+    }
+
+    public static ResultSet queryFlightCrew() {
+        String query = "SELECT * FROM FLIGHTCREW";
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            return stmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Flight Crews", e);
+        }
+    }
+
+    public static ResultSet queryLocations() {
+        String query = "SELECT * FROM LOCATIONS";
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            return stmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Locations", e);
+
     public static void insertCustomer(RegisteredCustomer customer) {
         // SQL INSERT statement
         String sql = "INSERT INTO customers (customerId, status, username, password, creditCardNumber, creditCardSecurityCode, " +

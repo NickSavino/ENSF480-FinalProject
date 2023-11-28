@@ -76,7 +76,8 @@ public class Airline {
     public Location getLocationByID(String locationId)
     {
         for (Location location : this.locations) {
-            if (location.getLocationId() == locationId)
+            System.out.println(location.getLocationId());
+            if (location.getLocationId().equals(locationId))
                 return location;
         }
         return null;
@@ -95,8 +96,10 @@ public class Airline {
 
         
         Aircraft aircraft = getAircraftByID(aircraftId);
+
         Location origin = getLocationByID(originId);
         Location destination = getLocationByID(destinationId);
+        System.out.println("ORIGIN AND DEST: " + origin + "-" + destination);
         FlightCrew flightCrew = getFlightCrewByID(flightCrewId);
         Date departureTime = new Date(flightDepartureDay, flightDepartureMonth, 
         flightDepartureYear, flightDepartureHour, flightDepartureMinute);

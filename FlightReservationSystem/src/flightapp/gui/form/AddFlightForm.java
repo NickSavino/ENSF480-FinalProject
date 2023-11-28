@@ -1,23 +1,29 @@
 package flightapp.gui.form;
 
+import flightapp.gui.main.MainView;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class AddFlightForm extends JDialog {
 
     // Components
-    private JComboBox<String> planeComboBox;
-    private JComboBox<String> originComboBox;
-    private JComboBox<String> destinationComboBox;
+    private JComboBox<Object> planeComboBox;
+    private JComboBox<Object> originComboBox;
+    private JComboBox<Object> destinationComboBox;
     private JTextField datePicker; //Need to build a date picking method around this
     private JButton submitButton;
     private JButton cancelButton;
     private FormCallback callback;
 
-    public AddFlightForm(JFrame parent, FormCallback callback) {
+    private MainView mainView;
+
+    public AddFlightForm(JFrame parent, FormCallback callback, MainView mainView) {
         super(parent, "Add a Flight", true);
         this.callback = callback;
+        this.mainView = mainView;
         initializeUI();
         this.setSize(400, 300);
         this.setLocationRelativeTo(parent); // Center on parent
@@ -26,9 +32,9 @@ public class AddFlightForm extends JDialog {
     private void initializeUI() {
         this.setLayout(new GridLayout(5, 2, 10, 10));
 
-        String[] planeList = {"747", "Spitfire", "A-10"};
-        String[] originList = {"Dallas", "Calgary", "Atlanta"};
-        String[] destinationList = {"Dallas", "Calgary", "Atlanta"};
+        Object[] planeList = mainView.getUserController().getAircraftsString().toArray();
+        Object[] originList = mainView.getUserController().getLocationsString().toArray();
+        Object[] destinationList = mainView.getUserController().getLocationsString().toArray();
         // Initialize components
         planeComboBox = new JComboBox<>(planeList);
         originComboBox = new JComboBox<>(originList);

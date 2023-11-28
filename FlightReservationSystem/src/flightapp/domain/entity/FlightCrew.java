@@ -37,4 +37,8 @@ public class FlightCrew {
     {
         return this.flightAttendants;
     }
+
+    public String toString() {
+        return crewName + "-" + flightCrewId;
+    }
 }

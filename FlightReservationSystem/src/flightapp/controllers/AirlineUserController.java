@@ -22,6 +22,8 @@ public class AirlineUserController {
     private boolean isCustomerLoggedIn = false;
     private boolean isEmployeeLoggedIn = false;
 
+    private boolean initializationComplete = false;
+
     public AirlineUserController() {
         // Initialize Airline object with database values
         this.airline = new Airline();
@@ -64,7 +66,7 @@ public class AirlineUserController {
             populateFlights();
             for ( Flight flight:
                     airline.getFlights()) {
-                System.out.println(flight.getFlightId());
+                System.out.println(flight);
             }
             populatePurchases();
             for (Purchase purchases : airline.getPurchases()) {
@@ -74,7 +76,13 @@ public class AirlineUserController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        initializationComplete = true;
         return;
+    }
+
+    public boolean getInitalizationStatus() {
+        return initializationComplete;
     }
     private void populateFlights() throws SQLException // Nick
     {
@@ -93,8 +101,7 @@ public class AirlineUserController {
             int flightDepartureYear = rs.getInt("flightDepartureYear");
             int flightDepartureHour = rs.getInt("flightDepartureHour");
             int flightDepartureMinute = rs.getInt("flightDepartureMinute");
-
-            airline.addFlight(flightId, aircraftId, originId, destinationId, 
+            airline.addFlight(flightId, aircraftId, originId, destinationId,
             flightDuration, flightCrewId, baseFlightCost, flightDepartureDay, 
             flightDepartureMonth, flightDepartureYear, flightDepartureHour, flightDepartureMinute);    
         }
@@ -155,7 +162,7 @@ public class AirlineUserController {
             String locationID = rs.getString("locationID");
             String name = rs.getString("locationName");
 
-            airline.addLocation(locationID, name);
+            airline.addLocation(name, locationID);
         }
     }
 
@@ -371,5 +378,54 @@ public class AirlineUserController {
     public void applyForAirlineCreditCard(String newCreditCardNumber, int newSecurityCode, RegisteredCustomer customer)
     {
         customer.setCreditCard(newCreditCardNumber, newSecurityCode);
+    }
+
+    public Airline getAirline() {
+        return airline;
+    }
+
+    public ArrayList<String> getFlightsString() {
+
+        ArrayList<String> flightStrings = new ArrayList<>();
+        for (Flight flight : airline.getFlights()) {
+            flightStrings.add(flight.toString());
+        }
+        return flightStrings;
+    }
+
+    public ArrayList<String> getAircraftsString() {
+
+        ArrayList<String> aircraftStrings = new ArrayList<>();
+        for (Aircraft aircraft : airline.getAircrafts()) {
+            aircraftStrings.add(aircraft.toString());
+        }
+        return aircraftStrings;
+    }
+
+    public ArrayList<String> getLocationsString() {
+
+        ArrayList<String> locationStrings = new ArrayList<>();
+        for (Location location : airline.getLocations()) {
+            locationStrings.add(location.getLocationId());
+        }
+        return locationStrings;
+    }
+
+    public ArrayList<String> getFlightCrewsString() {
+
+        ArrayList<String> flightCrewStrings = new ArrayList<>();
+        for (FlightCrew flightCrew : airline.getFlightCrew()) {
+            flightCrewStrings.add(flightCrew.toString());
+        }
+        return flightCrewStrings;
+    }
+
+    public ArrayList<String> getRegisteredUsersString() {
+        
+        ArrayList<String> registeredUserStrings = new ArrayList<>();
+        for (RegisteredCustomer registeredCustomer : airline.getRegisteredCustomers()) {
+            registeredUserStrings.add(registeredCustomer.toString());
+        }
+        return registeredUserStrings;
     }
 }

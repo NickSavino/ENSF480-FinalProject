@@ -25,7 +25,6 @@ public class AdminPanel extends JPanel implements FormCallback {
     private JButton browseCrewsButton;
     private JButton browseAircraftsButton;
     private JButton browseUsersButton;
-
     JPanel mainMenuPanel;
     JPanel flightsPanel;
     JPanel crewsPanel;
@@ -33,14 +32,11 @@ public class AdminPanel extends JPanel implements FormCallback {
     JPanel usersPanel;
     private NavigationController navigationController;
     private MainView mainView;
-
     DefaultListModel<String> flightsModel;
     DefaultListModel<String> crewsModel;
     DefaultListModel<String> aircraftsModel;
     DefaultListModel<String> usersModel;
-
     DefaultComboBoxModel<String> destinationsModel;
-
     private JComboBox destinationsComboBox;
 
 
@@ -96,8 +92,6 @@ public class AdminPanel extends JPanel implements FormCallback {
         panel.add(browseAircraftsButton);
         panel.add(browseUsersButton);
         panel.add(createDestinationManagementPanel());
-
-
 
         return panel;
     }

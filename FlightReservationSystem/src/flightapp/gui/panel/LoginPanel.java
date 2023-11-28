@@ -34,7 +34,13 @@ public class LoginPanel extends JPanel {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainApp.onLogin(usernameField.getText(), passwordField.getPassword().toString());
+
+                try {
+                    int employeeId = Integer.parseInt(usernameField.getText());
+                    mainApp.onLogin(employeeId, passwordField.getText());
+                } catch (NumberFormatException ex) {
+                    mainApp.onLogin(usernameField.getText(), passwordField.getText());
+                }
             }
         });
 

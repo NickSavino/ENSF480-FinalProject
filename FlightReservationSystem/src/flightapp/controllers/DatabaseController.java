@@ -250,25 +250,6 @@ public class DatabaseController {
         }
     }
 
-    public static void addCrew(FlightCrew newCrew)
-    {
-        int crewId = newCrew.getFlightCrewId();
-        String flightCrewName = newCrew.getCrewName();
-        int assignflightID = newCrew.getAssignFlightId();
-
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = String.format("INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES (%d, '%d', %s)", crewId, assignflightID, flightCrewName);
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.executeUpdate();
-                System.out.println("Successfully added new flight crew.");
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error adding new flight crew.", e);
-        }
-    }
-
     public static void removeFlight(int flightId)
     {
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -401,9 +382,6 @@ public class DatabaseController {
         catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error adding new purchase.", e);
-        }
-
-
-        
+        }        
     }
 }

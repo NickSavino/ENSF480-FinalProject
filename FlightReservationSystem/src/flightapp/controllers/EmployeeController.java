@@ -70,7 +70,7 @@ public class EmployeeController {
 
         FlightCrew newCrew = new FlightCrew(newCrewId, assignFlightId, crewName);
         this.airline.getFlightCrew().add(newCrew);
-        DatabaseController.addCrew(newCrew);
+        DatabaseController.addCrew(newCrewId, crewName, assignFlightId);
     }
     
 

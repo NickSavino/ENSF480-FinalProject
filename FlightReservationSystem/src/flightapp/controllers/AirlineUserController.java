@@ -343,8 +343,8 @@ public class AirlineUserController {
         DatabaseController.insertCustomer(newCustomer);
     }
 
-    public void employeeSignup(String firstName, String lastName, String email, int age, String password, int houseNumber,
-        String street, String city, String province, String country, String phoneNumber, String role)
+    public void employeeSignup(String firstName, String lastName, String email, String password, int houseNumber,
+        String street, String city, String province, String country, String role)
     {
         Employee newEmployee = new Employee(firstName, lastName, houseNumber, street, city, province, country, email, password, role);
         this.airline.getEmployees().add(newEmployee);

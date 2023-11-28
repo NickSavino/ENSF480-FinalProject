@@ -10,7 +10,6 @@ public class AddAircraftForm extends JDialog {
     private JTextField aircraftSeatsField;
     private JButton submitButton;
     private JButton cancelButton;
-
     private FormCallback callback;
 
     public AddAircraftForm(JFrame parent, FormCallback callback) {

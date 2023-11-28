@@ -18,6 +18,8 @@ public class MainView extends JFrame implements RegistrationCallback {
     private JButton exitButton;
     private JButton logoutButton;
     private JLabel titleLabel;
+
+    private JLabel loggedInLabel;
     public MainView() {
         // Initialize the main frame
         super("Flight Reservation System");
@@ -34,6 +36,7 @@ public class MainView extends JFrame implements RegistrationCallback {
         //Create a title label
         titleLabel = new JLabel("Flight Reservation System", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+
 
         // Create an exit button
         exitButton = new JButton("Exit");
@@ -52,17 +55,23 @@ public class MainView extends JFrame implements RegistrationCallback {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new BorderLayout());
+        titlePanel.add(titleLabel, BorderLayout.NORTH);
+        loggedInLabel = new JLabel("\t\t Not Logged in.");
+        titlePanel.add(loggedInLabel, BorderLayout.SOUTH);
 
         //Instantiate and add user panels to cardPanel
         cardPanel.add(new GuestPanel(this), "Guest");
         cardPanel.add(new LoginPanel(this), "Login");
-        cardPanel.add(new CustomerPanel(), "Customer");
         cardPanel.add(new AttendantPanel(), "Attendant");
         cardPanel.add(new AirlineAgentPanel(), "AirlineAgent");
         cardPanel.add(new AdminPanel(this), "Admin");
+        cardPanel.add(new CustomerPanel(this), "Customer");
+
         //Set Layout to organize main page elements
         setLayout(new BorderLayout());
-        add(titleLabel, BorderLayout.NORTH);
+        add(titlePanel, BorderLayout.NORTH);
         add(cardPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
@@ -80,6 +89,7 @@ public class MainView extends JFrame implements RegistrationCallback {
         if (loginSuccess) {
             if (userController.isCustomerLoggedIn()) {
                 cardLayout.show(cardPanel, "Customer");
+                loggedInLabel.setText("Logged in as: " + username);
             }
             logoutButton.setVisible(true);
         } else {
@@ -93,10 +103,16 @@ public class MainView extends JFrame implements RegistrationCallback {
         if (loginSuccess) {
             if (userController.getEmployeeType().equals("Admin")) {
                 cardLayout.show(cardPanel, "Admin");
+                loggedInLabel.setText("\t\tLogged in as: Admin - " + employeeId);
+
             } else if (userController.getEmployeeType().equals("Flight Attendant")) {
                 cardLayout.show(cardPanel, "Attendant");
+                loggedInLabel.setText("\t\t Logged in as: Flight Attendant - " + employeeId);
+
             } else if (userController.getEmployeeType().equals("Airline Agent")) {
                 cardLayout.show(cardPanel, "AirlineAgent");
+                loggedInLabel.setText("\t\t Logged in as: Airline Agent - " + employeeId);
+
             }
             logoutButton.setVisible(true);
         } else {
@@ -107,6 +123,7 @@ public class MainView extends JFrame implements RegistrationCallback {
     private void performLogout() {
         // Logic to handle logout
         cardLayout.show(cardPanel, "Login");
+        loggedInLabel.setText("\t\t Not Logged in.");
         logoutButton.setVisible(false); // Hide the logout button on logout
     }
 
@@ -124,10 +141,12 @@ public class MainView extends JFrame implements RegistrationCallback {
         userController.customerSignup( username,  password,  creditCardNumber, creditCardSecurityCode, firstName, lastName,
          houseNumber, street, city, province, country, email);
         JOptionPane.showMessageDialog(this, "Registration Successful!");
+        loggedInLabel.setText("\t\tLogged in as: " + username + " - " + firstName + " " + lastName);
         cardLayout.show(cardPanel, "Customer");
     }
 
     public void browseAsGuest() {
+        loggedInLabel.setText("\t\t Browsing as Guest.");
         cardLayout.show(cardPanel, "Guest");
     }
     public static void main(String[] args) {

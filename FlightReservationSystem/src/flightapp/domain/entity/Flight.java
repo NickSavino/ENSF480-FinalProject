@@ -118,6 +118,11 @@ public class Flight {
     {
         this.passengers.add(passenger);
     }
-    
 
+    public String toString() {
+        System.out.println(origin);
+        System.out.println(destination);
+        System.out.println(departureTime.getDateString());
+        return new String(origin.getLocationId() + "- " + destination.getLocationId() + " " + departureTime.getDateString());
+    }
 }

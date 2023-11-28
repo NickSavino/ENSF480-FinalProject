@@ -71,6 +71,8 @@ public class DatabaseController {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error Querying Locations", e);
+        }
+    }
 
     public static void insertCustomer(RegisteredCustomer customer) {
         // SQL INSERT statement
@@ -85,7 +87,7 @@ public class DatabaseController {
 
             // Set parameters
             stmt.setInt(1, customer.getCustomerId());
-            stmt.setString(2, "PlaceHolder");
+            stmt.setString(2, "Registered");
             stmt.setString(3, customer.getUsername());
             stmt.setString(4, customer.getPassword()); // Consider encrypting the password
             stmt.setString(5, customer.getCreditCardNumber());

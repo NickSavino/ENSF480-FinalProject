@@ -62,6 +62,11 @@ public class AirlineUserController {
                     airline.getLocations()) {
                 System.out.println(location.getName());
             }
+            populateFlights();
+            for ( Flight flight:
+                    airline.getFlights()) {
+                System.out.println(flight.getFlightId());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -72,6 +77,22 @@ public class AirlineUserController {
         // Might be easier to call this after RegisteredCustomers is already initialized (for passengers) (I could be wrong)
         ResultSet rs = DatabaseController.queryFlights();
         while (rs.next()) {
+            int flightId = rs.getInt("flightId");
+            int aircraftId = rs.getInt("aircraftId");
+            String originId = rs.getString("originId");
+            String destinationId = rs.getString("destinationId");
+            int flightDuration = rs.getInt("flightDuration");
+            int flightCrewId = rs.getInt("flightCrewId");
+            int baseFlightCost = rs.getInt("baseFlightCost");
+            int flightDepartureDay = rs.getInt("flightDepartureDay");
+            int flightDepartureMonth = rs.getInt("flightDepartureMonth");
+            int flightDepartureYear = rs.getInt("flightDepartureYear");
+            int flightDepartureHour = rs.getInt("flightDepartureHour");
+            int flightDepartureMinute = rs.getInt("flightDepartureMinute");
+
+            airline.addFlight(flightId, aircraftId, originId, destinationId, 
+            flightDuration, flightCrewId, baseFlightCost, flightDepartureDay, 
+            flightDepartureMonth, flightDepartureYear, flightDepartureHour, flightDepartureMinute);    
         }
     }
 

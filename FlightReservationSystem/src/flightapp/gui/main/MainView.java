@@ -19,6 +19,7 @@ public class MainView extends JFrame implements RegistrationCallback {
     private JButton logoutButton;
     private JLabel titleLabel;
 
+    private CustomerPanel customerPanel;
     private JLabel loggedInLabel;
     public MainView() {
         // Initialize the main frame
@@ -82,7 +83,8 @@ public class MainView extends JFrame implements RegistrationCallback {
         cardPanel.add(new AttendantPanel(), "Attendant");
         cardPanel.add(new AirlineAgentPanel(), "AirlineAgent");
         cardPanel.add(new AdminPanel(this), "Admin");
-        cardPanel.add(new CustomerPanel(this), "Customer");
+        this.customerPanel = new CustomerPanel(this);
+        cardPanel.add(customerPanel, "Customer");
         cardPanel.add(new GuestPanel(this), "Guest");
 
 
@@ -169,7 +171,7 @@ public class MainView extends JFrame implements RegistrationCallback {
     public static void main(String[] args) {
         // Set the look and feel to the system look and feel
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException |
                  IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
@@ -197,4 +199,9 @@ public class MainView extends JFrame implements RegistrationCallback {
         button.setBorderPainted(false);
         button.repaint();
     }
+
+    public CustomerPanel getCustomerPanel() {
+        return this.customerPanel;
+    }
+
 }

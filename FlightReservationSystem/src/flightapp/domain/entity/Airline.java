@@ -213,7 +213,7 @@ public class Airline {
 
     public void addSeatToFlight(int flightId, int seatId, String seatType, boolean isBooked) {
         Flight flight = getFlightByID(flightId);
-        flight.getAircraft().modifySeat(seatId, seatType, isBooked);
+        flight.modifySeat(seatId, seatType, isBooked);
     }
 
 	

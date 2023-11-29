@@ -36,19 +36,13 @@ public class Flight {
         int numberOfBusinessSeats = aircraft.getNumberOfBusinessSeats();
         int numberOfComfortSeats = aircraft.getNumberOfComfortSeats();
 
-        for (int i = 0; i < numberOfSeats; i++)
-        {
-            if (i < numberOfBusinessSeats)
-            {
-                this.seatList.add(new Seat(i + 1, "Business"));
-            }
-            else if (i < numberOfBusinessSeats + numberOfComfortSeats)
-            {
-                this.seatList.add(new Seat(i + 1, "Comfort"));
-            }
-            else
-            {
-                this.seatList.add(new Seat(i + 1, "Ordinary"));
+        for (int i = 0; i < numberOfSeats; i++) {
+            if (i < numberOfComfortSeats) {
+                seatList.add(new Seat(i, "Comfort"));
+            } else if (i < numberOfComfortSeats + numberOfBusinessSeats) {
+                seatList.add(new Seat(i, "Business"));
+            } else {
+                seatList.add(new Seat(i, "Ordinary"));
             }
         }
 
@@ -139,8 +133,27 @@ public class Flight {
         this.origin = origin;
     }
 
+    public Seat getSeat(int seatId) {
+        for (Seat seat : seatList) {
+            if (seat.getSeatId() == seatId) {
+                return seat;
+            }
+        }
+        return null;
+    }
+
+    public void modifySeat(int seatId, String seatType, boolean isBooked) {
+
+        Seat seat = getSeat(seatId);
+
+        if (seat != null) {
+            seat.setSeatType(seatType);
+            seat.setBooked(isBooked);
+        }
+
+    }
     public String toString() {
-        String flightString = String.format("%s to %s | Departure: %d/%d/%d %d:%d - %d", origin.getLocationId(), destination.getLocationId(),
+        String flightString = String.format("%s to %s | Departure: %d/%d/%d %02d:%02d - %d", origin.getLocationId(), destination.getLocationId(),
                 departureTime.getDay(), departureTime.getMonth(), departureTime.getYear(), departureTime.getHour(), departureTime.getMinutes(), flightId);
         return flightString;
     }

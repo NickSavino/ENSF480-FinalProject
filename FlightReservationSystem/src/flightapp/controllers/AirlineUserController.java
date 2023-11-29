@@ -2,10 +2,8 @@ package flightapp.controllers;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -15,7 +13,6 @@ import flightapp.domain.entity.*;
 import flightapp.domain.pattern.*;
 import flightapp.domain.valueobject.*;
 
-import javax.xml.crypto.Data;
 
 
 
@@ -74,6 +71,7 @@ public class AirlineUserController {
     {
         // Might be easier to call this after RegisteredCustomers is already initialized (for passengers) (I could be wrong)
         ResultSet rs = DatabaseController.queryFlights();
+
         while (rs.next()) {
             int flightId = rs.getInt("flightId");
             int aircraftId = rs.getInt("aircraftId");
@@ -89,7 +87,15 @@ public class AirlineUserController {
             int flightDepartureMinute = rs.getInt("flightDepartureMinute");
             airline.addFlight(flightId, aircraftId, originId, destinationId,
             flightDuration, flightCrewId, baseFlightCost, flightDepartureDay, 
-            flightDepartureMonth, flightDepartureYear, flightDepartureHour, flightDepartureMinute);    
+            flightDepartureMonth, flightDepartureYear, flightDepartureHour, flightDepartureMinute);
+            
+            ResultSet rs2 = DatabaseController.querySeats(flightId);
+            while (rs2.next()) {
+                int seatId = rs2.getInt("seatId");
+                String seatType = rs2.getString("seatType");
+                boolean isBooked = rs2.getBoolean("isBooked");
+                airline.addSeatToFlight(flightId, seatId, seatType, isBooked);
+            }
         }
     }
 
@@ -474,6 +480,30 @@ public class AirlineUserController {
                           int baseFlightCost, int departureDay, int departureMonth, int departureYear, int departureHour, int departureMinute) {
 
         airline.addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay, departureMonth, departureYear, departureHour, departureMinute);
+        
+        // // Logic to add a seat to the database
+        // int amountOfSeats = airline.getAircraftByID(aircraftId).getNumberOfSeats();
+        // int amountOfBusinessSeats = airline.getAircraftByID(aircraftId).getNumberOfBusinessSeats();
+        // int amountOfComfortSeats = airline.getAircraftByID(aircraftId).getNumberOfComfortSeats();
+        // for (int i = 0; i < amountOfSeats; i++)
+        // {
+        //     if (i < amountOfBusinessSeats)
+        //     {
+        //         airline.addSeatToFlight(flightId, i + 1, "Business", false);
+        //         DatabaseController.addSeat(flightId, i + 1, "Business", false);
+        //     }
+        //     else if (i < amountOfBusinessSeats + amountOfComfortSeats)
+        //     {
+        //         airline.addSeatToFlight(flightId, i + 1, "Comfort", false);
+        //         DatabaseController.addSeat(flightId, i + 1, "Comfort", false);
+        //     }
+        //     else
+        //     {
+        //         airline.addSeatToFlight(flightId, i + 1, "Ordinary", false);
+        //         DatabaseController.addSeat(flightId, i + 1, "Ordinary", false);
+        //     }
+        // }
+
         DatabaseController.addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay, departureMonth, departureYear, departureHour, departureMinute);
     }
 

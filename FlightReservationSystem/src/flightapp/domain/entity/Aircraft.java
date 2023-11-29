@@ -77,4 +77,24 @@ public class Aircraft {
     public String toString() {
         return model + " - " + aircraftId;
     }
+
+    public Seat getSeat(int seatId) {
+        for (Seat seat : seats) {
+            if (seat.getSeatId() == seatId) {
+                return seat;
+            }
+        }
+        return null;
+    }
+
+    public void modifySeat(int seatId, String seatType, boolean isBooked) {
+        
+        Seat seat = getSeat(seatId);
+
+        if (seat != null) {
+            seat.setSeatType(seatType);
+            seat.setBooked(isBooked);
+        }
+        
+    }
 }

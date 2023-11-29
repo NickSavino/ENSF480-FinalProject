@@ -6,7 +6,6 @@ import flightapp.domain.entity.*;
 import flightapp.domain.valueobject.*;
 import flightapp.domain.valueobject.Date;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 
 public class DatabaseController {
@@ -21,6 +20,22 @@ public class DatabaseController {
             e.printStackTrace();
             throw new RuntimeException("Error Querying Flights", e);
         }
+    }
+
+    // Queries seats for a specific flight
+    public static ResultSet querySeats(int flightId) {
+        String query = "SELECT * FROM FLIGHTSEATS WHERE flightId = ?";
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, flightId);
+            return stmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error Querying Seats", e);
+        }
+
     }
 
     public static ResultSet queryAircrafts() 

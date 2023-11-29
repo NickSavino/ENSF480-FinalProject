@@ -34,7 +34,6 @@ public class CustomerPanel extends JPanel {
         // Initialize and add sub-panels
         cardPanel.add(createMainMenuPanel(), "MainMenu");
         cardPanel.add(createFlightSelectionPanel(), "FlightSelection");
-        cardPanel.add(createSeatSelectionPanel(), "SeatSelection");
         cardPanel.add(createPaymentPanel(), "Payment");
 
         setLayout(new BorderLayout());
@@ -88,6 +87,7 @@ public class CustomerPanel extends JPanel {
                 // Need to find corresponding flight and set it as active in AirlineUserController
                 String selectedFlight = list.getSelectedValue();
                 mainView.getUserController().setSelectedFlightFromString(selectedFlight);
+                updateSeatSelectionPanel();
                 navigationController.navigateTo("SeatSelection");
             }
         });
@@ -140,12 +140,15 @@ public class CustomerPanel extends JPanel {
 
     private JPanel createSeatSelectionPanel() {
         JPanel seatSelectionPanel = new JPanel();
+
+        Flight flight = mainView.getUserController().getSelectedFlight();
+        System.out.println("Selected Flight: " + flight);
+        if (flight == null) {
+            
+        }
         ArrayList<Seat> seatList = null;
-        Flight myFlight = mainView.getUserController().getSelectedFlight();
-        System.out.println("1");
         seatList = mainView.getUserController().getSelectedFlight().getSeatList();
-        System.out.println("2");
-        
+
         int rows = 0; // Amoount of rows on the aircraft
         int cols = 6; // Amount of seats per row
         
@@ -163,28 +166,42 @@ public class CustomerPanel extends JPanel {
         ArrayList<JToggleButton> selectedSeats = new ArrayList<>();
         for (int i = 0; i < rows * cols; i++) {
             JToggleButton seatButton = new JToggleButton("" + (i + 1));
-            
+            seatButton.setFocusPainted(false);
+            seatButton.setBorderPainted(false);
+            System.out.println("Seat: " + seatList.get(i).getSeatId());
+            System.out.println("Seat Type: " + seatList.get(i).getSeatType());
             if (seatList.get(i).isBooked()) {
                 seatButton.setEnabled(false);
-                seatButton.setBackground(Color.GRAY);
+                seatButton.setBackground(new Color(100, 100, 100));
+                seatButton.repaint();
             }
+            
+            
 
             // Customize the color of the buttons based on another condition
-            else if (seatList.get(i).getSeatType().equals("Comfort")) 
+            else if (seatList.get(i).getSeatType().strip().equals("Comfort")) 
             {
-                seatButton.setBackground(Color.BLUE); 
+                seatButton.setBackground(new Color(255, 140, 0));
+                seatButton.setForeground(Color.CYAN);
+                System.out.println("is comfort");
+                seatButton.repaint();
             }
             else if (seatList.get(i).getSeatType().equals("Business")) 
             {
-                seatButton.setBackground(Color.YELLOW); 
+                seatButton.setForeground(Color.YELLOW); 
+                System.out.println("is business");
+                seatButton.repaint();
             }
             else if (seatList.get(i).getSeatType().equals("Ordinary")) 
             {
-                seatButton.setBackground(Color.GREEN); 
+                seatButton.setForeground(Color.orange); 
+                System.out.println("ordinery aru");
+                seatButton.repaint();
             }
             else 
             {
-                seatButton.setBackground(Color.RED); 
+                seatButton.setForeground(Color.RED); 
+                System.out.println("raui0nsan");
             }
             
             seatSelectionPanel.add(seatButton);
@@ -210,6 +227,21 @@ public class CustomerPanel extends JPanel {
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     
         return mainPanel;
+    }
+
+    public void updateSeatSelectionPanel() {
+        Flight selectedFlight = mainView.getUserController().getSelectedFlight();
+        if (selectedFlight == null) {
+            return;
+        }
+
+        JPanel seatSelectionPanel = createSeatSelectionPanel();
+
+        cardPanel.add(seatSelectionPanel, "SeatSelection");
+        cardPanel.revalidate();
+        cardPanel.repaint();
+       
+
     }
     
 

@@ -106,10 +106,10 @@ CREATE TABLE AIRCRAFTS (
       PRIMARY KEY (aircraftId)
 );
 
-INSERT INTO AIRCRAFTS (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats, totalSeats) VALUES
-(1, 'Boeing 737', 100, 20, 10, 130),
-(2, 'Airbus A320', 120, 30, 15, 165),
-(3, 'Boeing 787', 200, 50, 25, 275);
+INSERT INTO AIRCRAFTS (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats) VALUES
+(1, 'Boeing 737', 6, 6, 6),
+(2, 'Airbus A320', 18, 12, 12),
+(3, 'Boeing 787', 20, 10, 6);
 
 
 -- 4. Add table for locations
@@ -183,9 +183,9 @@ CREATE TABLE TICKETS (
 );
 
 INSERT INTO TICKETS (ticketId, seatNumber, flightNumber, flightDay, flightMonth, flightYear, flightHour, flightMinute) VALUES
-('T001', 12, 100, 15, 12, 2023, 10, 30),
-('T002', 15, 101, 20, 12, 2023, 12, 45),
-('T003', 18, 102, 25, 12, 2023, 14, 00);
+('T001', 12, 1, 15, 12, 2023, 10, 30),
+('T002', 15, 1, 20, 12, 2023, 12, 45),
+('T003', 18, 1, 25, 12, 2023, 14, 00);
 
 
 -- 8. Add table for flights
@@ -220,9 +220,7 @@ CREATE TABLE FLIGHTS (
 );
 
 INSERT INTO FLIGHTS (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES
-(100, 1, 'YYZ', 'YVR', 240, 201, 300, 12, 15, 2023, 10, 30),
-(101, 2, 'YVR', 'JFK', 300, 202, 400, 12, 20, 2023, 12, 45),
-(102, 3, 'JFK', 'YYZ', 180, 203, 250, 12, 25, 2023, 14, 00);
+(100, 1, 'YYZ', 'YVR', 240, 201, 300, 12, 15, 2023, 10, 30);
 
 
 -- 10. Add table for flights and seats (PK is flightId and seatId)
@@ -243,9 +241,24 @@ CREATE TABLE FLIGHTSEATS (
 );
 
 INSERT INTO FLIGHTSEATS (flightId, seatId, seatIsBooked, seatType, passengerId) VALUES
-(100, 1, TRUE, 'Business', 1001),
-(101, 2, FALSE, 'Ordinary', NULL),
-(102, 3, TRUE, 'Comfort', 1002);
+(100, 1, TRUE, 'Comfort', 1001),
+(100, 2, FALSE, 'Comfort', null),
+(100, 3, FALSE, 'Comfort', null),
+(100, 4, TRUE, 'Comfort', 1001),
+(100, 5, TRUE, 'Comfort', 1002),
+(100, 6, TRUE, 'Comfort', 1003),
+(100, 7, TRUE, 'Business', 1002),
+(100, 8, FALSE, 'Business', null),
+(100, 9, FALSE, 'Business', null),
+(100, 10, FALSE, 'Business', null),
+(100, 11, TRUE, 'Business', 1002),
+(100, 12, FALSE, 'Business', null),
+(100, 13, TRUE, 'Ordinary', 1002),
+(100, 14, FALSE, 'Ordinary', null),
+(100, 15, FALSE, 'Ordinary', null),
+(100, 16, FALSE, 'Ordinary', null),
+(100, 17, TRUE, 'Ordinary', 1003),
+(100, 18, TRUE, 'Ordinary', 1001);
 
 
 -- 11. Add table for flight crew
@@ -262,9 +275,7 @@ CREATE TABLE FLIGHTCREW (
 );
 
 INSERT INTO FLIGHTCREW (flightcrewID, assignflightID, crewName) VALUES
-(201, 100, 'Alpha'),
-(202, 101, 'Bravo'),
-(203, 102, 'Charlie');
+(201, 100, 'Alpha');
 
 DROP USER IF EXISTS 'user'@'localhost';
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';

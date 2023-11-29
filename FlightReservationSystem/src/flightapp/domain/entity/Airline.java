@@ -211,4 +211,11 @@ public class Airline {
         return null;
     }
 
+    public void addSeatToFlight(int flightId, int seatId, String seatType, boolean isBooked) {
+        Flight flight = getFlightByID(flightId);
+        flight.getAircraft().modifySeat(seatId, seatType, isBooked);
+    }
+
+	
+
 }

@@ -24,6 +24,11 @@ public class Seat {
         this.isBooked = false;
     }
 
+    public void setBooked(boolean isBooked)
+    {
+        this.isBooked = isBooked;
+    }
+
     public int getSeatId()
     {
         return this.seatId;
@@ -32,6 +37,11 @@ public class Seat {
     public String getSeatType()
     {
         return this.seatType;
+    }
+
+    public void setSeatType(String seatType)
+    {
+        this.seatType = seatType;
     }
 
     public boolean isBooked()

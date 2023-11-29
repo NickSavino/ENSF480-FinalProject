@@ -6,6 +6,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import flightapp.DatabaseConnection;
 import flightapp.domain.entity.*;
 import flightapp.domain.pattern.*;
@@ -32,6 +35,9 @@ public class AirlineUserController {
         // Initialize controllers
         employeeController = new EmployeeController(airline);
         flightController = new FlightController(airline);
+        
+        // flightController.sendEmail("TESTING EMAIL SENDING WITH THIS DUMMY MESSAGE");
+        
     }
 
     private void initializeDataOnStartup()
@@ -58,6 +64,7 @@ public class AirlineUserController {
 
         initializationComplete = true;
         System.out.println("Initialization Complete");
+
         return;
     }
 

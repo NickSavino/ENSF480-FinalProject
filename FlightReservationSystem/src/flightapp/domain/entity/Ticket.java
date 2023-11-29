@@ -20,4 +20,14 @@ public class Ticket {
     {
         return this.flightNumber;
     }
+
+    public int getSeatNumber()
+    {
+        return this.seatNumber;
+    }
+
+    public String getTicketId()
+    {
+        return this.ticketId;
+    }
 }

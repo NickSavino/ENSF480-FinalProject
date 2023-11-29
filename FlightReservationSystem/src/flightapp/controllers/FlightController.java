@@ -1,6 +1,12 @@
 package flightapp.controllers;
 
 import java.util.ArrayList;
+import java.util.Properties;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import flightapp.domain.entity.*;
 import flightapp.domain.valueobject.*;
 import flightapp.domain.pattern.*;
@@ -113,7 +119,7 @@ public class FlightController {
 
         Purchase currentPurchase = new Purchase(this.selectedFlight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, this.selectedSeats, this.customer);
         this.airline.getPurchases().add(currentPurchase);
-        sendReceiptAndTicket(currentPurchase.getTickets(), currentPurchase.getReceipt());
+        sendReceiptAndTicket(currentPurchase);
         selectedSeats.clear();
         this.customer.addPurchase(currentPurchase);
         for (Flight flight : this.airline.getFlights())
@@ -128,12 +134,60 @@ public class FlightController {
         
     }
 
-    private void sendReceiptAndTicket(ArrayList<Ticket> ticket, Receipt receipt)
+    private void sendReceiptAndTicket(Purchase purchase)
     {
-        // TODO: Implement
-        // Need to populate the proper information inside of a new Receipt and Payment
-        return;
+        String purchaseId = purchase.getPurchaseId();
+        Receipt receipt = purchase.getReceipt();
+        ArrayList<Ticket> tickets = purchase.getTickets();
+
+        // Format the receipt information
+        String receiptInfo = String.format("Receipt ID: %s\nTotal Price: $%d\nCredit Card Number: %s",
+                receipt.getReceiptId(), receipt.getPrice(), receipt.getCreditCardNumber());
+
+        // Format the ticket information
+        StringBuilder ticketInfo = new StringBuilder("Tickets:\n");
+        for (Ticket ticket : tickets) {
+            ticketInfo.append(String.format("Flight Number: %d, Seat Number: %d, Ticket ID: %s\n",
+                    ticket.getFlightNumber(), ticket.getSeatNumber(), ticket.getTicketId()));
+        }
+
+        // Combine receipt and ticket information
+        String email = String.format("Dear Customer,\n\nThank you for your purchase (ID: %s).\n\n%s\n\n%s",
+                purchaseId, receiptInfo, ticketInfo.toString());
+
+        sendEmail(email);
     }
+
+    public void sendEmail(String content) {
+        String receivingEmail = "liam.d.mah@gmail.com";
+        String senderEmail = "ensf480helperemail@gmail.com";
+        String host = "smtp.gmail.com";
+    
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+    
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("ensf480helperemail@gmail.com", "aikm cotj umyp wnvz");
+            }
+        });
+    
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(senderEmail));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(receivingEmail));
+            message.setSubject("ENSF480 Airline Ticket and Receipt");
+            message.setText(content);
+            Transport.send(message);
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    }
+    
+
 
     public void refundPurchase(String purchaseId)
     {

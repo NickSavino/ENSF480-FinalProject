@@ -1,5 +1,6 @@
 package flightapp.domain.valueobject;
 
+import flightapp.domain.pattern.*;
 import flightapp.domain.pattern.ContentStrategy;
 
 public class PromotionalNews {

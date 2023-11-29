@@ -16,53 +16,63 @@ public class LoginPanel extends JPanel {
     private JButton registerButton;
     private JButton guestButton;
     public MainView mainApp;
+
     public LoginPanel(MainView mainApp) {
         this.mainApp = mainApp;
+        setLayout(new BorderLayout(10, 10)); // Set main layout with horizontal and vertical gaps
+
+        // Panel for form
+        JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets = new Insets(5, 0, 5, 0); // External padding
+        gbc.insets = new Insets(5, 5, 5, 5); // External padding
 
-        // Create UI components for username and password inputs
+        // UI components for username and password inputs
         usernameField = new JTextField(15);
         passwordField = new JPasswordField(15);
-        // Create a login button and add an action listener to it
-        loginButton = new JButton("Login");
-        exitButton = new JButton("Exit");
-        registerButton = new JButton("Register");
-        guestButton = new JButton("Guest");
 
+        // Login button and its action listener
+        loginButton = new JButton("Login");
+        this.mainApp.styleButton(loginButton);
+        loginButton.setPreferredSize(new Dimension(150, 40));
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 try {
                     int employeeId = Integer.parseInt(usernameField.getText());
-                    mainApp.onLogin(employeeId, passwordField.getText());
+                    mainApp.onLogin(employeeId, new String(passwordField.getPassword()));
                 } catch (NumberFormatException ex) {
-                    mainApp.onLogin(usernameField.getText(), passwordField.getText());
+                    mainApp.onLogin(usernameField.getText(), new String(passwordField.getPassword()));
                 }
             }
         });
 
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(1);
-            }
-        });
-
+        // Register and guest buttons with action listeners
+        registerButton = new JButton("Register");
+        this.mainApp.styleButton(registerButton);
+        registerButton.setPreferredSize(new Dimension(150, 40));
         registerButton.addActionListener(e -> mainApp.onRegister());
+        guestButton = new JButton("Guest");
+        this.mainApp.styleButton(guestButton);
+        guestButton.setPreferredSize(new Dimension(150, 40));
         guestButton.addActionListener(e -> mainApp.browseAsGuest());
 
-        // Add components to the login panel
-        add(new JLabel("Username:"), gbc);
-        add(usernameField, gbc);
-        add(new JLabel("Password:"), gbc);
-        add(passwordField, gbc);
-        add(loginButton, gbc);
-        add(registerButton, gbc);
-        add(guestButton, gbc);
+
+
+        // Adding components to the formPanel
+        formPanel.add(new JLabel("Username:"), gbc);
+        formPanel.add(usernameField, gbc);
+        formPanel.add(new JLabel("Password:"), gbc);
+        formPanel.add(passwordField, gbc);
+        formPanel.add(loginButton, gbc);
+
+
+        // Panel for bottom buttons
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        bottomPanel.add(registerButton, gbc);
+        bottomPanel.add(guestButton, gbc);
+        // Add formPanel and bottomPanel to LoginPanel
+        add(formPanel, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
     }
-
-
 }

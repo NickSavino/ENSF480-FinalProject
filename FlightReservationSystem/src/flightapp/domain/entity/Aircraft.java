@@ -12,7 +12,7 @@ public class Aircraft {
     private int amountOfSeats;
     private ArrayList<Seat> seats;
 
-    public Aircraft(String model, int id, int amountOfOrdinarySeats,
+    public Aircraft(int id, String model, int amountOfOrdinarySeats,
         int amountOfBusinessSeats, int amountOfComfortSeats) {
 
         this.model = model;

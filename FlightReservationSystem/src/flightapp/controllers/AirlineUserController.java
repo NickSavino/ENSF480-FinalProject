@@ -130,9 +130,8 @@ public class AirlineUserController {
             int amountOfOrdinarySeats = rs.getInt("ordinarySeats");
             int amountOfBusinessSeats = rs.getInt("businessSeats");
             int amountOfComfortSeats = rs.getInt("comfortSeats");
-            int amountOfSeats = rs.getInt("totalSeats");
-            
-            airline.addAircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats);
+
+            airline.addAircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats);
         }
 
     }
@@ -239,7 +238,6 @@ public class AirlineUserController {
 
             //Add Customer credentials to LoginSingleton Hashmap
             LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
-            System.out.println(username);
             loginSingleton.addCustomer(username, password);
 
             if (isAirlineMember)
@@ -264,7 +262,6 @@ public class AirlineUserController {
     {
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
         boolean validCustomer = loginSingleton.authenticateCustomer(username, password);
-        System.out.println(validCustomer);
 
         if (validCustomer)
         {
@@ -449,7 +446,7 @@ public class AirlineUserController {
     public void addAircraft(int aircraftId, String model, int amountOfOrdinarySeats,
                             int amountOfBusinessSeats, int amountOfComfortSeats) {
         int amountOfSeats = amountOfBusinessSeats + amountOfComfortSeats + amountOfOrdinarySeats;
-        airline.addAircraft(aircraftId, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats);
+        airline.addAircraft(aircraftId, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats);
         DatabaseController.addAircraft(airline.getAircraftByID(aircraftId));
     }
 

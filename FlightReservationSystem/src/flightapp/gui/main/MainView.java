@@ -25,39 +25,55 @@ public class MainView extends JFrame implements RegistrationCallback {
         super("Flight Reservation System");
         userController = new AirlineUserController();
 
+        //Wait for initialization to finish
         while (!userController.getInitalizationStatus()) {
-            //Wait for initialization to finish
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
         //Specify on action on close
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Specify Minimum Size
-        setMinimumSize(new Dimension(400, 200));
+        setMinimumSize(new Dimension(600, 400));
+        setLocationRelativeTo(null);
+        getContentPane().setBackground(new Color(50, 50, 50));
 
         //Create a title label
         titleLabel = new JLabel("Flight Reservation System", SwingConstants.CENTER);
+        titleLabel.setForeground(Color.BLACK);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBorder(BorderFactory.createEtchedBorder(Color.black, Color.white));
+
 
 
         // Create an exit button
         exitButton = new JButton("Exit");
+        styleButton(exitButton);
         exitButton.addActionListener(e -> System.exit(0));
-
         logoutButton = new JButton("Logout");
+        styleButton(logoutButton);
+
         logoutButton.addActionListener(e -> performLogout());
         logoutButton.setVisible(false); // Initially hidden
 
         // Create a panel to hold the back and exit buttons
         JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.setOpaque(false);
         buttonPanel.add(exitButton, BorderLayout.EAST);
         buttonPanel.add(logoutButton, BorderLayout.WEST);
 
         //Create a card layout for managing different user options
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
+        cardPanel.setBorder(BorderFactory.createBevelBorder(1, Color.BLACK, Color.WHITE));
+        cardPanel.setOpaque(false);
 
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BorderLayout());
         titlePanel.add(titleLabel, BorderLayout.NORTH);
+
         loggedInLabel = new JLabel("\t\t Not Logged in.");
         titlePanel.add(loggedInLabel, BorderLayout.SOUTH);
 
@@ -171,5 +187,14 @@ public class MainView extends JFrame implements RegistrationCallback {
 
     public AirlineUserController getUserController() {
         return userController;
+    }
+
+    public void styleButton(JButton button) {
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(100, 100, 100));
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.repaint();
     }
 }

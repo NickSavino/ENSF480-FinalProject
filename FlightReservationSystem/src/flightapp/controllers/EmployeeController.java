@@ -108,13 +108,11 @@ public class EmployeeController {
             }
         }
 
-        Aircraft newAircraft = new Aircraft(aircraftModel, newAircraftId, amountOfOrdinarySeats,
+        Aircraft newAircraft = new Aircraft(newAircraftId, aircraftModel, amountOfOrdinarySeats,
             amountOfBusinessSeats, amountOfComfortSeats);
         this.airline.getAircrafts().add(newAircraft);
         DatabaseController.addAircraft(newAircraft);
     }
-
-    
 
     public void removeAircraft(int aircraftId)
     {

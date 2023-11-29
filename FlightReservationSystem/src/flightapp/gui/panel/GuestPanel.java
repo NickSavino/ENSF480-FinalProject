@@ -14,10 +14,9 @@ public class GuestPanel extends JPanel {
     private NavigationController navigationController;
     private JButton browseFlightsButton;
     private JButton registerButton;
-
+    private JButton loginButton;
     private MainView mainView;
     private DefaultListModel<String> flightsModel;
-
 
     public GuestPanel(MainView mainView) {
         this.mainView = mainView;
@@ -48,12 +47,15 @@ public class GuestPanel extends JPanel {
 
         browseFlightsButton = new JButton("Browse Flights");
         registerButton = new JButton("Register");
+        loginButton = new JButton("Login");
 
         browseFlightsButton.addActionListener(e -> navigationController.navigateTo("FlightSelection"));
         registerButton.addActionListener(e -> mainView.onRegister());
+        loginButton.addActionListener(e -> showLoginDialog());
 
         add(browseFlightsButton);
         add(registerButton);
+        add(loginButton);
 
 
         // Set up action listeners for each button
@@ -63,10 +65,41 @@ public class GuestPanel extends JPanel {
 
         mainMenuPanel.add(browseFlightsButton);
         mainMenuPanel.add(registerButton);
+        mainMenuPanel.add(loginButton);
 
         return mainMenuPanel;
     }
 
+    private void showLoginDialog() {
+        // Create components
+        JTextField usernameField = new JTextField(20);
+        JPasswordField passwordField = new JPasswordField(20);
+
+        // Construct the dialog components array
+        final JComponent[] inputs = new JComponent[] {
+                new JLabel("Username"),
+                usernameField,
+                new JLabel("Password"),
+                passwordField
+        };
+
+        // Show the dialog and get user response
+        int result = JOptionPane.showConfirmDialog(this, inputs, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        // Handle the user response
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                int employeeID = Integer.parseInt(usernameField.getText());
+                String password = new String(passwordField.getPassword());
+                mainView.onLogin(employeeID, password);
+
+            } catch (Exception e) {
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+                mainView.onLogin(username, password);
+            }
+        }
+    }
     private JPanel createFlightSelectionPanel() {
         JPanel flightSelectionPanel = new JPanel(new BorderLayout());
 

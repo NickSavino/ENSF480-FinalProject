@@ -77,7 +77,6 @@ public class Airline {
     public FlightCrew getFlightCrewByID(int flightCrewId) 
     {
         for (FlightCrew flightCrew : this.flightCrew) {
-            System.out.println("Found: " + flightCrew.getFlightCrewId());
             if (flightCrew.getFlightCrewId() == flightCrewId)
                 return flightCrew;
         }
@@ -161,12 +160,11 @@ public class Airline {
     }
 
     public void addAircraft(int aircraftID, String model, int amountOfOrdinarySeats, int amountOfBusinessSeats,
-            int amountOfComfortSeats, int amountOfSeats) {
-        this.aircrafts.add(new Aircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats));
+            int amountOfComfortSeats) {
+        this.aircrafts.add(new Aircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats));
     }
 
     public void addFlightCrew(int flightCrewId, int flightId, String crewName) {
-        System.out.println("adding crew with ID: " + flightCrewId);
         this.flightCrew.add(new FlightCrew(flightCrewId, flightId, crewName));
 
     }

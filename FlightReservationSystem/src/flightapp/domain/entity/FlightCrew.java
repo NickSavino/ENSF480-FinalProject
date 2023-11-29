@@ -28,6 +28,6 @@ public class FlightCrew {
     }
 
     public String toString() {
-        return crewName + "-" + flightCrewId;
+        return crewName + " - " + flightCrewId;
     }
 }

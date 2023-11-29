@@ -140,7 +140,8 @@ public class Flight {
     }
 
     public String toString() {
-
-        return new String(origin.getLocationId() + "- " + destination.getLocationId() + " " + departureTime.getDateString());
+        String flightString = String.format("%s to %s | Departure: %d/%d/%d %d:%d - %d", origin.getLocationId(), destination.getLocationId(),
+                departureTime.getDay(), departureTime.getMonth(), departureTime.getYear(), departureTime.getHour(), departureTime.getMinutes(), flightId);
+        return flightString;
     }
 }

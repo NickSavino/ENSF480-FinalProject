@@ -62,12 +62,13 @@ public class MainView extends JFrame implements RegistrationCallback {
         titlePanel.add(loggedInLabel, BorderLayout.SOUTH);
 
         //Instantiate and add user panels to cardPanel
-        cardPanel.add(new GuestPanel(this), "Guest");
         cardPanel.add(new LoginPanel(this), "Login");
         cardPanel.add(new AttendantPanel(), "Attendant");
         cardPanel.add(new AirlineAgentPanel(), "AirlineAgent");
         cardPanel.add(new AdminPanel(this), "Admin");
         cardPanel.add(new CustomerPanel(this), "Customer");
+        cardPanel.add(new GuestPanel(this), "Guest");
+
 
         //Set Layout to organize main page elements
         setLayout(new BorderLayout());

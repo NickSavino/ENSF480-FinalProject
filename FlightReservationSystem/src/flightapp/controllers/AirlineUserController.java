@@ -5,11 +5,15 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import flightapp.DatabaseConnection;
 import flightapp.domain.entity.*;
 import flightapp.domain.pattern.*;
 import flightapp.domain.valueobject.*;
+
+import javax.xml.crypto.Data;
+
 
 
 public class AirlineUserController {
@@ -423,5 +427,49 @@ public class AirlineUserController {
             return currentEmployee.getEmployeeType();
         else
             return null;
+    }
+
+    public void removeDestination(String locationId) {
+        airline.getLocations().remove(locationId);
+        DatabaseController.removeFlightDestination(locationId);
+    }
+
+    public void addDestination(String name, String locationId) {
+        airline.addLocation(name, locationId);
+        DatabaseController.addFlightDestination(airline.getLocationByID(locationId));
+    }
+
+    public void addAircraft(int aircraftId, String model, int amountOfOrdinarySeats,
+                            int amountOfBusinessSeats, int amountOfComfortSeats) {
+        int amountOfSeats = amountOfBusinessSeats + amountOfComfortSeats + amountOfOrdinarySeats;
+        airline.addAircraft(aircraftId, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats);
+        DatabaseController.addAircraft(airline.getAircraftByID(aircraftId));
+    }
+
+    public void removeAircraft(int aircraftId) {
+        DatabaseController.removeAircraft(aircraftId);
+    }
+
+    public void addFlight(int flightId, int aircraftId, String originId, String destinationId, int flightDuration, int flightCrewId,
+                          int baseFlightCost, int departureDay, int departureMonth, int departureYear, int departureHour, int departureMinute) {
+
+        airline.addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay, departureMonth, departureYear, departureHour, departureMinute);
+        DatabaseController.addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay, departureMonth, departureYear, departureHour, departureMinute);
+    }
+
+
+    public void removeFlight(int flightId) {
+        airline.removeFlight(flightId);
+        DatabaseController.removeFlight(flightId);
+    }
+
+    public void addCrew(int crewId, String crewName, int assignedFlightId) {
+        airline.addFlightCrew(crewId, assignedFlightId, crewName);
+        DatabaseController.addCrew(crewId, crewName, assignedFlightId);
+    }
+
+    public void removeCrew(int crewId) {
+        airline.removeFlightCrew(crewId);
+        DatabaseController.removeCrew(crewId);
     }
 }

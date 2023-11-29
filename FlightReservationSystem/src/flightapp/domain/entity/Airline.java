@@ -1,7 +1,10 @@
 package flightapp.domain.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
+import flightapp.controllers.DatabaseController;
 import flightapp.domain.pattern.*;
 import flightapp.domain.valueobject.*;
 
@@ -37,6 +40,16 @@ public class Airline {
         return this.flights;
     }
 
+    public Flight getFlightByID(int flightId) {
+        for (Flight flight : flights) {
+            if (flight.getFlightId() == flightId) {
+                return flight;
+            }
+        }
+        return null;
+    }
+
+
     public PromotionalNews getPromotionalNews()
     {
         return this.promotionalNews;
@@ -64,6 +77,7 @@ public class Airline {
     public FlightCrew getFlightCrewByID(int flightCrewId) 
     {
         for (FlightCrew flightCrew : this.flightCrew) {
+            System.out.println("Found: " + flightCrew.getFlightCrewId());
             if (flightCrew.getFlightCrewId() == flightCrewId)
                 return flightCrew;
         }
@@ -106,11 +120,35 @@ public class Airline {
         Location origin = getLocationByID(originId);
         Location destination = getLocationByID(destinationId);
         FlightCrew flightCrew = getFlightCrewByID(flightCrewId);
-        Date departureTime = new Date(flightDepartureDay, flightDepartureMonth, 
+        Date departureTime = new Date(flightDepartureDay, flightDepartureMonth,
         flightDepartureYear, flightDepartureHour, flightDepartureMinute);
 
         Flight flight = new Flight(aircraft, flightId, origin, destination, baseFlightCost, flightCrew, departureTime, flightDuration);
         this.flights.add(flight);
+    }
+    public int getNewFlightId() {
+        HashSet<Integer> existingIds = new HashSet<>();
+        for (Flight flight : flights) {
+            existingIds.add(flight.getFlightId());
+        }
+
+        // Start the search from 100 (or whatever your base ID is).
+        int newId = 100;
+        while (existingIds.contains(newId)) {
+            newId++;
+        }
+
+        return newId;
+    }
+    public void removeFlight(int flightId) {
+        Iterator<Flight> iterator = flights.iterator();
+        while (iterator.hasNext()) {
+            Flight flight = iterator.next();
+            if (flight.getFlightId() == flightId) {
+                iterator.remove();
+                break; // Assuming only one flight has this ID, we can break the loop after removing
+            }
+        }
     }
 
     public void addEmployee(int employeeId,
@@ -127,8 +165,17 @@ public class Airline {
         this.aircrafts.add(new Aircraft(aircraftID, model, amountOfOrdinarySeats, amountOfBusinessSeats, amountOfComfortSeats, amountOfSeats));
     }
 
-    public void addFlightCrew(int flightcrewId, int flightId, String crewName) {
-        this.flightCrew.add(new FlightCrew(flightcrewId, flightId, crewName));
+    public void addFlightCrew(int flightCrewId, int flightId, String crewName) {
+        System.out.println("adding crew with ID: " + flightCrewId);
+        this.flightCrew.add(new FlightCrew(flightCrewId, flightId, crewName));
+
+    }
+    public void removeFlightCrew(int flightCrewId) {
+        for (FlightCrew crew : flightCrew) {
+            if (crew.getFlightCrewId() == flightCrewId) {
+                flightCrew.remove(crew);
+            }
+        }
     }
 
     public void addLocation(String name, String locationId) {

@@ -75,6 +75,6 @@ public class Aircraft {
     }
 
     public String toString() {
-        return model + "-" + aircraftId;
+        return model + " - " + aircraftId;
     }
 }

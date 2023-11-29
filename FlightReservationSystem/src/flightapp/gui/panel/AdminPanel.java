@@ -1,6 +1,5 @@
 package flightapp.gui.panel;
 
-import flightapp.controllers.DatabaseController;
 import flightapp.gui.form.AddAircraftForm;
 import flightapp.gui.form.AddCrewForm;
 import flightapp.gui.form.AddFlightForm;
@@ -10,6 +9,7 @@ import flightapp.gui.main.MainView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 
 public class AdminPanel extends JPanel implements FormCallback {
@@ -99,7 +99,6 @@ public class AdminPanel extends JPanel implements FormCallback {
             for (String flight : mainView.getUserController().getFlightsString()) {
                 flightsModel.addElement(flight);
             }
-            // Add more flight items...
             return flightsModel;
         } else if ("Crew".equals(type)) {
             crewsModel = new DefaultListModel<>();
@@ -138,9 +137,11 @@ public class AdminPanel extends JPanel implements FormCallback {
 
         // Initialize destinations model and combo box for removal
         destinationsModel = new DefaultComboBoxModel<>();
-        Object[] destinations = mainView.getUserController().getLocationsString().toArray();
-        destinationsComboBox = new JComboBox<>(destinations);
-        // Populate destinationsModel with data...
+        ArrayList<String> destinations = mainView.getUserController().getLocationsString();
+        for (String destination : destinations) {
+            destinationsModel.addElement(destination);
+        }
+        destinationsComboBox = new JComboBox<>(destinationsModel);
 
         return panel;
     }
@@ -159,8 +160,10 @@ public class AdminPanel extends JPanel implements FormCallback {
         if (result == JOptionPane.OK_OPTION) {
             String location = locationField.getText();
             String code = codeField.getText();
-            // Validate and add the destination...
-            destinationsModel.addElement(location + " (" + code + ")");
+            destinationsModel.addElement(code);
+            destinationsComboBox.revalidate();
+            destinationsComboBox.repaint();
+            mainView.getUserController().addDestination(location, code);
         }
     }
 
@@ -168,11 +171,23 @@ public class AdminPanel extends JPanel implements FormCallback {
     private void onRemoveDestination() {
         if (destinationsComboBox.getItemCount() > 0) {
             destinationsComboBox.setSelectedIndex(0); // Select first item by default
-            int result = JOptionPane.showConfirmDialog(this, destinationsComboBox, "Remove Destination", JOptionPane.PLAIN_MESSAGE);
-            if (result == JOptionPane.OK_OPTION) {
+
+            Object[] options = {"Remove", "Cancel"};
+            int result = JOptionPane.showOptionDialog(
+                    this,
+                    destinationsComboBox,
+                    "Remove Destination",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    options,
+                    options[1] // Default button (Cancel)
+            );
+
+            if (result == 0) { // The index of "Remove" option is 0
                 String selectedDestination = (String) destinationsComboBox.getSelectedItem();
-                // Validate and remove the destination...
                 destinationsModel.removeElement(selectedDestination);
+                mainView.getUserController().removeDestination(selectedDestination);
             }
         } else {
             JOptionPane.showMessageDialog(this, "No destinations available to remove.", "Remove Destination", JOptionPane.INFORMATION_MESSAGE);
@@ -191,19 +206,23 @@ public class AdminPanel extends JPanel implements FormCallback {
 
         JScrollPane scrollPane = new JScrollPane(list);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton addButton = new JButton("Add");
-        JButton removeButton = new JButton("Remove");
+        if (!type.equals("Registered Users")) {
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            JButton addButton = new JButton("Add");
+            JButton removeButton = new JButton("Remove");
 
-        // Add action listeners for Add and Remove
-        addButton.addActionListener(e -> onAddItem(model, type));
-        removeButton.addActionListener(e -> onRemoveItem(list, model, type));
+            // Add action listeners for Add and Remove
+            addButton.addActionListener(e -> onAddItem(model, type));
+            removeButton.addActionListener(e -> onRemoveItem(list, model, type));
 
-        buttonPanel.add(addButton);
-        buttonPanel.add(removeButton);
+            buttonPanel.add(addButton);
+            buttonPanel.add(removeButton);
+
+            panel.add(buttonPanel, BorderLayout.SOUTH);
+        }
 
         panel.add(scrollPane, BorderLayout.CENTER);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+
 
         return panel;
     }
@@ -228,35 +247,64 @@ public class AdminPanel extends JPanel implements FormCallback {
     }
 
     @Override
-    public void onFlightAdded(String flightInfo) {
-        flightsModel.addElement(flightInfo);
+    public void onFlightAdded(int aircraftId, String originId, String destinationId, int flightDuration, int flightCrewId,
+                              int baseFlightCost, int departureDay, int departureMonth, int departureYear, int departureHour, int departureMinute) {
+
+        int flightId = mainView.getUserController().getAirline().getNewFlightId();
+
+
+        String flightString = String.format("%s to %s | Departure: %d/%d/%d %d:%d - %d", originId, destinationId,
+                departureDay, departureMonth, departureYear, departureHour, departureMinute, flightId);
+        flightsModel.addElement(flightString);
+
+        mainView.getUserController().addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay,
+                departureMonth, departureYear, departureHour, departureMinute);
     }
 
     @Override
     public void onCrewAdded(int crewId, String crewName, int assignedFlightId) {
-
-        crewsModel.addElement(crewName + "-" + Integer.toString(crewId));
-        DatabaseController.addCrew(crewId, crewName, assignedFlightId);
-
-
+        crewsModel.addElement(crewName + " - " + Integer.toString(crewId));
+        mainView.getUserController().addCrew(crewId, crewName, assignedFlightId);
     }
 
     @Override
-    public void onAircraftAdded(String model, int seats) {
-        aircraftsModel.addElement(model);
+    public void onAircraftAdded(int aircraftId, String model, int comfortSeats, int businessSeats, int ordinarySeats) {
+
+        mainView.getUserController().addAircraft(aircraftId, model, comfortSeats, businessSeats, ordinarySeats);
+        aircraftsModel.addElement(mainView.getUserController().getAirline().getAircraftByID(aircraftId).toString());
+
     }
 
     private void onRemoveItem(JList<String> list, DefaultListModel<String> model, String type) {
         // Show confirmation dialog and remove item
         int selectedIndex = list.getSelectedIndex();
-
         if (selectedIndex != -1) {
+            String selectedItem = model.getElementAt(selectedIndex);
             int confirmed = JOptionPane.showConfirmDialog(this, "Are you sure you want to remove the selected " + type + "?");
             if (confirmed == JOptionPane.YES_OPTION) {
+                // Extract ID from the selected item
+                int id = extractIdFromSelectedItem(selectedItem);
+
+                // Perform removal based on type and id
+                if (type.equals("Flight")) {
+                    mainView.getUserController().removeFlight(id);
+                } else if (type.equals("Crew")) {
+                    mainView.getUserController().removeCrew(id);
+                } else if (type.equals("Aircraft")) {
+                    mainView.getUserController().removeAircraft(id);
+                }
+
+                // Update model and UI
                 model.remove(selectedIndex);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Please select a " + type + " to remove.", "No " + type + " Selected", JOptionPane.WARNING_MESSAGE);
         }
+    }
+
+    private int extractIdFromSelectedItem(String selectedItem) {
+        // Assuming the format is "Name - ID"
+        String[] parts = selectedItem.split(" - ");
+        return Integer.parseInt(parts[1]);
     }
 }

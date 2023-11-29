@@ -198,7 +198,7 @@ public class DatabaseController {
         int flightDepartureMinute = newFlight.getDate().getMinutes();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO FLIGHT (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO FLIGHTS (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, flightId);
                 stmt.setInt(2, aircraftId);
@@ -222,13 +222,43 @@ public class DatabaseController {
         }
     }
 
+    public static void addFlight(int flightId, int aircraftId, String originId, String destinationId, int flightDuration, int flightCrewId,
+                                 int baseFlightCost, int departureDay, int departureMonth, int departureYear, int departureHour, int departureMinute)
+    {
+
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = "INSERT INTO FLIGHTS (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, flightId);
+                stmt.setInt(2, aircraftId);
+                stmt.setString(3, originId);
+                stmt.setString(4, destinationId);
+                stmt.setInt(5, flightDuration);
+                stmt.setInt(6, flightCrewId);
+                stmt.setInt(7, baseFlightCost);
+                stmt.setInt(8, departureDay);
+                stmt.setInt(9, departureMonth);
+                stmt.setInt(10, departureYear);
+                stmt.setInt(11, departureHour);
+                stmt.setInt(12, departureMinute);
+                stmt.executeUpdate();
+                System.out.println("Successfully added new flight.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new flight.", e);
+        }
+    }
+
     public static void addFlightDestination(Location newLocation)
     {
         String locationId = newLocation.getLocationId();
         String locationName = newLocation.getName();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO LOCATION (locationId, locationName) VALUES (?, ?)";
+            String query = "INSERT INTO LOCATIONS (locationId, locationName) VALUES (?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, locationId);
                 stmt.setString(2, locationName);
@@ -252,7 +282,7 @@ public class DatabaseController {
         int amountOfSeats = newAircraft.getNumberOfSeats();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO AIRCRAFT (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats, totalSeats) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO AIRCRAFTS (aircraftId, aircraftModel, ordinarySeats, businessSeats, comfortSeats, totalSeats) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
 
                 stmt.setInt(1, aircraftId);

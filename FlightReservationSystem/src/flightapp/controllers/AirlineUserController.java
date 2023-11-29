@@ -27,6 +27,7 @@ public class AirlineUserController {
     private boolean isCustomerLoggedIn = false;
     private boolean isEmployeeLoggedIn = false;
     private boolean initializationComplete = false;
+    private Flight selectedFlight;
 
     public AirlineUserController() {
         // Initialize Airline object with database values
@@ -68,6 +69,7 @@ public class AirlineUserController {
     public boolean getInitalizationStatus() {
         return initializationComplete;
     }
+
     private void populateFlights() throws SQLException // Nick
     {
         // Might be easier to call this after RegisteredCustomers is already initialized (for passengers) (I could be wrong)
@@ -190,7 +192,7 @@ public class AirlineUserController {
             
             if (currentFlight != null && currentCustomer != null)
             {
-                airline.addPurchase(currentFlight, ticketInsurance, loungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, seats, currentCustomer);
+                airline.initializePurchase(currentFlight, ticketInsurance, loungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, seats, currentCustomer);
             }
         }
 

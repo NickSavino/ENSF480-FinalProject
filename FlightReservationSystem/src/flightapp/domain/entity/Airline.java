@@ -93,6 +93,15 @@ public class Airline {
         return this.locations;
     }
 
+    public void initializePurchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
+        String creditCardNumber, int securityCode, ArrayList<Seat> seats, Customer customer)
+    {
+        // Method to help on startup
+        Purchase newPurchase = new Purchase(flight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, securityCode, seats, customer);
+        this.purchases.add(newPurchase);
+        customer.addPurchase(newPurchase);
+    }
+
     public Location getLocationByID(String locationId)
     {
         for (Location location : this.locations) {
@@ -202,11 +211,4 @@ public class Airline {
         return null;
     }
 
-    public void addPurchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
-        String creditCardNumber, int securityCode, ArrayList<Seat> seats, Customer customer)
-    {
-        Purchase newPurchase = new Purchase(flight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, securityCode, seats, customer);
-        this.purchases.add(newPurchase);
-        customer.addPurchase(newPurchase);
-    }
 }

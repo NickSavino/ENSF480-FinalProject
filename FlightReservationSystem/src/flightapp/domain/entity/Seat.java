@@ -6,7 +6,7 @@ public class Seat {
 
     private int seatId;
     private boolean isBooked;
-    private String seatType;
+    private String seatType; // "Business", "Comfort", "Ordinary
 
     public Seat(int seatId, String seatType) {
         this.seatId = seatId;

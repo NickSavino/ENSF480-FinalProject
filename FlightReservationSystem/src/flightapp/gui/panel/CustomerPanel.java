@@ -1,6 +1,8 @@
 package flightapp.gui.panel;
 
 import com.sun.tools.javac.Main;
+
+import flightapp.domain.entity.*;
 import flightapp.gui.main.MainView;
 import flightapp.gui.navigation.NavigationController;
 
@@ -8,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class CustomerPanel extends JPanel {
     private CardLayout cardLayout;
@@ -82,6 +85,9 @@ public class CustomerPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Switch to seat selection panel
+                // Need to find corresponding flight and set it as active in AirlineUserController
+                String selectedFlight = list.getSelectedValue();
+                mainView.getUserController().setSelectedFlightFromString(selectedFlight);
                 navigationController.navigateTo("SeatSelection");
             }
         });
@@ -92,42 +98,120 @@ public class CustomerPanel extends JPanel {
         return flightSelectionPanel;
     }
 
+    // private JPanel createSeatSelectionPanel() {
+    //     JPanel seatSelectionPanel = new JPanel();
+    //     // Define the number of rows and columns for seats
+
+
+
+    //     int rows = 5; // For example, 5 rows
+    //     int cols = 4; // For example, 4 seats per row
+
+    //     seatSelectionPanel.setLayout(new GridLayout(rows, cols));
+
+    //     ButtonGroup seatGroup = new ButtonGroup(); // To allow only one seat to be selected at a time
+
+    //     for (int i = 0; i < rows * cols; i++) {
+    //         JToggleButton seatButton = new JToggleButton("" + (i + 1));
+    //         seatButton.addActionListener(e -> {
+    //             // Handle seat selection
+    //             // use seatButton.getText() to get the seat number
+    //         });
+
+    //         seatGroup.add(seatButton);
+    //         seatSelectionPanel.add(seatButton);
+    //     }
+
+    //     selectSeatButton = new JButton("Confirm Seat");
+    //     selectSeatButton.addActionListener(e -> {
+    //         // Confirm the selected seat and move to the next step
+    //         navigationController.navigateTo("Payment");
+    //     });
+
+    //     JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    //     bottomPanel.add(selectSeatButton);
+
+    //     JPanel mainPanel = new JPanel(new BorderLayout());
+    //     mainPanel.add(seatSelectionPanel, BorderLayout.CENTER);
+    //     mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+    //     return mainPanel;
+    // }
+
     private JPanel createSeatSelectionPanel() {
         JPanel seatSelectionPanel = new JPanel();
+        ArrayList<Seat> seatList = null;
+        Flight myFlight = mainView.getUserController().getSelectedFlight();
+        System.out.println("1");
+        seatList = mainView.getUserController().getSelectedFlight().getSeatList();
+        System.out.println("2");
+        
+        int rows = 0; // Amoount of rows on the aircraft
+        int cols = 6; // Amount of seats per row
+        
+        for (int i = 0; i < seatList.size(); i++) {
+            if (i % cols == 0) {
+                rows++;
+            }
+        }
         // Define the number of rows and columns for seats
-        int rows = 5; // For example, 5 rows
-        int cols = 4; // For example, 4 seats per row
-
+        
+    
         seatSelectionPanel.setLayout(new GridLayout(rows, cols));
-
-        ButtonGroup seatGroup = new ButtonGroup(); // To allow only one seat to be selected at a time
-
+    
+        // Use a list to store selected seats
+        ArrayList<JToggleButton> selectedSeats = new ArrayList<>();
         for (int i = 0; i < rows * cols; i++) {
             JToggleButton seatButton = new JToggleButton("" + (i + 1));
-            seatButton.addActionListener(e -> {
-                // Handle seat selection
-                // use seatButton.getText() to get the seat number
-            });
+            
+            if (seatList.get(i).isBooked()) {
+                seatButton.setEnabled(false);
+                seatButton.setBackground(Color.GRAY);
+            }
 
-            seatGroup.add(seatButton);
+            // Customize the color of the buttons based on another condition
+            else if (seatList.get(i).getSeatType().equals("Comfort")) 
+            {
+                seatButton.setBackground(Color.BLUE); 
+            }
+            else if (seatList.get(i).getSeatType().equals("Business")) 
+            {
+                seatButton.setBackground(Color.YELLOW); 
+            }
+            else if (seatList.get(i).getSeatType().equals("Ordinary")) 
+            {
+                seatButton.setBackground(Color.GREEN); 
+            }
+            else 
+            {
+                seatButton.setBackground(Color.RED); 
+            }
+            
             seatSelectionPanel.add(seatButton);
         }
-
-        selectSeatButton = new JButton("Confirm Seat");
+    
+        selectSeatButton = new JButton("Confirm Seats");
         selectSeatButton.addActionListener(e -> {
-            // Confirm the selected seat and move to the next step
+            // Confirm the selected seats and move to the next step
+            // You can access the selected seats using the 'selectedSeats' list
+            for (JToggleButton seat : selectedSeats) {
+                System.out.println("Selected Seat: " + seat.getText());
+            }
+    
+            // Move to the next step (e.g., Payment)
             navigationController.navigateTo("Payment");
         });
-
+    
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.add(selectSeatButton);
-
+    
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(seatSelectionPanel, BorderLayout.CENTER);
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-
+    
         return mainPanel;
     }
+    
 
     private JPanel createPaymentPanel() {
         JPanel paymentPanel = new JPanel(new GridLayout(0, 1)); // Adjust layout as needed

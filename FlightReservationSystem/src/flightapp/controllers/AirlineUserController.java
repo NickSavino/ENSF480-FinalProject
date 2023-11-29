@@ -373,10 +373,37 @@ public class AirlineUserController {
     public ArrayList<String> getFlightsString() {
 
         ArrayList<String> flightStrings = new ArrayList<>();
-        for (Flight flight : airline.getFlights()) {
+        for (Flight flight : this.airline.getFlights()) {
             flightStrings.add(flight.toString());
         }
         return flightStrings;
+    }
+
+    public void setSelectedFlightFromString(String string)
+    {
+        String[] tokens = string.split(" ");
+        int flightId = -1;
+        try
+        {
+            flightId = Integer.parseInt(tokens[tokens.length - 1]);
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(e);
+        }
+        for (Flight flight : airline.getFlights())
+        {
+            if (flight.getFlightId() == flightId)
+            {
+                this.selectedFlight = flight;
+                break;
+            }
+        }
+    }
+    
+    public Flight getSelectedFlight()
+    {
+        return this.selectedFlight;
     }
 
     public ArrayList<String> getAircraftsString() {

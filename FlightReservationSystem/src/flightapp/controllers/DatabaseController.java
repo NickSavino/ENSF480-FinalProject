@@ -457,4 +457,71 @@ public class DatabaseController {
             throw new RuntimeException("Error adding new purchase.", e);
         }        
     }
+
+    public static void insertEmployee(Employee employee) {
+        // SQL INSERT statement
+        String sql = "INSERT INTO employees (employeeId, password, employeeType, firstName, lastName, houseNumber, street, city, province, country, email) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            // Set parameters
+            stmt.setInt(1, employee.getEmployeeId());
+            stmt.setString(2, employee.getPassword()); // Consider encrypting the password
+            stmt.setString(3, employee.getEmployeeType());
+            stmt.setString(4, employee.getName().getFirstName());
+            stmt.setString(5, employee.getName().getLastName());
+            stmt.setInt(6, employee.getAddress().getHouseNumber());
+            stmt.setString(7, employee.getAddress().getStreet());
+            stmt.setString(8, employee.getAddress().getCity());
+            stmt.setString(9, employee.getAddress().getProvince());
+            stmt.setString(10, employee.getAddress().getCountry());
+            stmt.setString(11, employee.getEmail());
+
+            // Execute the insert operation
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            // Handle SQL Exceptions
+            e.printStackTrace();
+            throw new RuntimeException("Error insterting into table EMPLOYEES");
+        }
+    }
+
+    public static void becomeAirlineMember(int employeeId)
+    {
+        String sql = "UPDATE CUSTOMERS SET status = 'Airline Member' WHERE customerId = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, employeeId);
+            stmt.executeUpdate();
+            System.out.println("Successfully made customer an airline member.");
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error making customer an airline member.", e);
+        }
+    }
+
+    public static void createAirlineCreditCard(String newCreditCardNumber, int newSecurityCode, int customerId)
+    {
+        String sql = "UPDATE CUSTOMERS SET creditCardNumber = ?, hasCompanyCreditCard = true, creditCardSecurityCode = ? WHERE customerId = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, newCreditCardNumber);
+            stmt.setInt(2, newSecurityCode);
+            stmt.setInt(3, customerId);
+            stmt.executeUpdate();
+            System.out.println("Successfully created airline credit card.");
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error creating airline credit card.", e);
+        }
+    }
 }

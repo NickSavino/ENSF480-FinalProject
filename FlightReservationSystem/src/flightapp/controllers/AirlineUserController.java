@@ -20,15 +20,12 @@ import javax.xml.crypto.Data;
 
 
 public class AirlineUserController {
-    private EmployeeController employeeController;
-    private FlightController flightController;
     private Airline airline;
 
     private RegisteredCustomer currentCustomer;
     private Employee currentEmployee;
     private boolean isCustomerLoggedIn = false;
     private boolean isEmployeeLoggedIn = false;
-
     private boolean initializationComplete = false;
 
     public AirlineUserController() {
@@ -36,9 +33,6 @@ public class AirlineUserController {
         this.airline = new Airline();
         initializeDataOnStartup();
 
-        // Initialize controllers
-        employeeController = new EmployeeController(airline);
-        flightController = new FlightController(airline);
         
         // flightController.sendEmail("TESTING EMAIL SENDING WITH THIS DUMMY MESSAGE");
         
@@ -276,7 +270,6 @@ public class AirlineUserController {
             this.currentEmployee = null;
             this.isCustomerLoggedIn = true;
             this.isEmployeeLoggedIn = false;
-            this.flightController.setCustomer(this.currentCustomer);
         }
         return validCustomer;
     }
@@ -300,7 +293,6 @@ public class AirlineUserController {
             this.currentCustomer = null;
             this.isCustomerLoggedIn = false;
             this.isEmployeeLoggedIn = true;
-            this.employeeController.setEmployee(this.currentEmployee);
         }
         return validEmployee;
     }
@@ -321,8 +313,6 @@ public class AirlineUserController {
         this.isEmployeeLoggedIn = false;
         this.currentCustomer = null;
         this.currentEmployee = null;
-        this.employeeController.setEmployee(null);
-        this.flightController.setCustomer(null);
     }
 
     public void customerSignup(String username, String password, String creditCardNumber,
@@ -345,7 +335,6 @@ public class AirlineUserController {
 
         // Logging in the new customer
         customerLogin(newCustomer.getUsername(), newCustomer.getPassword());
-        this.flightController.setCustomer(newCustomer);
 
         DatabaseController.insertCustomer(newCustomer);
     }
@@ -358,15 +347,13 @@ public class AirlineUserController {
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
         loginSingleton.addEmployee(newEmployee.getEmployeeId(), newEmployee.getPassword());
         employeeLogin(newEmployee.getEmployeeId(), newEmployee.getPassword());
-        this.employeeController.setEmployee(newEmployee);
-
-        // TODO: Still need to add to database
+        DatabaseController.insertEmployee(newEmployee);
     }
 
     public void upgradeToAirlineMember()
     {
         this.currentCustomer.becomeAirlineMember();
-        // TODO: Still need to edit database
+        DatabaseController.becomeAirlineMember(this.currentCustomer.getCustomerId());
         
     }
 
@@ -374,6 +361,7 @@ public class AirlineUserController {
     public void applyForAirlineCreditCard(String newCreditCardNumber, int newSecurityCode, RegisteredCustomer customer)
     {
         customer.setCreditCard(newCreditCardNumber, newSecurityCode);
+        DatabaseController.createAirlineCreditCard(newCreditCardNumber, newSecurityCode, customer.getCustomerId());
     }
 
     public Airline getAirline() {

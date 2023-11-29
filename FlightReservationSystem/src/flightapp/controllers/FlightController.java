@@ -20,25 +20,7 @@ public class FlightController {
     public FlightController(Airline airline) {
         this.airline = airline;
     }
-
-    public void setCustomer(RegisteredCustomer customer)
-    {
-        this.customer = customer;
-    }
-
-    public ArrayList<Flight> browseFlights(String destinationId)
-    {
-        ArrayList<Flight> flightsToDestination = new ArrayList<Flight>();
-        for (Flight flight : this.airline.getFlights())
-        {
-            if (flight.getDestination().getLocationId().equals(destinationId))
-            {
-                flightsToDestination.add(flight);
-            }
-        }
-        return flightsToDestination;
-    }
-
+    
     public void selectFlight(int flightId) // Selecting flight and saving it locally as a variable in this class
     {
         for (Flight flight : this.airline.getFlights())

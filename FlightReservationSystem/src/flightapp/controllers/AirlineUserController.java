@@ -481,29 +481,30 @@ public class AirlineUserController {
 
         airline.addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay, departureMonth, departureYear, departureHour, departureMinute);
         
-        // // Logic to add a seat to the database
-        // int amountOfSeats = airline.getAircraftByID(aircraftId).getNumberOfSeats();
-        // int amountOfBusinessSeats = airline.getAircraftByID(aircraftId).getNumberOfBusinessSeats();
-        // int amountOfComfortSeats = airline.getAircraftByID(aircraftId).getNumberOfComfortSeats();
-        // for (int i = 0; i < amountOfSeats; i++)
-        // {
-        //     if (i < amountOfBusinessSeats)
-        //     {
-        //         airline.addSeatToFlight(flightId, i + 1, "Business", false);
-        //         DatabaseController.addSeat(flightId, i + 1, "Business", false);
-        //     }
-        //     else if (i < amountOfBusinessSeats + amountOfComfortSeats)
-        //     {
-        //         airline.addSeatToFlight(flightId, i + 1, "Comfort", false);
-        //         DatabaseController.addSeat(flightId, i + 1, "Comfort", false);
-        //     }
-        //     else
-        //     {
-        //         airline.addSeatToFlight(flightId, i + 1, "Ordinary", false);
-        //         DatabaseController.addSeat(flightId, i + 1, "Ordinary", false);
-        //     }
-        // }
-
+        // Logic to add a seat to the database
+        int amountOfSeats = airline.getAircraftByID(aircraftId).getNumberOfSeats();
+        int amountOfBusinessSeats = airline.getAircraftByID(aircraftId).getNumberOfBusinessSeats();
+        int amountOfComfortSeats = airline.getAircraftByID(aircraftId).getNumberOfComfortSeats();
+        for (int i = 0; i < amountOfSeats; i++)
+        {
+            if (i < amountOfBusinessSeats)
+            {
+                System.out.println("1");
+                airline.addSeatToFlight(flightId, i + 1, "Business", false);
+                System.out.println("2");
+                DatabaseController.addSeatToFlight(flightId, i + 1, "Business", false);
+            }
+            else if (i < amountOfBusinessSeats + amountOfComfortSeats)
+            {
+                airline.addSeatToFlight(flightId, i + 1, "Comfort", false);
+                DatabaseController.addSeatToFlight(flightId, i + 1, "Comfort", false);
+            }
+            else
+            {
+                airline.addSeatToFlight(flightId, i + 1, "Ordinary", false);
+                DatabaseController.addSeatToFlight(flightId, i + 1, "Ordinary", false);
+            }
+        }
         DatabaseController.addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay, departureMonth, departureYear, departureHour, departureMinute);
     }
 

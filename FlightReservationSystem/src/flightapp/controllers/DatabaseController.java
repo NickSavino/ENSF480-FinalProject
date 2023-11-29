@@ -197,45 +197,45 @@ public class DatabaseController {
         }
     }
 
-    public static void addFlight(Flight newFlight)
-    {
-        int flightId = newFlight.getFlightId();
-        int aircraftId = newFlight.getAircraft().getAircraftId();
-        String originId = newFlight.getOrigin().getLocationId();
-        String destinationId = newFlight.getDestination().getLocationId();
-        int flightDuration = newFlight.getDuration();
-        int flightCrewId = newFlight.getFlightCrew().getFlightCrewId();
-        int baseFlightCost = newFlight.getBaseFlightCost();
-        int flightDepartureMonth = newFlight.getDate().getMonth();
-        int flightDepartureDay = newFlight.getDate().getDay();
-        int flightDepartureYear = newFlight.getDate().getYear();
-        int flightDepartureHour = newFlight.getDate().getHour();
-        int flightDepartureMinute = newFlight.getDate().getMinutes();
+    // public static void addFlight(Flight newFlight)
+    // {
+    //     int flightId = newFlight.getFlightId();
+    //     int aircraftId = newFlight.getAircraft().getAircraftId();
+    //     String originId = newFlight.getOrigin().getLocationId();
+    //     String destinationId = newFlight.getDestination().getLocationId();
+    //     int flightDuration = newFlight.getDuration();
+    //     int flightCrewId = newFlight.getFlightCrew().getFlightCrewId();
+    //     int baseFlightCost = newFlight.getBaseFlightCost();
+    //     int flightDepartureMonth = newFlight.getDate().getMonth();
+    //     int flightDepartureDay = newFlight.getDate().getDay();
+    //     int flightDepartureYear = newFlight.getDate().getYear();
+    //     int flightDepartureHour = newFlight.getDate().getHour();
+    //     int flightDepartureMinute = newFlight.getDate().getMinutes();
 
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO FLIGHTS (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setInt(1, flightId);
-                stmt.setInt(2, aircraftId);
-                stmt.setString(3, originId);
-                stmt.setString(4, destinationId);
-                stmt.setInt(5, flightDuration);
-                stmt.setInt(6, flightCrewId);
-                stmt.setInt(7, baseFlightCost);
-                stmt.setInt(8, flightDepartureMonth);
-                stmt.setInt(9, flightDepartureDay);
-                stmt.setInt(10, flightDepartureYear);
-                stmt.setInt(11, flightDepartureHour);
-                stmt.setInt(12, flightDepartureMinute);
-                stmt.executeUpdate();
-                System.out.println("Successfully added new flight.");
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error adding new flight.", e);
-        }
-    }
+    //     try (Connection conn = DatabaseConnection.getConnection()) {
+    //         String query = "INSERT INTO FLIGHTS (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    //         try (PreparedStatement stmt = conn.prepareStatement(query)) {
+    //             stmt.setInt(1, flightId);
+    //             stmt.setInt(2, aircraftId);
+    //             stmt.setString(3, originId);
+    //             stmt.setString(4, destinationId);
+    //             stmt.setInt(5, flightDuration);
+    //             stmt.setInt(6, flightCrewId);
+    //             stmt.setInt(7, baseFlightCost);
+    //             stmt.setInt(8, flightDepartureMonth);
+    //             stmt.setInt(9, flightDepartureDay);
+    //             stmt.setInt(10, flightDepartureYear);
+    //             stmt.setInt(11, flightDepartureHour);
+    //             stmt.setInt(12, flightDepartureMinute);
+    //             stmt.executeUpdate();
+    //             System.out.println("Successfully added new flight.");
+    //         }
+    //     }
+    //     catch (SQLException e) {
+    //         e.printStackTrace();
+    //         throw new RuntimeException("Error adding new flight.", e);
+    //     }
+    // }
 
     public static void addFlight(int flightId, int aircraftId, String originId, String destinationId, int flightDuration, int flightCrewId,
                                  int baseFlightCost, int departureDay, int departureMonth, int departureYear, int departureHour, int departureMinute)
@@ -537,6 +537,25 @@ public class DatabaseController {
         catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error creating airline credit card.", e);
+        }
+    }
+
+    public static void addSeatToFlight(int flightId, int seatId, String seatType, boolean isBooked)
+    {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = "INSERT INTO FLIGHTSEATS (flightId, seatId, seatType, isBooked) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, flightId);
+                stmt.setInt(2, seatId);
+                stmt.setString(3, seatType);
+                stmt.setBoolean(4, isBooked);
+                stmt.executeUpdate();
+                System.out.println("Successfully added new seat.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error adding new seat.", e);
         }
     }
 }

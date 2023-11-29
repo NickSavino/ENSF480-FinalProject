@@ -7,27 +7,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/build/java" />
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/demo/java" />
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/generated/java" />
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/legacy/java" />
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/main/core-api/java" />
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/main/core-impl/java" />
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/main/protocol-impl/java" />
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/main/user-api/java" />
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/main/user-impl/java" />
-          <root url="file://$MODULE_DIR$/lib/mysql-connector-j-8.2.0/src/test/java" />
-        </SOURCES>
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="mysql-connector-j-8.2.0" level="project" />
     <orderEntry type="library" name="activation" level="project" />
-    <orderEntry type="library" name="mail" level="project" />
     <orderEntry type="library" name="javax.mail" level="project" />
   </component>
 </module>

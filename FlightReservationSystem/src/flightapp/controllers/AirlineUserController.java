@@ -69,7 +69,6 @@ public class AirlineUserController {
         initializationComplete = true;
         System.out.println("Initialization Complete");
 
-        return;
     }
 
     public boolean getInitalizationStatus() {

@@ -234,13 +234,13 @@ DROP TABLE IF EXISTS FLIGHTSEATS;
 CREATE TABLE FLIGHTSEATS (
       flightId            INT,
       seatId              INT,
-      seatIsBooked        BOOLEAN,
+      isBooked        BOOLEAN,
       seatType            VARCHAR(25),
       passengerId         INT,
       PRIMARY KEY (flightId, seatId)
 );
 
-INSERT INTO FLIGHTSEATS (flightId, seatId, seatIsBooked, seatType, passengerId) VALUES
+INSERT INTO FLIGHTSEATS (flightId, seatId, isBooked, seatType, passengerId) VALUES
 (100, 1, TRUE, 'Comfort', 1001),
 (100, 2, FALSE, 'Comfort', null),
 (100, 3, FALSE, 'Comfort', null),

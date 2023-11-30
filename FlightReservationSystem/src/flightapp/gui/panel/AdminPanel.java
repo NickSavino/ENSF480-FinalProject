@@ -229,7 +229,6 @@ public class AdminPanel extends JPanel implements FormCallback {
 
     private void onAddItem(DefaultListModel<String> model, String type) {
         // Show dialog to add item
-        System.out.println(type);
         if (type != null) {
             if (type.equals("Flight")) {
                 AddFlightForm flightForm = new AddFlightForm(this.mainView, this, this.mainView);
@@ -258,6 +257,7 @@ public class AdminPanel extends JPanel implements FormCallback {
         flightsModel.addElement(flightString);
 
         mainView.getCustomerPanel().addtoFlightList(flightString);
+        mainView.getGuestPanel().addtoFlightList(flightString);
         mainView.getUserController().addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay,
                 departureMonth, departureYear, departureHour, departureMinute);
 

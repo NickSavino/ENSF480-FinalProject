@@ -141,7 +141,7 @@ INSERT INTO LOCATIONS (locationId, locationName) VALUES
 
 DROP TABLE IF EXISTS PURCHASES;
 CREATE TABLE PURCHASES (
-      purchaseId          VARCHAR(25),
+      purchaseId          VARCHAR(50),
       loungeAccess        BOOLEAN,
       creditCardNumber    VARCHAR(25),
       creditCardSecurityCode INT,

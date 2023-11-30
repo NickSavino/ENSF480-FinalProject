@@ -216,6 +216,4 @@ public class Airline {
         flight.modifySeat(seatId, seatType, isBooked);
     }
 
-	
-
 }

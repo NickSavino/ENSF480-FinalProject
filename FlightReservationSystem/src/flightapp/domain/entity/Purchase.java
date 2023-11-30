@@ -31,15 +31,15 @@ public class Purchase {
             this.totalPurchaseCost += baseFlightCost;
             if (seat.getSeatType().equals("Business"))
             {
-                this.totalPurchaseCost += 200;
+                this.totalPurchaseCost *= 1.5;
             }
             else if (seat.getSeatType().equals("Comfort"))
             {
-                this.totalPurchaseCost += 140;
+                this.totalPurchaseCost *= 2;
             }
             else
             {
-                this.totalPurchaseCost += 100;
+                this.totalPurchaseCost *= 1;
             }
         }
 

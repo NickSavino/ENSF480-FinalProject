@@ -82,9 +82,9 @@ CREATE TABLE CUSTOMERS (
 );
 
 INSERT INTO CUSTOMERS (customerId, status, username, password, creditCardNumber, creditCardSecurityCode, hasCompanyCreditCard, isAirlineMember, companionVoucherUsable, firstName, lastName, houseNumber, street, city, province, country, email) VALUES
-(1001, 'Registered', 'user1', 'pass1', "", 123, FALSE, FALSE, FALSE, 'Tom', 'Brown', 10, 'Maple St', 'CityA', 'ON', 'Canada', 'tom.brown@email.com'),
-(1002, 'Airline Member', 'user2', 'pass2', '4444333322221111', 456, TRUE, TRUE, TRUE, 'Emily', 'White', 20, 'Elm St', 'CityB', 'AB', 'Canada', 'emily.white@email.com'),
-(1003, 'Registered', 'user3', 'pass3', '2222333344445555', 789, TRUE, FALSE, FALSE, 'Kyle', 'Green', 30, 'Birch Ave', 'CityC', 'BC', 'Canada', 'kyle.green@email.com');
+(1001, 'Registered', 'user1', 'pass1', "", 123, FALSE, FALSE, FALSE, 'Tom', 'Brown', 10, 'Maple St', 'CityA', 'ON', 'Canada', 'liam.d.mah@NotAnEmail.com'),
+(1002, 'Airline Member', 'user2', 'pass2', '4444333322221111', 456, TRUE, TRUE, TRUE, 'Emily', 'White', 20, 'Elm St', 'CityB', 'AB', 'Canada', 'liam.d.mah@NotAnEmail.com'),
+(1003, 'Registered', 'user3', 'pass3', '2222333344445555', 789, TRUE, FALSE, FALSE, 'Kyle', 'Green', 30, 'Birch Ave', 'CityC', 'BC', 'Canada', 'liam.d.mah@gmail.com');
 
 
 -- 3. Add table for aircrafts

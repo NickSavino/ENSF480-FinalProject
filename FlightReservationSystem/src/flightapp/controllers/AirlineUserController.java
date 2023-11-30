@@ -658,11 +658,10 @@ public class AirlineUserController {
         String email = String.format("Dear Customer,\n\nThank you for your purchase (ID: %s).\n\n%s\n\n%s",
                 purchaseId, receiptInfo, ticketInfo.toString());
 
-        sendEmail(email);
+        sendEmail(email, this.currentCustomer.getEmail());
     }
 
-    public void sendEmail(String content) {
-        String receivingEmail = "nicksavino2@gmail.com";
+    public void sendEmail(String content, String receivingEmail) {
         String senderEmail = "ensf480helperemail@gmail.com";
         String host = "smtp.gmail.com";
 

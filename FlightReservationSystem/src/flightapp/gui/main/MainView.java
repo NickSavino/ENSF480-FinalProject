@@ -20,6 +20,7 @@ public class MainView extends JFrame implements RegistrationCallback {
     private JLabel titleLabel;
 
     private CustomerPanel customerPanel;
+    private GuestPanel guestPanel;
     private JLabel loggedInLabel;
     public MainView() {
         // Initialize the main frame
@@ -85,7 +86,8 @@ public class MainView extends JFrame implements RegistrationCallback {
         cardPanel.add(new AdminPanel(this), "Admin");
         this.customerPanel = new CustomerPanel(this);
         cardPanel.add(customerPanel, "Customer");
-        cardPanel.add(new GuestPanel(this), "Guest");
+        this.guestPanel = new GuestPanel(this);
+        cardPanel.add(guestPanel, "Guest");
 
 
         //Set Layout to organize main page elements
@@ -204,5 +206,7 @@ public class MainView extends JFrame implements RegistrationCallback {
     public CustomerPanel getCustomerPanel() {
         return this.customerPanel;
     }
+
+    public GuestPanel getGuestPanel() { return this.guestPanel; }
 
 }

@@ -107,9 +107,8 @@ public class CustomerPanel extends JPanel {
         JPanel seatSelectionPanel = new JPanel();
 
         Flight flight = mainView.getUserController().getSelectedFlight();
-        System.out.println("Selected Flight: " + flight);
         if (flight == null) {
-            
+
         }
         ArrayList<Seat> seatList = null;
         seatList = mainView.getUserController().getSelectedFlight().getSeatList();
@@ -118,7 +117,7 @@ public class CustomerPanel extends JPanel {
         // Define the number of rows and columns for seats
         int rows = 0; // Amoount of rows on the aircraft
         int cols = 6; // Amount of seats per row
-        
+
         for (int i = 0; i < seatList.size(); i++) {
             if (i % cols == 0) {
                 rows++;
@@ -129,8 +128,10 @@ public class CustomerPanel extends JPanel {
         ArrayList<JToggleButton> selectedSeats = new ArrayList<>();
         ArrayList<Integer> selectedSeatIds = new ArrayList<>();
 
-        for (int i = 1; i < rows * cols; i++) {
-            JToggleButton seatButton = new JToggleButton("" + (i));
+
+
+        for (int i = 0; i < rows * cols; i++) {
+            JToggleButton seatButton = new JToggleButton("" + (i + 1));
             seatButton.setOpaque(true);
             seatButton.setBorderPainted(false);
 
@@ -140,32 +141,30 @@ public class CustomerPanel extends JPanel {
             {
                 seatButton.setBackground(Color.CYAN);
             }
-            else if (seatList.get(i).getSeatType().equals("Business")) 
+            else if (seatList.get(i).getSeatType().equals("Business"))
             {
                 seatButton.setBackground(Color.YELLOW);
             }
-            else if (seatList.get(i).getSeatType().equals("Ordinary")) 
+            else if (seatList.get(i).getSeatType().equals("Ordinary"))
             {
                 seatButton.setBackground(Color.ORANGE);
             }
-            else 
+            else
             {
-                seatButton.setForeground(Color.RED); 
+                seatButton.setForeground(Color.RED);
             }
 
             if (seatList.get(i).isBooked()) {
-                System.out.println("IS BOOKED");
                 seatButton.setEnabled(false);
                 seatButton.setBackground(Color.DARK_GRAY);
             }
             else
             {
                 seatButton.addActionListener(e -> {
-                    if (seatButton.isSelected()) 
+                    if (seatButton.isSelected())
                     {
                         selectedSeats.add(seatButton);
-                        selectedSeatIds.add(Integer.parseInt(seatButton.getText()));
-                        System.out.println("Selected seat: " + seatButton.getText());
+                        selectedSeatIds.add(Integer.parseInt(seatButton.getText() ) - 1);
                     }
                     else
                     {
@@ -176,29 +175,32 @@ public class CustomerPanel extends JPanel {
                             selectedSeats.remove(index);
                             selectedSeatIds.remove(index);
                         }
-                        
-                        System.out.println("Unselected seat " + text);
+
                     }
                 });
             }
-            
+
             seatSelectionPanel.add(seatButton);
         }
-    
+        //Create Scroll pane to store seat grid
+        JScrollPane scrollPane = new JScrollPane(seatSelectionPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
         selectSeatButton = new JButton("Confirm Seats");
         selectSeatButton.addActionListener(e -> {
             mainView.getUserController().setSelectedSeats(selectedSeatIds);
             updatePaymentPanel();
             navigationController.navigateTo("Payment");
         });
-    
+
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.add(selectSeatButton);
-    
+
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(seatSelectionPanel, BorderLayout.CENTER);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-    
+
         return mainPanel;
     }
 
@@ -315,12 +317,6 @@ public class CustomerPanel extends JPanel {
         cardPanel.repaint();
 
     }
-
-    private boolean userIsRegistered() {
-        // Implement logic to determine if the current user is a registered customer
-        return false; // Placeholder
-    }
-
     public void addtoFlightList(String flightInfo) {
         flightsModel.addElement(flightInfo);
     }

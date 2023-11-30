@@ -14,6 +14,9 @@ public class Purchase {
     private int totalPurchaseCost = 0;
     CreditCard creditCard;
 
+    private int customerId;
+    private int flightId;
+
     public Purchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
         String creditCardNumber, int creditCardSecurityCode, ArrayList<Seat> seats, Customer customer) 
     {
@@ -22,6 +25,8 @@ public class Purchase {
         this.tickets = new ArrayList<Ticket>();
         this.creditCard = new CreditCard(creditCardNumber, creditCardSecurityCode);
         this.purchaseId = UUID.randomUUID().toString();
+        this.customerId = customer.getCustomerId();
+        this.flightId = flight.getFlightId();
 
         int baseFlightCost = flight.getBaseFlightCost();
 
@@ -114,5 +119,12 @@ public class Purchase {
     public boolean getTicketInsurance()
     {
         return this.ticketInsurance;    
+    }
+
+    public int getCustomerId() {
+        return this.customerId;
+    }
+    public int getFlightId() {
+        return this.flightId;
     }
 }

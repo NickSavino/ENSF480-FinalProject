@@ -136,7 +136,6 @@ public class GuestPanel extends JPanel {
         JPanel seatSelectionPanel = new JPanel();
 
         Flight flight = mainView.getUserController().getSelectedFlight();
-        System.out.println("Selected Flight: " + flight);
         if (flight == null) {
 
         }

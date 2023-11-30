@@ -208,6 +208,7 @@ public class AirlineUserController {
 
     }
 
+
     private void populateRegisteredCustomers() throws SQLException // Liam
     {
         ResultSet rs = DatabaseController.queryCustomers();
@@ -496,9 +497,7 @@ public class AirlineUserController {
         {
             if (i < amountOfBusinessSeats)
             {
-                System.out.println("1");
                 airline.addSeatToFlight(flightId, i + 1, "Business", false);
-                System.out.println("2");
                 DatabaseController.addSeatToFlight(flightId, i + 1, "Business", false);
             }
             else if (i < amountOfBusinessSeats + amountOfComfortSeats)
@@ -531,11 +530,14 @@ public class AirlineUserController {
         }
     }
 
+    public Seat getSeat(int flightId, int seatId) {
+        return airline.getFlightByID(flightId).getSeat(seatId);
+    }
+
     public int calculateTotalCost(boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher)
     {
         int totalCost = 0;
 
-        System.out.println(selectedFlight.getFlightId());
         totalCost += this.selectedFlight.getBaseFlightCost() * this.selectedSeats.size();
         for (Seat seat : this.selectedSeats)
         {
@@ -625,7 +627,6 @@ public class AirlineUserController {
         sendReceiptAndTicket(currentPurchase);
 
         for (Seat seat : selectedSeats) {
-            System.out.println("Booking Seat: " + seat.getSeatId());
             seat.book();
             DatabaseController.updateSeat(this.selectedFlight.getFlightId(), seat.getSeatId(), seat.isBooked());
         }

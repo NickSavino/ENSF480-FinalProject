@@ -36,7 +36,7 @@ public class Flight {
         int numberOfBusinessSeats = aircraft.getNumberOfBusinessSeats();
         int numberOfComfortSeats = aircraft.getNumberOfComfortSeats();
 
-        for (int i = 0; i < numberOfSeats; i++) {
+        for (int i = 1; i <= numberOfSeats; i++) {
             if (i < numberOfComfortSeats) {
                 seatList.add(new Seat(i, "Comfort"));
             } else if (i < numberOfComfortSeats + numberOfBusinessSeats) {

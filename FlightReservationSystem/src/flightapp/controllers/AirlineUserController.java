@@ -697,7 +697,16 @@ public class AirlineUserController {
         }
     }
 
+    public void makeCurrentCustomerAirlineMember()
+    {
+        this.currentCustomer.becomeAirlineMember();
+        DatabaseController.becomeAirlineMember(this.currentCustomer.getCustomerId());
+    }
 
+    public RegisteredCustomer getCurrentCustomer()
+    {
+        return this.currentCustomer;
+    }
 
     public void removeFlight(int flightId) {
         airline.removeFlight(flightId);

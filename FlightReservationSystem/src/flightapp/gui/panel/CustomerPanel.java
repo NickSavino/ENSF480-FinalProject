@@ -63,7 +63,18 @@ public class CustomerPanel extends JPanel {
 
         // Set up action listeners for each button
         browseFlightsButton.addActionListener(e -> navigationController.navigateTo("FlightSelection"));
-        //becomeMemberButton.addActionListener(e -> navigationController.navigateTo("SeatSe"));
+        becomeMemberButton.addActionListener(e -> {
+            becomeMemberButton.setEnabled(true);
+            if (mainView.getUserController().getCurrentCustomer().getStatus().equals("Registered"))
+            {
+                mainView.getUserController().makeCurrentCustomerAirlineMember();
+                JOptionPane.showMessageDialog(mainMenuPanel, "You are now an Airline Member", "Airline Member", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(mainMenuPanel, "Error. You are already an Airline Member!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         //applyCreditCardButton.addActionListener(e -> );
 
         mainMenuPanel.add(browseFlightsButton);

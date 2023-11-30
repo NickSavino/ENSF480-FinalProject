@@ -54,6 +54,7 @@ public class CustomerPanel extends JPanel {
         navigationController.initialize("MainMenu");
         // Initialize to show main menu
         navigationController.navigateTo("MainMenu");
+
     }
 
     private JPanel createMainMenuPanel() {
@@ -63,6 +64,7 @@ public class CustomerPanel extends JPanel {
         JButton browseFlightsButton = new JButton("Browse Flights");
         JButton becomeMemberButton = new JButton("Become Member");
         JButton applyCreditCardButton = new JButton("Apply for Company Credit Card");
+        JButton cancelFlightButton = new JButton("Cancel Flight");
 
         // Set up action listeners for each button
         browseFlightsButton.addActionListener(e -> navigationController.navigateTo("FlightSelection"));
@@ -115,11 +117,59 @@ public class CustomerPanel extends JPanel {
             }
         });
 
+        cancelFlightButton.addActionListener(e -> cancelFlight());
+
         mainMenuPanel.add(browseFlightsButton);
         mainMenuPanel.add(becomeMemberButton);
         mainMenuPanel.add(applyCreditCardButton);
+        mainMenuPanel.add(cancelFlightButton);
 
         return mainMenuPanel;
+    }
+
+    public void cancelFlight() {
+        // Retrieve the list of the user's flights
+        ArrayList<Purchase> userPurchases = mainView.getUserController().getCurrentCustomer().getPurchases();
+
+        ArrayList<String> cancellableFlights = new ArrayList<>();
+
+        for (Purchase purchase : userPurchases) {
+            System.out.println(purchase.getTicketInsurance());
+            if (purchase.getTicketInsurance()) {
+                Flight flight = mainView.getUserController().getAirline().getFlightByID(purchase.getFlightId());
+                cancellableFlights.add(flight.toString() + " | " + purchase.getPurchaseId());
+            }
+        }
+
+        if (cancellableFlights.isEmpty()) {
+            JOptionPane.showMessageDialog(mainView, "You have no flights with cancellation insurance.", "No Cancellable Flights", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        // Convert the list to an array for the dialog
+        Object[] cancellableFlightsArray = cancellableFlights.toArray();
+
+        // Show a dialog with the list of flights
+        String selectedFlight = (String) JOptionPane.showInputDialog(
+                mainView,
+                "Select a flight to cancel:",
+                "Cancel Flight",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                cancellableFlightsArray,
+                cancellableFlightsArray[0]
+        );
+
+        // Handle the flight cancellation
+        if (selectedFlight != null && !selectedFlight.isEmpty()) {
+            // Extract the flight ID or any unique identifier from the selectedFlight string
+            String[] parts = selectedFlight.split(" \\| ");
+            String purchaseId = parts[parts.length - 1]; // Assuming the purchase ID is the last part
+            mainView.getUserController().cancelPurchase(purchaseId);
+            JOptionPane.showMessageDialog(mainView, "Your flight has been cancelled.", "Flight Cancelled", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(mainView, "No flight selected for cancellation.", "Cancellation Aborted", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private JPanel createFlightSelectionPanel() {
@@ -310,7 +360,6 @@ public class CustomerPanel extends JPanel {
         // Add components for registered users
         if (mainView.getUserController().isCustomerLoggedIn()) {
             paymentPanel.add(useCompanionTicket);
-            // Add more options for registered users
         }
 
         loungeAccess.addActionListener(new ActionListener() {
@@ -373,7 +422,7 @@ public class CustomerPanel extends JPanel {
                 }
 
                 try {
-                    mainView.getUserController().purchaseForCustomer(loungeAccessSelected, cancellationInsuranceSelected, useCompanionTicketSelected, creditCardNumber, securityCode);
+                    mainView.getUserController().purchaseForCustomer(cancellationInsuranceSelected, loungeAccessSelected, useCompanionTicketSelected, creditCardNumber, securityCode);
                     JOptionPane.showMessageDialog(mainView, "Successfully Processed Purchase\n an E-mail will be sent to you shortly", "Successful Purchase", JOptionPane.INFORMATION_MESSAGE);
                     updatePaymentPanel();
                     updateSeatSelectionPanel();
@@ -402,5 +451,15 @@ public class CustomerPanel extends JPanel {
     }
     public void addtoFlightList(String flightInfo) {
         flightsModel.addElement(flightInfo);
+    }
+
+    public void routeHome() {
+        navigationController.goHome("MainMenu");
+    }
+
+    private int extractIdFromSelectedItem(String selectedItem) {
+        // Assuming the format is "Name - ID"
+        String[] parts = selectedItem.split(" - ");
+        return Integer.parseInt(parts[1]);
     }
 }

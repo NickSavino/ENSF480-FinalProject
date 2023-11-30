@@ -10,6 +10,7 @@ import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.xml.crypto.Data;
 
 import flightapp.DatabaseConnection;
 import flightapp.domain.entity.*;
@@ -202,7 +203,7 @@ public class AirlineUserController {
             
             if (currentFlight != null && currentCustomer != null)
             {
-                airline.initializePurchase(currentFlight, ticketInsurance, loungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, seats, currentCustomer);
+                airline.initializePurchase(purchaseId, currentFlight, ticketInsurance, loungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, seats, currentCustomer);
             }
         }
 
@@ -398,6 +399,11 @@ public class AirlineUserController {
                 break;
             }
         }
+    }
+
+    public void cancelPurchase(String purchaseId) {
+        airline.removePurchaseByID(purchaseId);
+        DatabaseController.removePurchase(purchaseId);
     }
 
     private int extractIdFromSelectedItem(String selectedItem) {

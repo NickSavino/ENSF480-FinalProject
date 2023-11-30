@@ -93,11 +93,11 @@ public class Airline {
         return this.locations;
     }
 
-    public void initializePurchase(Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
+    public void initializePurchase(String purchaseId, Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
         String creditCardNumber, int securityCode, ArrayList<Seat> seats, Customer customer)
     {
         // Method to help on startup
-        Purchase newPurchase = new Purchase(flight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, securityCode, seats, customer);
+        Purchase newPurchase = new Purchase(purchaseId, flight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, securityCode, seats, customer);
         this.purchases.add(newPurchase);
         customer.addPurchase(newPurchase);
     }
@@ -216,5 +216,25 @@ public class Airline {
         flight.modifySeat(seatId, seatType, isBooked);
     }
 
+    //removes purchase and updates seat on flight
+    public void removePurchaseByID(String purchaseId) {
+        Iterator<Purchase> iterator = purchases.iterator();
+        while (iterator.hasNext()) {
+            Purchase purchase = iterator.next();
+            if (purchase.getPurchaseId().equals(purchaseId)) {
+                Customer customer = getCustomerByID(purchase.getCustomerId());
+                customer.removePurchase(purchase);
+                purchases.remove(purchase);
+
+                Flight flight = getFlightByID(purchase.getFlightId());
+                for (Ticket ticket : purchase.getTickets()) {
+                    Seat seat = flight.getSeat(ticket.getSeatNumber());
+                    addSeatToFlight(flight.getFlightId(), seat.getSeatId(), seat.getSeatType(), false);
+                    DatabaseController.updateSeat(flight.getFlightId(), seat.getSeatId(), false);
+                }
+                break;
+            }
+        }
+    }
 
 }

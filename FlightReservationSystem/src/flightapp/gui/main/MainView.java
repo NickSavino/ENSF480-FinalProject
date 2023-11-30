@@ -110,8 +110,7 @@ public class MainView extends JFrame implements RegistrationCallback {
 
         if (loginSuccess) {
             if (userController.isCustomerLoggedIn()) {
-                customerPanel = new CustomerPanel(this);
-                cardPanel.add(customerPanel);
+                customerPanel.routeHome();
                 cardLayout.show(cardPanel, "Customer");
                 loggedInLabel.setText("Logged in as: " + username);
                 JOptionPane.showMessageDialog(this, userController.getPromotionalNews(), "Promotional News", JOptionPane.OK_OPTION);

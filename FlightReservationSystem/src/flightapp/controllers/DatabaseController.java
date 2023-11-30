@@ -162,6 +162,22 @@ public class DatabaseController {
             throw new RuntimeException("Error Querying Purchases", e);
         }
     }
+
+    public static void removePurchase(String purchaseId) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = "DELETE FROM PURCHASES WHERE purchaseId = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, purchaseId);
+                stmt.executeUpdate();
+                System.out.println("Successfully removed Purchase.");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error removing purchase.", e);
+        }
+
+    }
     
     public static ResultSet queryFlightSeats()
     {

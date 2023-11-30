@@ -293,7 +293,6 @@ public class GuestPanel extends JPanel {
         costLabel.setText("Total Cost: $" + totalCost);
 
         paymentPanel.add(loungeAccess);
-        paymentPanel.add(cancellationInsurance);
 
         loungeAccess.addActionListener(new ActionListener() {
             @Override
@@ -338,7 +337,7 @@ public class GuestPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean loungeAccessSelected = loungeAccess.isSelected();
-                boolean cancellationInsuranceSelected = cancellationInsurance.isSelected();
+                boolean cancellationInsuranceSelected = false;
                 String creditCardNumber = creditCardField.getText();
 
                 if (creditCardNumber.length() != 16 || isNumeric(creditCardNumber) == false) {

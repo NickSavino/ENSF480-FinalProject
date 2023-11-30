@@ -1,5 +1,6 @@
 package flightapp.gui.panel;
 
+import com.sun.mail.imap.protocol.Item;
 import com.sun.tools.javac.Main;
 
 import flightapp.domain.entity.*;
@@ -10,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 public class CustomerPanel extends JPanel {
@@ -169,6 +172,7 @@ public class CustomerPanel extends JPanel {
 
 
 
+
             // Customize the color of the buttons based on another condition
             if (seatList.get(i).getSeatType().equals("Comfort"))
             {
@@ -205,6 +209,7 @@ public class CustomerPanel extends JPanel {
             }
     
             // Move to the next step (e.g., Payment)
+            updatePaymentPanel();
             navigationController.navigateTo("Payment");
         });
     
@@ -223,13 +228,11 @@ public class CustomerPanel extends JPanel {
         if (selectedFlight == null) {
             return;
         }
-
         JPanel seatSelectionPanel = createSeatSelectionPanel();
 
         cardPanel.add(seatSelectionPanel, "SeatSelection");
         cardPanel.revalidate();
         cardPanel.repaint();
-       
 
     }
     
@@ -240,15 +243,22 @@ public class CustomerPanel extends JPanel {
         // Components for payment options
         JCheckBox loungeAccess = new JCheckBox("Lounge Access");
         JCheckBox cancellationInsurance = new JCheckBox("Cancellation Insurance");
-        JComboBox<String> seatClass = new JComboBox<>(new String[] {"Economy", "Business", "First Class"});
+
+        loungeAccess.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                }
+            }
+        });
 
         paymentPanel.add(loungeAccess);
         paymentPanel.add(cancellationInsurance);
-        paymentPanel.add(new JLabel("Seat Class:"));
-        paymentPanel.add(seatClass);
 
         // Add components for registered users
-        if (userIsRegistered()) {
+        System.out.println(mainView.getUserController().isCustomerLoggedIn());
+        if (mainView.getUserController().isCustomerLoggedIn()) {
             JCheckBox useCompanionTicket = new JCheckBox("Use Companion Ticket");
             paymentPanel.add(useCompanionTicket);
             // Add more options for registered users
@@ -260,6 +270,15 @@ public class CustomerPanel extends JPanel {
         paymentPanel.add(makePaymentButton); // Add other components as needed
 
         return paymentPanel;
+    }
+
+    public void updatePaymentPanel() {
+
+        JPanel panel = createPaymentPanel();
+        cardPanel.add(panel, "Payment");
+        cardPanel.revalidate();
+        cardPanel.repaint();
+
     }
 
     private boolean userIsRegistered() {

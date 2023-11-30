@@ -22,8 +22,6 @@ public class Aircraft {
         this.amountOfSeats = amountOfOrdinarySeats + amountOfBusinessSeats + amountOfComfortSeats;
     }
 
-
-
     public String getModel() {
         return this.model;
     }

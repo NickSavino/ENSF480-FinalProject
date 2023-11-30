@@ -137,6 +137,11 @@ public class CustomerPanel extends JPanel {
         selectFlightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (list.isSelectionEmpty())
+                {
+                    JOptionPane.showMessageDialog(flightSelectionPanel, "Please select a flight", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 // Switch to seat selection panel
                 // Need to find corresponding flight and set it as active in AirlineUserController
                 String selectedFlight = list.getSelectedValue();
@@ -361,14 +366,19 @@ public class CustomerPanel extends JPanel {
                 boolean useCompanionTicketSelected = mainView.getUserController().isCustomerLoggedIn() && useCompanionTicket.isSelected();
                 String creditCardNumber = creditCardField.getText();
 
-                if (creditCardNumber.length() != 16) {
-                    JOptionPane.showMessageDialog(mainView, "Credit Card Must be 16 digits in length", "Invalid Card Number", JOptionPane.ERROR_MESSAGE);
+                if (creditCardNumber.length() != 16 || isNumeric(creditCardNumber) == false) {
+                    JOptionPane.showMessageDialog(mainView, "Credit card must be 16 digits!", "Invalid Card Number", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
-                Integer securityCode = Integer.parseInt(securityCodeField.getText());
+                Integer securityCode;
+                try {
+                    securityCode = Integer.parseInt(securityCodeField.getText());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(mainView, "Credit card security code must be 3 digits!", "Invalid Card Number", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 if (securityCode.toString().length() != 3) {
-                    JOptionPane.showMessageDialog(mainView, "Security Code Must be 3 digits in length", "Invalid Security Code", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(mainView, "Credit card security code must be 3 digits!", "Invalid Security Code", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -390,6 +400,14 @@ public class CustomerPanel extends JPanel {
         paymentPanel.add(makePaymentButton); // Add other components as needed
 
         return paymentPanel;
+    }
+
+    private boolean isNumeric(String str) {
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c))
+                return false;
+        }
+        return true;
     }
 
     public void updatePaymentPanel() {

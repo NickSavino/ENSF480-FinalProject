@@ -1,11 +1,14 @@
 package flightapp.gui.panel;
 
+import flightapp.domain.entity.Flight;
+import flightapp.domain.entity.Seat;
 import flightapp.gui.main.MainView;
 import flightapp.gui.navigation.NavigationController;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class GuestPanel extends JPanel {
 
@@ -18,6 +21,8 @@ public class GuestPanel extends JPanel {
     private MainView mainView;
     private DefaultListModel<String> flightsModel;
 
+    private int totalCost = 0;
+
     public GuestPanel(MainView mainView) {
         this.mainView = mainView;
 
@@ -27,7 +32,6 @@ public class GuestPanel extends JPanel {
         // Initialize and add sub-panels
         cardPanel.add(createMainMenuPanel(), "MainMenu");
         cardPanel.add(createFlightSelectionPanel(), "FlightSelection");
-        cardPanel.add(createSeatSelectionPanel(), "SeatSelection");
 
         setLayout(new BorderLayout());
         add(cardPanel, BorderLayout.CENTER);
@@ -115,6 +119,9 @@ public class GuestPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Switch to seat selection panel
+                String selectedFlight = flightList.getSelectedValue();
+                mainView.getUserController().setSelectedFlightFromString(selectedFlight);
+                updateSeatSelectionPanel();
                 navigationController.navigateTo("SeatSelection");
             }
         });
@@ -127,28 +134,90 @@ public class GuestPanel extends JPanel {
 
     private JPanel createSeatSelectionPanel() {
         JPanel seatSelectionPanel = new JPanel();
+
+        Flight flight = mainView.getUserController().getSelectedFlight();
+        System.out.println("Selected Flight: " + flight);
+        if (flight == null) {
+
+        }
+        ArrayList<Seat> seatList = null;
+        seatList = mainView.getUserController().getSelectedFlight().getSeatList();
+
+
         // Define the number of rows and columns for seats
-        int rows = 5; // For example, 5 rows
-        int cols = 4; // For example, 4 seats per row
+        int rows = 0; // Amoount of rows on the aircraft
+        int cols = 6; // Amount of seats per row
 
+        for (int i = 0; i < seatList.size(); i++) {
+            if (i % cols == 0) {
+                rows++;
+            }
+        }
         seatSelectionPanel.setLayout(new GridLayout(rows, cols));
+        // Use a list to store selected seats
+        ArrayList<JToggleButton> selectedSeats = new ArrayList<>();
+        ArrayList<Integer> selectedSeatIds = new ArrayList<>();
 
-        ButtonGroup seatGroup = new ButtonGroup(); // To allow only one seat to be selected at a time
+        for (int i = 1; i < rows * cols; i++) {
+            JToggleButton seatButton = new JToggleButton("" + (i));
+            seatButton.setOpaque(true);
+            seatButton.setBorderPainted(false);
 
-        for (int i = 0; i < rows * cols; i++) {
-            JToggleButton seatButton = new JToggleButton("" + (i + 1));
-            seatButton.addActionListener(e -> {
-                // Handle seat selection
-                // use seatButton.getText() to get the seat number
-            });
 
-            seatGroup.add(seatButton);
+            // Customize the color of the buttons based on another condition
+            if (seatList.get(i).getSeatType().equals("Comfort"))
+            {
+                seatButton.setBackground(Color.CYAN);
+            }
+            else if (seatList.get(i).getSeatType().equals("Business"))
+            {
+                seatButton.setBackground(Color.YELLOW);
+            }
+            else if (seatList.get(i).getSeatType().equals("Ordinary"))
+            {
+                seatButton.setBackground(Color.ORANGE);
+            }
+            else
+            {
+                seatButton.setForeground(Color.RED);
+            }
+
+            if (seatList.get(i).isBooked()) {
+                System.out.println("IS BOOKED");
+                seatButton.setEnabled(false);
+                seatButton.setBackground(Color.DARK_GRAY);
+            }
+            else
+            {
+                seatButton.addActionListener(e -> {
+                    if (seatButton.isSelected())
+                    {
+                        selectedSeats.add(seatButton);
+                        selectedSeatIds.add(Integer.parseInt(seatButton.getText()));
+                        System.out.println("Selected seat: " + seatButton.getText());
+                    }
+                    else
+                    {
+                        int index = selectedSeats.indexOf(seatButton);
+                        String text = seatButton.getText();
+                        if (index != -1)
+                        {
+                            selectedSeats.remove(index);
+                            selectedSeatIds.remove(index);
+                        }
+
+                        System.out.println("Unselected seat " + text);
+                    }
+                });
+            }
+
             seatSelectionPanel.add(seatButton);
         }
 
-        JButton selectSeatButton = new JButton("Confirm Seat");
+        JButton selectSeatButton = new JButton("Confirm Seats");
         selectSeatButton.addActionListener(e -> {
-            // Confirm the selected seat and move to the next step
+            mainView.getUserController().setSelectedSeats(selectedSeatIds);
+            updatePaymentPanel();
             navigationController.navigateTo("Payment");
         });
 
@@ -162,37 +231,122 @@ public class GuestPanel extends JPanel {
         return mainPanel;
     }
 
+    public void updateSeatSelectionPanel() {
+        Flight selectedFlight = mainView.getUserController().getSelectedFlight();
+        if (selectedFlight == null) {
+            return;
+        }
+        JPanel seatSelectionPanel = createSeatSelectionPanel();
+
+        cardPanel.add(seatSelectionPanel, "SeatSelection");
+        cardPanel.revalidate();
+        cardPanel.repaint();
+
+    }
+
+
     private JPanel createPaymentPanel() {
         JPanel paymentPanel = new JPanel(new GridLayout(0, 1)); // Adjust layout as needed
-
         // Components for payment options
         JCheckBox loungeAccess = new JCheckBox("Lounge Access");
         JCheckBox cancellationInsurance = new JCheckBox("Cancellation Insurance");
-        JComboBox<String> seatClass = new JComboBox<>(new String[] {"Economy", "Business", "First Class"});
+        JCheckBox useCompanionTicket = new JCheckBox("Use Companion Ticket");
+
+        JLabel costLabel = new JLabel();
+        totalCost = mainView.getUserController().calculateTotalCost(false, false, false);
+        costLabel.setText("Total Cost: $" + totalCost);
 
         paymentPanel.add(loungeAccess);
         paymentPanel.add(cancellationInsurance);
-        paymentPanel.add(new JLabel("Seat Class:"));
-        paymentPanel.add(seatClass);
 
         // Add components for registered users
-        if (userIsRegistered()) {
-            JCheckBox useCompanionTicket = new JCheckBox("Use Companion Ticket");
+        if (mainView.getUserController().isCustomerLoggedIn()) {
             paymentPanel.add(useCompanionTicket);
             // Add more options for registered users
         }
 
+        loungeAccess.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
+                costLabel.setText("Total Cost: $" + totalCost);
+
+            }
+        });
+
+        cancellationInsurance.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
+                costLabel.setText("Total Cost: $" + totalCost);
+
+            }
+        });
+
+        useCompanionTicket.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
+                costLabel.setText("Total Cost: $" + totalCost);
+            }
+        });
+
+
+        JPanel creditCardPanel = new JPanel();
+
+
+        JLabel numberLabel = new JLabel("Credit Card Number:");
+        JTextField creditCardField = new JTextField(16);
+        JLabel securityCodeLabel = new JLabel("Security Code:");
+        JTextField securityCodeField = new JTextField(3);
+
+        creditCardPanel.add(numberLabel);
+        creditCardPanel.add(creditCardField);
+        creditCardPanel.add(securityCodeLabel);
+        creditCardPanel.add(securityCodeField);
+
         JButton makePaymentButton = new JButton("Make Payment");
         // Add ActionListener to handle payment logic
 
+        makePaymentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean loungeAccessSelected = loungeAccess.isSelected();
+                boolean cancellationInsuranceSelected = cancellationInsurance.isSelected();
+                boolean useCompanionTicketSelected = mainView.getUserController().isCustomerLoggedIn() && useCompanionTicket.isSelected();
+                String creditCardNumber = creditCardField.getText();
+                int securityCode = Integer.parseInt(securityCodeField.getText());
+                try {
+                    mainView.getUserController().purchase(loungeAccessSelected, cancellationInsuranceSelected, useCompanionTicketSelected, creditCardNumber, securityCode);
+                    JOptionPane.showMessageDialog(mainView, "Successfully Processed Purchase\n an E-mail will be sent to you shortly", "Successful Purchase", JOptionPane.INFORMATION_MESSAGE);
+                    updatePaymentPanel();
+                    updateSeatSelectionPanel();
+                    navigationController.goHome("MainMenu");
+                } catch (Exception Ex) {
+                    JOptionPane.showMessageDialog(mainView, "Please confirm credit card information", "Error Confirming purchase", JOptionPane.WARNING_MESSAGE);
+                }
+
+            }
+        });
+
+        paymentPanel.add(creditCardPanel);
+        paymentPanel.add(costLabel);
         paymentPanel.add(makePaymentButton); // Add other components as needed
 
         return paymentPanel;
     }
 
-    private boolean userIsRegistered() {
-        // Implement logic to determine if the current user is a registered customer
-        return false; // Placeholder
+    public void updatePaymentPanel() {
+
+        JPanel panel = createPaymentPanel();
+        cardPanel.add(panel, "Payment");
+        cardPanel.revalidate();
+        cardPanel.repaint();
+
+    }
+
+    public void addtoFlightList(String flightInfo) {
+        flightsModel.addElement(flightInfo);
     }
 
 }

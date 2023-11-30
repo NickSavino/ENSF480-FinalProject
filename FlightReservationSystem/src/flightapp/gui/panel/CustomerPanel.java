@@ -3,6 +3,7 @@ package flightapp.gui.panel;
 import com.sun.mail.imap.protocol.Item;
 import com.sun.tools.javac.Main;
 
+import flightapp.controllers.FlightController;
 import flightapp.domain.entity.*;
 import flightapp.gui.main.MainView;
 import flightapp.gui.navigation.NavigationController;
@@ -27,6 +28,8 @@ public class CustomerPanel extends JPanel {
 
     private MainView mainView;
 
+    private int totalCost = 0;
+
     private DefaultListModel<String> flightsModel;
 
     public CustomerPanel(MainView mainView) {
@@ -37,7 +40,6 @@ public class CustomerPanel extends JPanel {
         // Initialize and add sub-panels
         cardPanel.add(createMainMenuPanel(), "MainMenu");
         cardPanel.add(createFlightSelectionPanel(), "FlightSelection");
-        cardPanel.add(createPaymentPanel(), "Payment");
 
         setLayout(new BorderLayout());
         add(cardPanel, BorderLayout.CENTER);
@@ -127,12 +129,10 @@ public class CustomerPanel extends JPanel {
         ArrayList<JToggleButton> selectedSeats = new ArrayList<>();
         ArrayList<Integer> selectedSeatIds = new ArrayList<>();
 
-        for (int i = 0; i < rows * cols; i++) {
-            JToggleButton seatButton = new JToggleButton("" + (i + 1));
+        for (int i = 1; i < rows * cols; i++) {
+            JToggleButton seatButton = new JToggleButton("" + (i));
             seatButton.setOpaque(true);
             seatButton.setBorderPainted(false);
-
-
 
 
             // Customize the color of the buttons based on another condition
@@ -218,34 +218,90 @@ public class CustomerPanel extends JPanel {
 
     private JPanel createPaymentPanel() {
         JPanel paymentPanel = new JPanel(new GridLayout(0, 1)); // Adjust layout as needed
-
         // Components for payment options
         JCheckBox loungeAccess = new JCheckBox("Lounge Access");
         JCheckBox cancellationInsurance = new JCheckBox("Cancellation Insurance");
+        JCheckBox useCompanionTicket = new JCheckBox("Use Companion Ticket");
 
-        loungeAccess.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-
-                }
-            }
-        });
+        JLabel costLabel = new JLabel();
+        totalCost = mainView.getUserController().calculateTotalCost(false, false, false);
+        costLabel.setText("Total Cost: $" + totalCost);
 
         paymentPanel.add(loungeAccess);
         paymentPanel.add(cancellationInsurance);
 
         // Add components for registered users
-        System.out.println(mainView.getUserController().isCustomerLoggedIn());
         if (mainView.getUserController().isCustomerLoggedIn()) {
-            JCheckBox useCompanionTicket = new JCheckBox("Use Companion Ticket");
             paymentPanel.add(useCompanionTicket);
             // Add more options for registered users
         }
 
+        loungeAccess.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
+                costLabel.setText("Total Cost: $" + totalCost);
+
+            }
+        });
+
+        cancellationInsurance.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
+                costLabel.setText("Total Cost: $" + totalCost);
+
+            }
+        });
+
+        useCompanionTicket.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
+                costLabel.setText("Total Cost: $" + totalCost);
+            }
+        });
+
+
+        JPanel creditCardPanel = new JPanel();
+
+
+        JLabel numberLabel = new JLabel("Credit Card Number:");
+        JTextField creditCardField = new JTextField(16);
+        JLabel securityCodeLabel = new JLabel("Security Code:");
+        JTextField securityCodeField = new JTextField(3);
+
+        creditCardPanel.add(numberLabel);
+        creditCardPanel.add(creditCardField);
+        creditCardPanel.add(securityCodeLabel);
+        creditCardPanel.add(securityCodeField);
+
         makePaymentButton = new JButton("Make Payment");
         // Add ActionListener to handle payment logic
 
+        makePaymentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean loungeAccessSelected = loungeAccess.isSelected();
+                boolean cancellationInsuranceSelected = cancellationInsurance.isSelected();
+                boolean useCompanionTicketSelected = mainView.getUserController().isCustomerLoggedIn() && useCompanionTicket.isSelected();
+                String creditCardNumber = creditCardField.getText();
+                int securityCode = Integer.parseInt(securityCodeField.getText());
+                try {
+                    mainView.getUserController().purchase(loungeAccessSelected, cancellationInsuranceSelected, useCompanionTicketSelected, creditCardNumber, securityCode);
+                    JOptionPane.showMessageDialog(mainView, "Successfully Processed Purchase\n an E-mail will be sent to you shortly", "Successful Purchase", JOptionPane.INFORMATION_MESSAGE);
+                    updatePaymentPanel();
+                    updateSeatSelectionPanel();
+                    navigationController.goHome("MainMenu");
+                } catch (Exception Ex) {
+                    JOptionPane.showMessageDialog(mainView, "Please confirm credit card information", "Error Confirming purchase", JOptionPane.WARNING_MESSAGE);
+                }
+
+            }
+        });
+
+        paymentPanel.add(creditCardPanel);
+        paymentPanel.add(costLabel);
         paymentPanel.add(makePaymentButton); // Add other components as needed
 
         return paymentPanel;

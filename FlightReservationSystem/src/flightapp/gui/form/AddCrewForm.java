@@ -12,9 +12,9 @@ public class AddCrewForm extends JDialog {
     private JButton submitButton;
     private JButton cancelButton;
 
-    private FormCallback callback;
+    private AdminFormCallback callback;
 
-    public AddCrewForm(JFrame parent, FormCallback callback) {
+    public AddCrewForm(JFrame parent, AdminFormCallback callback) {
         super(parent, "Add a Crew Member", true);
         this.callback = callback;
         initializeUI();

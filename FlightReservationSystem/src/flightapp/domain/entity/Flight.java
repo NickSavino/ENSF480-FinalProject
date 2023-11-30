@@ -152,9 +152,22 @@ public class Flight {
         }
 
     }
+
+    public void setBaseFlightCost(int baseFlightCost) {
+        this.baseFlightCost = baseFlightCost;
+    }
+
+    public int getFlightDuration() {
+        return flightDuration;
+    }
+
+    public Date getDepartureTime() {
+        return departureTime;
+    }
+
     public String toString() {
         String flightString = String.format("%s to %s | Departure: %d/%d/%d %02d:%02d - %d", origin.getLocationId(), destination.getLocationId(),
-                departureTime.getDay(), departureTime.getMonth(), departureTime.getYear(), departureTime.getHour(), departureTime.getMinutes(), flightId);
+                departureTime.getDay(), departureTime.getMonth(), departureTime.getYear(), departureTime.getHour(), departureTime.getMinute(), flightId);
         return flightString;
     }
 }

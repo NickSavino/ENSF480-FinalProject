@@ -13,9 +13,9 @@ public class AddAircraftForm extends JDialog {
     private JTextField ordinarySeatsField;
     private JButton submitButton;
     private JButton cancelButton;
-    private FormCallback callback;
+    private AdminFormCallback callback;
 
-    public AddAircraftForm(JFrame parent, FormCallback callback) {
+    public AddAircraftForm(JFrame parent, AdminFormCallback callback) {
         super(parent, "Add an Aircraft", true);
         this.callback = callback;
         initializeUI();

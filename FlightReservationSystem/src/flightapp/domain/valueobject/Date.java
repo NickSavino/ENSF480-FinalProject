@@ -87,7 +87,7 @@ public class Date {
         return this.hour;
     }
 
-    public int getMinutes() {
+    public int getMinute() {
         return this.minutes;
     }
 }

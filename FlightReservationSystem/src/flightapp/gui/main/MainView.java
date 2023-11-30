@@ -2,7 +2,6 @@ package flightapp.gui.main;
 
 import flightapp.DatabaseConnection;
 import flightapp.controllers.AirlineUserController;
-import flightapp.gui.form.FormCallback;
 import flightapp.gui.form.RegistrationCallback;
 import flightapp.gui.form.RegistrationForm;
 import flightapp.gui.panel.*;

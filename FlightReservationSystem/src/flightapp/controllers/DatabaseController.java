@@ -404,7 +404,7 @@ public class DatabaseController {
         int month = newDate.getMonth();
         int year = newDate.getYear();
         int hour = newDate.getHour();
-        int minutes = newDate.getMinutes();
+        int minutes = newDate.getMinute();
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             String query = "UPDATE FLIGHTS SET flightDepartureDay = ?, flightDepartureMonth = ?, flightDepartureYear = ?, flightDepartureHour = ?, flightDepartureMinute = ? WHERE flightId = ?";
@@ -582,6 +582,40 @@ public class DatabaseController {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error updating seat booking status.", e);
+        }
+    }
+
+    public static void updateFlight(int flightId, int aircraftId, String originId, String destinationId, int flightDuration, int flightCrewId, int baseFlightCost,
+                                    int day, int month, int year, int hour, int minute) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String query = "UPDATE flights SET aircraftId = ?, originId = ?, destinationId = ?, flightDuration = ?, " +
+                    "flightCrewId = ?, baseFlightCost = ?, flightDepartureMonth = ?, flightDepartureDay = ?, " +
+                    "flightDepartureYear = ?, flightDepartureHour = ?, flightDepartureMinute = ? WHERE flightId = ?";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setInt(1, aircraftId);
+                pstmt.setString(2, originId);
+                pstmt.setString(3, destinationId);
+                pstmt.setInt(4, flightDuration);
+                pstmt.setInt(5, flightCrewId);
+                pstmt.setInt(6, baseFlightCost);
+                pstmt.setInt(7, day);
+                pstmt.setInt(8, month);
+                pstmt.setInt(9, year);
+                pstmt.setInt(10, hour);
+                pstmt.setInt(11, minute);
+                pstmt.setInt(12, flightId);
+
+                int updatedRows = pstmt.executeUpdate();
+                if (updatedRows > 0) {
+                    System.out.println("Flight successfully updated.");
+                } else {
+                    System.out.println("No flight was updated.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exceptions such as SQL issues
         }
     }
 

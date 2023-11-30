@@ -1,14 +1,15 @@
 package flightapp.gui.form;
 
+import flightapp.domain.entity.Flight;
 import flightapp.gui.main.MainView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class AddFlightForm extends JDialog {
-
-    // Components
+public class ModifyFlightForm extends JDialog {
     private JComboBox<Object> planeComboBox;
     private JComboBox<Object> originComboBox;
     private JComboBox<Object> destinationComboBox;
@@ -21,21 +22,15 @@ public class AddFlightForm extends JDialog {
     private JComboBox<Integer> yearBox;
     private JComboBox<Integer> hourBox;
     private JComboBox<Integer> minuteBox;
-
     private JPanel datePicker;
     private JButton submitButton;
     private JButton cancelButton;
-    private AdminFormCallback callback;
 
+    private AdminFormCallback callback;
     private MainView mainView;
 
-    public AddFlightForm(JFrame parent, AdminFormCallback callback, MainView mainView) {
-        super(parent, "Add a Flight", true);
-        this.callback = callback;
-        this.mainView = mainView;
-        initializeUI();
-        this.setLocationRelativeTo(parent); // Center on parent
-    }
+    int flightId;
+    int selectedIndex;
 
     // Helper method to add components to the panel
     void addComponent(Component component, int gridx, int gridy, int gridwidth, int fill, GridBagConstraints gbc) {
@@ -55,6 +50,17 @@ public class AddFlightForm extends JDialog {
         gbc.gridx = gridx * 2 + 1; // Box position
         gbc.gridwidth = 1;
         panel.add(comboBox, gbc);
+    }
+
+    public ModifyFlightForm(JFrame parent, AdminFormCallback callback, MainView mainView, int flightId, int selectedIndex) {
+        super(parent, "Modify Flight", true);
+        this.callback = callback;
+        this.mainView = mainView;
+        this.flightId = flightId;
+        this.selectedIndex = selectedIndex;
+        initializeUI();
+        loadFlightData();
+        this.setLocationRelativeTo(parent); // Center on parent
     }
 
     private void initializeUI() {
@@ -162,7 +168,7 @@ public class AddFlightForm extends JDialog {
                 Integer hour = (Integer) hourBox.getSelectedItem();
                 Integer minute = (Integer) minuteBox.getSelectedItem();
 
-                onSubmit(planeId, origin, destination, crewId, flightDuration, flightCost, day, month, year, hour, minute);
+                onSubmit(selectedIndex, planeId, origin, destination, crewId, flightDuration, flightCost, day, month, year, hour, minute);
                 dispose();
             }
         });
@@ -176,11 +182,45 @@ public class AddFlightForm extends JDialog {
         pack();
     }
 
-    private void onSubmit(int planeID, String origin, String destination, int flightDuration, int flightCrewID, int baseFlightCost, int day, int month, int year, int hour, int minute) {
+    private void loadFlightData() {
+        mainView.getUserController().setSelectedFlightFromString(" - " + (Integer) flightId);
+        Flight flight = mainView.getUserController().getSelectedFlight();
+        if (flight == null) {
+            JOptionPane.showMessageDialog(this, "Flight data not found", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Set the selected item of the planeComboBox
+        planeComboBox.setSelectedItem(flight.getAircraft().getModel() + " - " + flight.getAircraft().getAircraftId());
+
+        // Set the selected item of the originComboBox and destinationComboBox
+        originComboBox.setSelectedItem(flight.getOrigin().getLocationId());
+        destinationComboBox.setSelectedItem(flight.getDestination().getLocationId());
+
+        // Set the selected item of the flightCrewComboBox
+        //System.out.println(flight.getFlightCrew());
+        //flightCrewComboBox.setSelectedItem(flight.getFlightCrew().toString());
+        // Set the flightCostField text
+        flightCostField.setText(String.valueOf(flight.getBaseFlightCost()));
+
+        // Set the values for date and time
+        dayBox.setSelectedItem(flight.getDepartureTime().getDay());
+        monthBox.setSelectedItem(flight.getDepartureTime().getMonth());
+        yearBox.setSelectedItem(flight.getDepartureTime().getYear());
+        hourBox.setSelectedItem(flight.getDepartureTime().getHour());
+        minuteBox.setSelectedItem(flight.getDepartureTime().getMinute());
+
+        // Set the flight duration
+        durationComboxBox.setSelectedItem(flight.getFlightDuration());
+
+    }
+
+    private void onSubmit(int selectedIndex, int aircraftId, String origin, String destination, int flightDuration, int flightCrewId, int baseFlightCost, int day, int month, int year, int hour, int minute) {
         // Handle submission logic
         // Returns submission information and adds to list
         if(callback != null) {
-            callback.onFlightAdded(planeID, origin, destination, flightDuration, flightCrewID, baseFlightCost, day, month, year, hour, minute);
+            callback.onFlightModified(selectedIndex, flightId, aircraftId, origin, destination,  flightDuration, flightCrewId,
+                    baseFlightCost, day,  month,  year,  hour,  minute);
         }
     }
 

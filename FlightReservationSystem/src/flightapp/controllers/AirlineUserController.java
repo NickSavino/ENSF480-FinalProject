@@ -507,6 +507,21 @@ public class AirlineUserController {
         DatabaseController.addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay, departureMonth, departureYear, departureHour, departureMinute);
     }
 
+    public void modifyFlight(int flightId, int aircraftId, String origin, String destination, int flightDuration, int flightCrewId,
+                             int baseFlightCost, int day, int month, int year, int hour, int minute) {
+        Flight flight = airline.getFlightByID(flightId);
+
+        flight.setAircraft(airline.getAircraftByID(aircraftId));
+        flight.setDestination(airline.getLocationByID(origin));
+        flight.setDestination(airline.getLocationByID(destination));
+        flight.setDuration(flightDuration);
+        flight.setFlightCrew(airline.getFlightCrewByID(flightCrewId));
+        flight.setBaseFlightCost(baseFlightCost);
+        flight.setDate(new Date(day, month, year, hour, minute));
+
+        DatabaseController.updateFlight(flightId, aircraftId, origin, destination,  flightDuration, flightCrewId,
+                baseFlightCost, day,  month,  year,  hour,  minute);
+    }
     public void setSelectedSeats(ArrayList<Integer> seatIds)
     {
         this.selectedSeats.clear();

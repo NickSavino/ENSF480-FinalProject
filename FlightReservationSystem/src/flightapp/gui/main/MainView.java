@@ -83,7 +83,7 @@ public class MainView extends JFrame implements RegistrationCallback {
         //Instantiate and add user panels to cardPanel
         cardPanel.add(new LoginPanel(this), "Login");
         cardPanel.add(new AttendantPanel(), "Attendant");
-        cardPanel.add(new AirlineAgentPanel(), "AirlineAgent");
+        cardPanel.add(new AirlineAgentPanel(this), "AirlineAgent");
         cardPanel.add(new AdminPanel(this), "Admin");
         this.customerPanel = new CustomerPanel(this);
         cardPanel.add(customerPanel, "Customer");
@@ -110,6 +110,8 @@ public class MainView extends JFrame implements RegistrationCallback {
 
         if (loginSuccess) {
             if (userController.isCustomerLoggedIn()) {
+                customerPanel = new CustomerPanel(this);
+                cardPanel.add(customerPanel);
                 cardLayout.show(cardPanel, "Customer");
                 loggedInLabel.setText("Logged in as: " + username);
             }
@@ -132,6 +134,8 @@ public class MainView extends JFrame implements RegistrationCallback {
                 loggedInLabel.setText("\t\t Logged in as: Flight Attendant - " + employeeId);
 
             } else if (userController.getEmployeeType().equals("Airline Agent")) {
+                AirlineAgentPanel agentPanel = new AirlineAgentPanel(this);
+                cardPanel.add(agentPanel, "AirlineAgent");
                 cardLayout.show(cardPanel, "AirlineAgent");
                 loggedInLabel.setText("\t\t Logged in as: Airline Agent - " + employeeId);
 

@@ -35,6 +35,8 @@ public class MainView extends JFrame implements RegistrationCallback {
                 Thread.currentThread().interrupt();
             }
         }
+
+        UIManager.put("ToggleButton.select", Color.GREEN);
         //Specify on action on close
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Specify Minimum Size

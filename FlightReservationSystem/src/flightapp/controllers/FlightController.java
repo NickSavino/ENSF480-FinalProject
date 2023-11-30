@@ -204,16 +204,5 @@ public class FlightController {
         DatabaseController.deletePurchase(purchaseId);
     }
 
-    public String sendPromotionalNews()
-    {
-        if (this.customer.getStatus().equals("Airline Member"))
-        {
-            this.airline.getPromotionalNews().setContentStrategy(new ContentShort());
-        }
-        else
-        {
-            this.airline.getPromotionalNews().setContentStrategy(new ContentLong());
-        }
-        return this.airline.getPromotionalNews().getPromotionalContent();
-    }
+
 }

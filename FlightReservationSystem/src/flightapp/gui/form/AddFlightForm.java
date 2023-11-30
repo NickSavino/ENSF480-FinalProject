@@ -147,7 +147,9 @@ public class AddFlightForm extends JDialog {
                     return;
                 }
                 Integer flightDuration = (Integer) durationComboxBox.getSelectedItem();
-                Integer crewId = extractIdFromSelectedItem((String) flightCrewComboBox.getSelectedItem());
+                int crewId = extractIdFromSelectedItem((String) flightCrewComboBox.getSelectedItem());
+                System.out.println("Flight Crew ID: " + crewId);
+
                 Integer flightCost;
                 try {
                     flightCost = Integer.parseInt(flightCostField.getText());
@@ -162,7 +164,7 @@ public class AddFlightForm extends JDialog {
                 Integer hour = (Integer) hourBox.getSelectedItem();
                 Integer minute = (Integer) minuteBox.getSelectedItem();
 
-                onSubmit(planeId, origin, destination, crewId, flightDuration, flightCost, day, month, year, hour, minute);
+                onSubmit(planeId, origin, destination, flightDuration, crewId, flightCost, day, month, year, hour, minute);
                 dispose();
             }
         });
@@ -179,6 +181,7 @@ public class AddFlightForm extends JDialog {
     private void onSubmit(int planeID, String origin, String destination, int flightDuration, int flightCrewID, int baseFlightCost, int day, int month, int year, int hour, int minute) {
         // Handle submission logic
         // Returns submission information and adds to list
+        System.out.println("Flight Crew ID in un submit: " + flightCrewID);
         if(callback != null) {
             callback.onFlightAdded(planeID, origin, destination, flightDuration, flightCrewID, baseFlightCost, day, month, year, hour, minute);
         }

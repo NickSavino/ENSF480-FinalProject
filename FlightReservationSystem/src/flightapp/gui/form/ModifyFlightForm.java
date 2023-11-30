@@ -198,8 +198,8 @@ public class ModifyFlightForm extends JDialog {
         destinationComboBox.setSelectedItem(flight.getDestination().getLocationId());
 
         // Set the selected item of the flightCrewComboBox
-        //System.out.println(flight.getFlightCrew());
-        //flightCrewComboBox.setSelectedItem(flight.getFlightCrew().toString());
+        System.out.println(mainView.getUserController().getAirline().getFlightByID(flightId));
+        flightCrewComboBox.setSelectedItem(flight.getFlightCrew().toString());
         // Set the flightCostField text
         flightCostField.setText(String.valueOf(flight.getBaseFlightCost()));
 

@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 
-import javax.mail.MessagingException;
+import javax.mail.*;
 import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import flightapp.DatabaseConnection;
 import flightapp.domain.entity.*;
@@ -260,6 +263,10 @@ public class AirlineUserController {
         }
     }
 
+    public void browseAsGuest() {
+        this.currentCustomer = new RegisteredCustomer();
+
+    }
     public boolean customerLogin(String username, String password)
     {
         LoginSingleton loginSingleton = LoginSingleton.getOnlyInstance();
@@ -528,6 +535,7 @@ public class AirlineUserController {
     {
         int totalCost = 0;
 
+        System.out.println(selectedFlight.getFlightId());
         totalCost += this.selectedFlight.getBaseFlightCost() * this.selectedSeats.size();
         for (Seat seat : this.selectedSeats)
         {
@@ -581,6 +589,114 @@ public class AirlineUserController {
         }
         return totalCost;
     }
+
+    public void purchase(boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
+                         String creditCardNumber, int creditCardSecurityCode)
+    {
+        // REQUIRES: Purchase parameters
+        // RETURNS: Total cost of the purchase
+
+        // Mark companion voucher as used or don't use it at all if unavailable
+        if (useCompanionVoucher && this.selectedSeats.size() > 1 && currentCustomer.getStatus().equals("Airline Member"))
+        {
+            for (RegisteredCustomer member : this.airline.getRegisteredCustomers())
+            {
+                if (member.getCustomerId() == currentCustomer.getCustomerId())
+                {
+                    if (member.getCompanionVoucher().isUsable())
+                    {
+                        member.getCompanionVoucher().use();
+                    }
+                    else
+                    {
+                        useCompanionVoucher = false;
+                    }
+                    break;
+                }
+            }
+        }
+        else
+        {
+            useCompanionVoucher = false;
+        }
+
+        Purchase currentPurchase = new Purchase(this.selectedFlight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, this.selectedSeats, currentCustomer);
+        this.airline.getPurchases().add(currentPurchase);
+        sendReceiptAndTicket(currentPurchase);
+
+        for (Seat seat : selectedSeats) {
+            System.out.println("Booking Seat: " + seat.getSeatId());
+            seat.book();
+            DatabaseController.updateSeat(this.selectedFlight.getFlightId(), seat.getSeatId(), seat.isBooked());
+        }
+
+        selectedSeats.clear();
+        currentCustomer.addPurchase(currentPurchase);
+        for (Flight flight : this.airline.getFlights())
+        {
+            if (flight.getFlightId() == this.selectedFlight.getFlightId())
+            {
+                flight.addPassenger(currentCustomer);
+                break;
+            }
+        }
+        DatabaseController.addPurchase(currentPurchase, this.selectedFlight.getFlightId(), currentCustomer.getCustomerId(), useCompanionVoucher);
+
+    }
+
+    private void sendReceiptAndTicket(Purchase purchase)
+    {
+        String purchaseId = purchase.getPurchaseId();
+        Receipt receipt = purchase.getReceipt();
+        ArrayList<Ticket> tickets = purchase.getTickets();
+
+        // Format the receipt information
+        String receiptInfo = String.format("Receipt ID: %s\nTotal Price: $%d\nCredit Card Number: %s",
+                receipt.getReceiptId(), receipt.getPrice(), receipt.getCreditCardNumber());
+
+        // Format the ticket information
+        StringBuilder ticketInfo = new StringBuilder("Tickets:\n");
+        for (Ticket ticket : tickets) {
+            ticketInfo.append(String.format("Flight Number: %d, Seat Number: %d, Ticket ID: %s\n",
+                    ticket.getFlightNumber(), ticket.getSeatNumber(), ticket.getTicketId()));
+        }
+
+        // Combine receipt and ticket information
+        String email = String.format("Dear Customer,\n\nThank you for your purchase (ID: %s).\n\n%s\n\n%s",
+                purchaseId, receiptInfo, ticketInfo.toString());
+
+        sendEmail(email);
+    }
+
+    public void sendEmail(String content) {
+        String receivingEmail = "nicksavino2@gmail.com";
+        String senderEmail = "ensf480helperemail@gmail.com";
+        String host = "smtp.gmail.com";
+
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("ensf480helperemail@gmail.com", "aikm cotj umyp wnvz");
+            }
+        });
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(senderEmail));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(receivingEmail));
+            message.setSubject("ENSF480 Airline Ticket and Receipt");
+            message.setText(content);
+            Transport.send(message);
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    }
+
 
 
     public void removeFlight(int flightId) {

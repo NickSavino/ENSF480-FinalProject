@@ -167,6 +167,7 @@ public class MainView extends JFrame implements RegistrationCallback {
     public void browseAsGuest() {
         loggedInLabel.setText("\t\t Browsing as Guest.");
         cardLayout.show(cardPanel, "Guest");
+        userController.browseAsGuest();
     }
     public static void main(String[] args) {
         // Set the look and feel to the system look and feel

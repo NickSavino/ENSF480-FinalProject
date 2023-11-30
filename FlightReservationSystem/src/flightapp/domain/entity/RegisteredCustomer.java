@@ -2,6 +2,8 @@ package flightapp.domain.entity;
 
 import flightapp.domain.valueobject.*;
 
+import java.util.UUID;
+
 public class RegisteredCustomer extends Customer {
     private String password;
     String username;
@@ -10,6 +12,10 @@ public class RegisteredCustomer extends Customer {
     boolean hasCompanyCreditCard = false;
     private CompanionVoucher companionVoucher;
 
+    public RegisteredCustomer() {
+        super("Guest", "Guest", 0, "null", "null", "null", "null", "email");
+        super.status = "Guest";
+    }
     public RegisteredCustomer(String username, String password, String creditCardNumber,
                               String creditCardSecurityCode, String firstName, String lastName,
                               int houseNumber, String street, String city, String province,

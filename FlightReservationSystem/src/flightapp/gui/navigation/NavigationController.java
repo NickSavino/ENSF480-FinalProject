@@ -41,4 +41,9 @@ public class NavigationController {
         navigationStack.push(initialPanel);
         backButton.setEnabled(false);
     }
+
+    public void goHome(String homePanel) {
+        initialize(homePanel);
+        navigateTo(homePanel);
+    }
 }

@@ -558,4 +558,30 @@ public class DatabaseController {
             throw new RuntimeException("Error adding new seat.", e);
         }
     }
+
+    public static void updateSeat(int flightId, int seatId, boolean isBooked) {
+        // SQL UPDATE statement
+        String sql = "UPDATE FLIGHTSEATS SET isBooked = ? WHERE flightId = ? AND seatId = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set the parameters for the prepared statement
+            stmt.setBoolean(1, isBooked);
+            stmt.setInt(2, flightId);
+            stmt.setInt(3, seatId);
+
+            // Execute the update operation
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("Seat booking status updated successfully.");
+            } else {
+                System.out.println("No rows affected. It may mean that the seat or flight does not exist.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error updating seat booking status.", e);
+        }
+    }
 }

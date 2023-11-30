@@ -1,9 +1,6 @@
 package flightapp.gui.panel;
 
-import flightapp.gui.form.AddAircraftForm;
-import flightapp.gui.form.AddCrewForm;
-import flightapp.gui.form.AddFlightForm;
-import flightapp.gui.form.FormCallback;
+import flightapp.gui.form.*;
 import flightapp.gui.navigation.NavigationController;
 import flightapp.gui.main.MainView;
 
@@ -12,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 
-public class AdminPanel extends JPanel implements FormCallback {
+public class AdminPanel extends JPanel implements AdminFormCallback {
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -74,8 +71,6 @@ public class AdminPanel extends JPanel implements FormCallback {
         browseCrewsButton = new JButton("Browse Crews");
         browseAircraftsButton = new JButton("Browse Aircrafts");
         browseUsersButton = new JButton("Browse Registered Users");
-
-
 
         // Add action listeners
         browseFlightsButton.addActionListener(e -> navigationController.navigateTo("Flight"));
@@ -167,6 +162,8 @@ public class AdminPanel extends JPanel implements FormCallback {
         }
     }
 
+
+
     // Method to handle the removal of a destination
     private void onRemoveDestination() {
         if (destinationsComboBox.getItemCount() > 0) {
@@ -216,7 +213,16 @@ public class AdminPanel extends JPanel implements FormCallback {
             removeButton.addActionListener(e -> onRemoveItem(list, model, type));
 
             buttonPanel.add(addButton);
+            //Add Modify Button for Flights Panel
+            if (type.equals("Flight")) {
+                JButton modifyDestinationButton = new JButton("Modify");
+                modifyDestinationButton.addActionListener(e -> onModifyFlight(list, model));
+                buttonPanel.add(modifyDestinationButton);
+
+            }
             buttonPanel.add(removeButton);
+
+
 
             panel.add(buttonPanel, BorderLayout.SOUTH);
         }
@@ -245,6 +251,24 @@ public class AdminPanel extends JPanel implements FormCallback {
         }
     }
 
+    private void onModifyFlight(JList<String> list, DefaultListModel<String> model) {
+        int flightID = extractIdFromSelectedItem(model.getElementAt(list.getSelectedIndex()));
+        int selectedIndex = list.getSelectedIndex();
+        ModifyFlightForm modifyFlightForm = new ModifyFlightForm(this.mainView, this, this.mainView, flightID, selectedIndex);
+        modifyFlightForm.setVisible(true);
+    }
+    @Override
+    public void onFlightModified(int selectedIndex, int flightId, int aircraftId, String originId, String destinationId, int flightDuration, int flightCrewId, int baseFlightCost,
+                                 int day, int month, int year, int hour, int minute) {
+        System.out.println("Modified Callback Called");
+        mainView.getUserController().modifyFlight(flightId, aircraftId, originId, destinationId,  flightDuration, flightCrewId,
+        baseFlightCost, day,  month,  year,  hour,  minute);
+        flightsModel.remove(selectedIndex);
+        String flightString = String.format("%s to %s | Departure: %02d/%02d/%d %02d:%02d - %d", originId, destinationId,
+                day, month, year, hour, minute, flightId);
+        flightsModel.addElement(flightString);
+    }
+
     @Override
     public void onFlightAdded(int aircraftId, String originId, String destinationId, int flightDuration, int flightCrewId,
                               int baseFlightCost, int departureDay, int departureMonth, int departureYear, int departureHour, int departureMinute) {
@@ -252,7 +276,7 @@ public class AdminPanel extends JPanel implements FormCallback {
         int flightId = mainView.getUserController().getAirline().getNewFlightId();
 
 
-        String flightString = String.format("%s to %s | Departure: %d/%d/%d %02d:%02d - %d", originId, destinationId,
+        String flightString = String.format("%s to %s | Departure: %02d/%02d/%d %02d:%02d - %d", originId, destinationId,
                 departureDay, departureMonth, departureYear, departureHour, departureMinute, flightId);
         flightsModel.addElement(flightString);
 

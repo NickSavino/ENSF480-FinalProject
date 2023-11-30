@@ -388,16 +388,8 @@ public class AirlineUserController {
 
     public void setSelectedFlightFromString(String string)
     {
-        String[] tokens = string.split(" ");
-        int flightId = -1;
-        try
-        {
-            flightId = Integer.parseInt(tokens[tokens.length - 1]);
-        }
-        catch (NumberFormatException e)
-        {
-            System.out.println(e);
-        }
+        int flightId = extractIdFromSelectedItem(string);
+
         for (Flight flight : airline.getFlights())
         {
             if (flight.getFlightId() == flightId)
@@ -406,6 +398,13 @@ public class AirlineUserController {
                 break;
             }
         }
+    }
+
+    private int extractIdFromSelectedItem(String selectedItem) {
+        // Assuming the format is "Name - ID"
+        String[] parts = selectedItem.split(" - ");
+        for (String part : parts) System.out.println(part);
+        return Integer.parseInt(parts[1]);
     }
     
     public Flight getSelectedFlight()
@@ -777,5 +776,18 @@ public class AirlineUserController {
         int creditCardSecurityCode = Integer.parseInt(tokens[1]);
         DatabaseController.giveAirlineCreditCard(this.currentCustomer.getCustomerId(), creditCardNumber, creditCardSecurityCode);
         return "Credit Card Number: " + creditCardNumber + "\nSecurity Code: " + creditCardSecurityCode;
+    }
+
+    public String getPromotionalNews()
+    {
+        if (this.currentCustomer.getStatus().equals("Airline Member"))
+        {
+            this.airline.getPromotionalNews().setContentStrategy(new ContentShort());
+        }
+        else
+        {
+            this.airline.getPromotionalNews().setContentStrategy(new ContentLong());
+        }
+        return this.airline.getPromotionalNews().getPromotionalContent();
     }
 }

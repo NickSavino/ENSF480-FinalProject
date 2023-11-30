@@ -114,10 +114,11 @@ public class MainView extends JFrame implements RegistrationCallback {
                 cardPanel.add(customerPanel);
                 cardLayout.show(cardPanel, "Customer");
                 loggedInLabel.setText("Logged in as: " + username);
+                JOptionPane.showMessageDialog(this, userController.getPromotionalNews(), "Promotional News", JOptionPane.OK_OPTION);
             }
             logoutButton.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Invalid username or password", "Login Error", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -126,11 +127,15 @@ public class MainView extends JFrame implements RegistrationCallback {
 
         if (loginSuccess) {
             if (userController.getEmployeeType().equals("Admin")) {
+                AdminPanel adminPanel = new AdminPanel(this);
+                cardPanel.add(adminPanel, "Admin");
                 cardLayout.show(cardPanel, "Admin");
                 loggedInLabel.setText("\t\tLogged in as: Admin - " + employeeId);
 
             } else if (userController.getEmployeeType().equals("Flight Attendant")) {
-                cardLayout.show(cardPanel, "Attendant");
+                AirlineAgentPanel agentPanel = new AirlineAgentPanel(this);
+                cardPanel.add(agentPanel, "AirlineAgent");
+                cardLayout.show(cardPanel, "AirlineAgent");
                 loggedInLabel.setText("\t\t Logged in as: Flight Attendant - " + employeeId);
 
             } else if (userController.getEmployeeType().equals("Airline Agent")) {

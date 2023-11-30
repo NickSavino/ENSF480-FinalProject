@@ -318,7 +318,6 @@ public class CustomerPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
                 costLabel.setText("Total Cost: $" + totalCost);
-
             }
         });
 
@@ -327,7 +326,6 @@ public class CustomerPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
                 costLabel.setText("Total Cost: $" + totalCost);
-
             }
         });
 

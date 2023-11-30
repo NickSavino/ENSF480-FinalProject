@@ -75,7 +75,42 @@ public class CustomerPanel extends JPanel {
                 JOptionPane.showMessageDialog(mainMenuPanel, "Error. You are already an Airline Member!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        //applyCreditCardButton.addActionListener(e -> );
+        applyCreditCardButton.addActionListener(e -> {
+            if (mainView.getUserController().getCurrentCustomer().hasCompanyCreditCard())
+            {
+                JOptionPane.showMessageDialog(mainMenuPanel, "Error. You already have a company credit card!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            boolean validInput = false;
+            int creditScore = 0;
+            while (!validInput)
+            {
+                String userStringInput = JOptionPane.showInputDialog(mainMenuPanel, "Enter your credit score:", "Airline Credit Card", JOptionPane.QUESTION_MESSAGE);
+                if (userStringInput == null)
+                {
+                    return;
+                }
+                try
+                {
+                    creditScore = Integer.parseInt(userStringInput);
+                    validInput = true;
+                }
+                catch (NumberFormatException ex)
+                {
+                    JOptionPane.showMessageDialog(mainMenuPanel, "Please enter a valid credit score", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            if (creditScore >= 500)
+            {
+                String creditCardInfo = mainView.getUserController().giveAirlineCreditCard();
+                JOptionPane.showMessageDialog(mainMenuPanel, "Success! You now have an Airline Credit Card.\n\nNew credit card info:\n" + creditCardInfo, 
+                    "Airline Credit Card", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(mainMenuPanel, "Error. You do not have a high enough credit score.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         mainMenuPanel.add(browseFlightsButton);
         mainMenuPanel.add(becomeMemberButton);

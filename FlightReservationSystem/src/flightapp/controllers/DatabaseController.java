@@ -584,4 +584,22 @@ public class DatabaseController {
             throw new RuntimeException("Error updating seat booking status.", e);
         }
     }
+
+    public static void giveAirlineCreditCard(int customerId, String creditCardNumber, int securityCode)
+    {
+        String sql = "UPDATE CUSTOMERS SET creditCardNumber = ?, creditCardSecurityCode = ?, hasCompanyCreditCard = true WHERE customerId = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, creditCardNumber);
+            stmt.setInt(2, securityCode);
+            stmt.setInt(3, customerId);
+            stmt.executeUpdate();
+            System.out.println("Successfully gave customer an airline credit card.");
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error giving customer an airline credit card.", e);
+        }
+    }
 }

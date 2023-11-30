@@ -1,6 +1,7 @@
 package flightapp.domain.entity;
 
 import flightapp.domain.valueobject.*;
+import java.util.Random;
 
 import java.util.UUID;
 
@@ -52,9 +53,29 @@ public class RegisteredCustomer extends Customer {
         return this.password;
     }
 
-    public void setCreditCard(String cardNumber, int securityCode)
+    public String grantCompanyCreditCard()
     {
-        this.creditCard = new CreditCard(cardNumber, securityCode);
+        this.hasCompanyCreditCard = true;
+        String cardNumber = "";
+        String securityCode = "";
+
+        Random random = new Random();
+        StringBuilder creditCardNumber = new StringBuilder();
+        StringBuilder creditCardSecurityNumber = new StringBuilder();
+        for (int i = 0; i < 16; i++)
+        {
+            int value = random.nextInt(10);
+            creditCardNumber.append(value);
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            int value = random.nextInt(10);
+            creditCardSecurityNumber.append(value);
+        }
+        cardNumber = creditCardNumber.toString();
+        securityCode = creditCardSecurityNumber.toString();
+        this.creditCard = new CreditCard(cardNumber, Integer.parseInt(securityCode));
+        return cardNumber + " " + securityCode;
     }
 
     public String getUsername()

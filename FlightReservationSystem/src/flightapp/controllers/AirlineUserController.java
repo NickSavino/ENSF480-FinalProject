@@ -372,13 +372,6 @@ public class AirlineUserController {
         DatabaseController.becomeAirlineMember(this.currentCustomer.getCustomerId());
     }
 
-
-    public void applyForAirlineCreditCard(String newCreditCardNumber, int newSecurityCode, RegisteredCustomer customer)
-    {
-        customer.setCreditCard(newCreditCardNumber, newSecurityCode);
-        DatabaseController.createAirlineCreditCard(newCreditCardNumber, newSecurityCode, customer.getCustomerId());
-    }
-
     public Airline getAirline() {
         return airline;
     }
@@ -721,5 +714,15 @@ public class AirlineUserController {
     public void removeCrew(int crewId) {
         airline.removeFlightCrew(crewId);
         DatabaseController.removeCrew(crewId);
+    }
+
+    public String giveAirlineCreditCard()
+    {
+        String creditCardInfo = this.currentCustomer.grantCompanyCreditCard();
+        String[] tokens = creditCardInfo.split(" ");
+        String creditCardNumber = tokens[0];
+        int creditCardSecurityCode = Integer.parseInt(tokens[1]);
+        DatabaseController.giveAirlineCreditCard(this.currentCustomer.getCustomerId(), creditCardNumber, creditCardSecurityCode);
+        return "Credit Card Number: " + creditCardNumber + "\nSecurity Code: " + creditCardSecurityCode;
     }
 }

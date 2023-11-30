@@ -325,16 +325,21 @@ public class GuestPanel extends JPanel {
 
 
         JPanel creditCardPanel = new JPanel();
+        creditCardPanel.setLayout(new GridLayout(0, 2));
 
         JLabel numberLabel = new JLabel("Credit Card Number:");
         JTextField creditCardField = new JTextField(16);
         JLabel securityCodeLabel = new JLabel("Security Code:");
         JTextField securityCodeField = new JTextField(3);
+        JLabel emailLabel = new JLabel("Email:");
+        JTextField emailField = new JTextField();
 
         creditCardPanel.add(numberLabel);
         creditCardPanel.add(creditCardField);
         creditCardPanel.add(securityCodeLabel);
         creditCardPanel.add(securityCodeField);
+        creditCardPanel.add(emailLabel);
+        creditCardPanel.add(emailField);
 
         JButton makePaymentButton = new JButton("Make Payment");
         // Add ActionListener to handle payment logic
@@ -365,7 +370,7 @@ public class GuestPanel extends JPanel {
 
 
                 try {
-                    mainView.getUserController().purchase(loungeAccessSelected, cancellationInsuranceSelected, useCompanionTicketSelected, creditCardNumber, securityCode);
+                    mainView.getUserController().purchaseForGuest(loungeAccessSelected, cancellationInsuranceSelected, useCompanionTicketSelected, creditCardNumber, securityCode, emailField.getText());
                     JOptionPane.showMessageDialog(mainView, "Successfully Processed Purchase\n an E-mail will be sent to you shortly", "Successful Purchase", JOptionPane.INFORMATION_MESSAGE);
                     updatePaymentPanel();
                     updateSeatSelectionPanel();

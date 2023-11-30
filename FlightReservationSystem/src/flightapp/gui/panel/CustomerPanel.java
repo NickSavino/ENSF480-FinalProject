@@ -373,7 +373,7 @@ public class CustomerPanel extends JPanel {
                 }
 
                 try {
-                    mainView.getUserController().purchase(loungeAccessSelected, cancellationInsuranceSelected, useCompanionTicketSelected, creditCardNumber, securityCode);
+                    mainView.getUserController().purchaseForCustomer(loungeAccessSelected, cancellationInsuranceSelected, useCompanionTicketSelected, creditCardNumber, securityCode);
                     JOptionPane.showMessageDialog(mainView, "Successfully Processed Purchase\n an E-mail will be sent to you shortly", "Successful Purchase", JOptionPane.INFORMATION_MESSAGE);
                     updatePaymentPanel();
                     updateSeatSelectionPanel();

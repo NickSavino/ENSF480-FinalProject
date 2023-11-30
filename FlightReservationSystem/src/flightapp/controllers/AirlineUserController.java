@@ -585,7 +585,7 @@ public class AirlineUserController {
         return totalCost;
     }
 
-    public void purchase(boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
+    public void purchaseForCustomer(boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
                          String creditCardNumber, int creditCardSecurityCode)
     {
         // REQUIRES: Purchase parameters
@@ -617,6 +617,66 @@ public class AirlineUserController {
 
         Purchase currentPurchase = new Purchase(this.selectedFlight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, this.selectedSeats, currentCustomer);
         this.airline.getPurchases().add(currentPurchase);
+
+        sendReceiptAndTicket(currentPurchase);
+
+        for (Seat seat : selectedSeats) {
+            seat.book();
+            DatabaseController.updateSeat(this.selectedFlight.getFlightId(), seat.getSeatId(), seat.isBooked());
+        }
+
+        selectedSeats.clear();
+        currentCustomer.addPurchase(currentPurchase);
+        for (Flight flight : this.airline.getFlights())
+        {
+            if (flight.getFlightId() == this.selectedFlight.getFlightId())
+            {
+                flight.addPassenger(currentCustomer);
+                break;
+            }
+        }
+        DatabaseController.addPurchase(currentPurchase, this.selectedFlight.getFlightId(), currentCustomer.getCustomerId(), useCompanionVoucher);
+
+    }
+
+    public void purchaseForGuest(boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
+                         String creditCardNumber, int creditCardSecurityCode, String email)
+    {
+        // REQUIRES: Purchase parameters
+        // RETURNS: Total cost of the purchase
+
+        // Mark companion voucher as used or don't use it at all if unavailable
+        if (useCompanionVoucher && this.selectedSeats.size() > 1 && currentCustomer.getStatus().equals("Airline Member"))
+        {
+            for (RegisteredCustomer member : this.airline.getRegisteredCustomers())
+            {
+                if (member.getCustomerId() == currentCustomer.getCustomerId())
+                {
+                    if (member.getCompanionVoucher().isUsable())
+                    {
+                        member.getCompanionVoucher().use();
+                    }
+                    else
+                    {
+                        useCompanionVoucher = false;
+                    }
+                    break;
+                }
+            }
+        }
+        else
+        {
+            useCompanionVoucher = false;
+        }
+
+        Purchase currentPurchase = new Purchase(this.selectedFlight, buyInsurance, buyAirportLoungeAccess, useCompanionVoucher, creditCardNumber, creditCardSecurityCode, this.selectedSeats, currentCustomer);
+        this.airline.getPurchases().add(currentPurchase);
+
+        if (currentCustomer.getStatus().equals("Guest"))
+        {
+            currentCustomer.setEmail(email);
+        }
+
         sendReceiptAndTicket(currentPurchase);
 
         for (Seat seat : selectedSeats) {

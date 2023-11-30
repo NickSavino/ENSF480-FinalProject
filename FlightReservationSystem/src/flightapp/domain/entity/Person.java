@@ -28,4 +28,9 @@ public abstract class Person {
     public String getEmail() {
         return email;
     }
+
+    public void setEmail(String newEmail)
+    {
+        this.email = newEmail;
+    }
 }

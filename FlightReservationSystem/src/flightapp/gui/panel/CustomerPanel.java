@@ -98,46 +98,6 @@ public class CustomerPanel extends JPanel {
         return flightSelectionPanel;
     }
 
-    // private JPanel createSeatSelectionPanel() {
-    //     JPanel seatSelectionPanel = new JPanel();
-    //     // Define the number of rows and columns for seats
-
-
-
-    //     int rows = 5; // For example, 5 rows
-    //     int cols = 4; // For example, 4 seats per row
-
-    //     seatSelectionPanel.setLayout(new GridLayout(rows, cols));
-
-    //     ButtonGroup seatGroup = new ButtonGroup(); // To allow only one seat to be selected at a time
-
-    //     for (int i = 0; i < rows * cols; i++) {
-    //         JToggleButton seatButton = new JToggleButton("" + (i + 1));
-    //         seatButton.addActionListener(e -> {
-    //             // Handle seat selection
-    //             // use seatButton.getText() to get the seat number
-    //         });
-
-    //         seatGroup.add(seatButton);
-    //         seatSelectionPanel.add(seatButton);
-    //     }
-
-    //     selectSeatButton = new JButton("Confirm Seat");
-    //     selectSeatButton.addActionListener(e -> {
-    //         // Confirm the selected seat and move to the next step
-    //         navigationController.navigateTo("Payment");
-    //     });
-
-    //     JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    //     bottomPanel.add(selectSeatButton);
-
-    //     JPanel mainPanel = new JPanel(new BorderLayout());
-    //     mainPanel.add(seatSelectionPanel, BorderLayout.CENTER);
-    //     mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-
-    //     return mainPanel;
-    // }
-
     private JPanel createSeatSelectionPanel() {
         JPanel seatSelectionPanel = new JPanel();
 
@@ -162,6 +122,8 @@ public class CustomerPanel extends JPanel {
         seatSelectionPanel.setLayout(new GridLayout(rows, cols));
         // Use a list to store selected seats
         ArrayList<JToggleButton> selectedSeats = new ArrayList<>();
+        ArrayList<Integer> selectedSeatIds = new ArrayList<>();
+
         for (int i = 0; i < rows * cols; i++) {
             JToggleButton seatButton = new JToggleButton("" + (i + 1));
             seatButton.setOpaque(true);
@@ -192,19 +154,36 @@ public class CustomerPanel extends JPanel {
                 seatButton.setEnabled(false);
                 seatButton.setBackground(Color.DARK_GRAY);
             }
+            else
+            {
+                seatButton.addActionListener(e -> {
+                    if (seatButton.isSelected()) 
+                    {
+                        selectedSeats.add(seatButton);
+                        selectedSeatIds.add(Integer.parseInt(seatButton.getText()));
+                        System.out.println("Selected seat: " + seatButton.getText());
+                    }
+                    else
+                    {
+                        int index = selectedSeats.indexOf(seatButton);
+                        String text = seatButton.getText();
+                        if (index != -1)
+                        {
+                            selectedSeats.remove(index);
+                            selectedSeatIds.remove(index);
+                        }
+                        
+                        System.out.println("Unselected seat " + text);
+                    }
+                });
+            }
             
             seatSelectionPanel.add(seatButton);
         }
     
         selectSeatButton = new JButton("Confirm Seats");
         selectSeatButton.addActionListener(e -> {
-            // Confirm the selected seats and move to the next step
-            // You can access the selected seats using the 'selectedSeats' list
-            for (JToggleButton seat : selectedSeats) {
-                System.out.println("Selected Seat: " + seat.getText());
-            }
-    
-            // Move to the next step (e.g., Payment)
+            mainView.getUserController().setSelectedSeats(selectedSeatIds);
             navigationController.navigateTo("Payment");
         });
     

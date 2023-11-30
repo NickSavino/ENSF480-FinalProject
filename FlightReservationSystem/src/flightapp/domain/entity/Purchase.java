@@ -62,6 +62,7 @@ public class Purchase {
 
         if (useCompanionVoucher)
         {
+            this.totalPurchaseCost -= flight.getBaseFlightCost();
             String seatType = seats.get(0).getSeatType();
             if (seatType.equals("Business"))
             {

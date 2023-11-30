@@ -25,6 +25,7 @@ public class AirlineUserController {
     private boolean isEmployeeLoggedIn = false;
     private boolean initializationComplete = false;
     private Flight selectedFlight;
+    private ArrayList<Seat> selectedSeats = new ArrayList<Seat>();
 
     public AirlineUserController() {
         // Initialize Airline object with database values
@@ -362,7 +363,6 @@ public class AirlineUserController {
     {
         this.currentCustomer.becomeAirlineMember();
         DatabaseController.becomeAirlineMember(this.currentCustomer.getCustomerId());
-        
     }
 
 
@@ -506,6 +506,80 @@ public class AirlineUserController {
             }
         }
         DatabaseController.addFlight(flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, departureDay, departureMonth, departureYear, departureHour, departureMinute);
+    }
+
+    public void setSelectedSeats(ArrayList<Integer> seatIds)
+    {
+        this.selectedSeats.clear();
+        for (Integer seatId : seatIds)
+        {
+            for (Seat seat : this.selectedFlight.getSeatList())
+            {
+                if (seat.getSeatId() == seatId)
+                {
+                    this.selectedSeats.add(seat);
+                    break;
+                }
+            }
+        }
+    }
+
+    public int calculateTotalCost(boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher)
+    {
+        int totalCost = 0;
+
+        totalCost += this.selectedFlight.getBaseFlightCost() * this.selectedSeats.size();
+        for (Seat seat : this.selectedSeats)
+        {
+            if (seat.getSeatType().equals("Business"))
+            {
+                totalCost += 200;
+            }
+            else if (seat.getSeatType().equals("Comfort"))
+            {
+                totalCost += 140;
+            }
+            else
+            {
+                totalCost += 100;
+            }
+        }
+
+        if (buyAirportLoungeAccess)
+        {
+            if (currentCustomer.getStatus().equals("Airline Member"))
+            {
+                totalCost += 25 * selectedSeats.size();
+            }
+            else
+            {
+                totalCost += 50 * selectedSeats.size();
+            }
+        }
+
+        if (buyInsurance)
+        {
+            totalCost += 20 * selectedSeats.size();
+        }
+
+        if (useCompanionVoucher)
+        {
+            totalCost -= this.selectedFlight.getBaseFlightCost();
+            String seatType = selectedSeats.get(0).getSeatType();
+            if (seatType.equals("Business"))
+            {
+                totalCost -= 200;
+            }
+            else if (seatType.equals("Comfort"))
+            {
+                totalCost -= 140;
+            }
+            else
+            {
+                totalCost -= 100;
+            }
+        }
+        return totalCost;
     }
 
 

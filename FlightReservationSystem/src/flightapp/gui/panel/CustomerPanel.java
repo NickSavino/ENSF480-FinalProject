@@ -297,6 +297,8 @@ public class CustomerPanel extends JPanel {
         JCheckBox loungeAccess = new JCheckBox("Lounge Access");
         JCheckBox cancellationInsurance = new JCheckBox("Cancellation Insurance");
         JCheckBox useCompanionTicket = new JCheckBox("Use Companion Ticket");
+        boolean isAirlineMember = mainView.getUserController().getCurrentCustomer().isAirlineMember();
+        useCompanionTicket.setEnabled(isAirlineMember);
 
         JLabel costLabel = new JLabel();
         totalCost = mainView.getUserController().calculateTotalCost(false, false, false);

@@ -113,6 +113,11 @@ public class RegisteredCustomer extends Customer {
         return this.hasCompanyCreditCard;
     }
 
+    public boolean isAirlineMember()
+    {
+        return this.isAirlineMember;
+    }
+
     public String toString() {
         return username + " - " + getEmail() + " - " + getName().getFirstName() + " " + getName().getLastName();
     }

@@ -282,7 +282,6 @@ public class GuestPanel extends JPanel {
         // Components for payment options
         JCheckBox loungeAccess = new JCheckBox("Lounge Access");
         JCheckBox cancellationInsurance = new JCheckBox("Cancellation Insurance");
-        JCheckBox useCompanionTicket = new JCheckBox("Use Companion Ticket");
 
         JLabel costLabel = new JLabel();
         totalCost = mainView.getUserController().calculateTotalCost(false, false, false);
@@ -291,16 +290,10 @@ public class GuestPanel extends JPanel {
         paymentPanel.add(loungeAccess);
         paymentPanel.add(cancellationInsurance);
 
-        // Add components for registered users
-        if (mainView.getUserController().isCustomerLoggedIn()) {
-            paymentPanel.add(useCompanionTicket);
-            // Add more options for registered users
-        }
-
         loungeAccess.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
+                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), false);
                 costLabel.setText("Total Cost: $" + totalCost);
 
             }
@@ -309,17 +302,9 @@ public class GuestPanel extends JPanel {
         cancellationInsurance.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
+                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), false);
                 costLabel.setText("Total Cost: $" + totalCost);
 
-            }
-        });
-
-        useCompanionTicket.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                totalCost = mainView.getUserController().calculateTotalCost(cancellationInsurance.isSelected(), loungeAccess.isSelected(), useCompanionTicket.isSelected());
-                costLabel.setText("Total Cost: $" + totalCost);
             }
         });
 
@@ -349,7 +334,6 @@ public class GuestPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 boolean loungeAccessSelected = loungeAccess.isSelected();
                 boolean cancellationInsuranceSelected = cancellationInsurance.isSelected();
-                boolean useCompanionTicketSelected = mainView.getUserController().isCustomerLoggedIn() && useCompanionTicket.isSelected();
                 String creditCardNumber = creditCardField.getText();
 
                 if (creditCardNumber.length() != 16) {
@@ -370,7 +354,7 @@ public class GuestPanel extends JPanel {
 
 
                 try {
-                    mainView.getUserController().purchaseForGuest(loungeAccessSelected, cancellationInsuranceSelected, useCompanionTicketSelected, creditCardNumber, securityCode, emailField.getText());
+                    mainView.getUserController().purchaseForGuest(loungeAccessSelected, cancellationInsuranceSelected, creditCardNumber, securityCode, emailField.getText());
                     JOptionPane.showMessageDialog(mainView, "Successfully Processed Purchase\n an E-mail will be sent to you shortly", "Successful Purchase", JOptionPane.INFORMATION_MESSAGE);
                     updatePaymentPanel();
                     updateSeatSelectionPanel();

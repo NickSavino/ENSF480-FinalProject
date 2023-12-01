@@ -2,6 +2,7 @@ package flightapp.gui.form;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class AddCrewForm extends JDialog {
 
@@ -11,11 +12,12 @@ public class AddCrewForm extends JDialog {
     private JTextField assignedFlightIdField;
     private JButton submitButton;
     private JButton cancelButton;
-
+    private ArrayList<Integer> crewIds;
     private AdminFormCallback callback;
 
-    public AddCrewForm(JFrame parent, AdminFormCallback callback) {
+    public AddCrewForm(JFrame parent, AdminFormCallback callback, ArrayList<Integer> crewIds) {
         super(parent, "Add a Crew Member", true);
+        this.crewIds = crewIds;
         this.callback = callback;
         initializeUI();
         this.setSize(300, 250);
@@ -52,6 +54,16 @@ public class AddCrewForm extends JDialog {
         try {
             int crewId = Integer.parseInt(crewIdField.getText());
             String crewName = crewNameField.getText();
+            if (crewName.isEmpty()) 
+            {
+                JOptionPane.showMessageDialog(this, "Please fill all input fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (crewIds.contains(crewId)) 
+            {
+                JOptionPane.showMessageDialog(this, "Crew ID already exists. Please choose another Crew ID.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             int assignedFlightId = Integer.parseInt(assignedFlightIdField.getText());
 
             if (callback != null) {

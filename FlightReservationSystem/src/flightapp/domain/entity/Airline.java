@@ -178,9 +178,11 @@ public class Airline {
 
     }
     public void removeFlightCrew(int flightCrewId) {
-        for (FlightCrew crew : flightCrew) {
+        Iterator<FlightCrew> iterator = flightCrew.iterator();
+        while (iterator.hasNext()) {
+            FlightCrew crew = iterator.next();
             if (crew.getFlightCrewId() == flightCrewId) {
-                flightCrew.remove(crew);
+                iterator.remove();
             }
         }
     }
@@ -253,5 +255,15 @@ public class Airline {
             aircraftIds.add(aircraft.getAircraftId());
         }
         return aircraftIds;
+    }
+
+    public ArrayList<Integer> getFlightCrewIds()
+    {
+        ArrayList<Integer> flightCrewIds = new ArrayList<Integer>();
+        for (FlightCrew flightCrew : this.flightCrew)
+        {
+            flightCrewIds.add(flightCrew.getFlightCrewId());
+        }
+        return flightCrewIds;
     }
 }

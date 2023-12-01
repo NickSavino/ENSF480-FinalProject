@@ -252,7 +252,7 @@ public class AdminPanel extends JPanel implements AdminFormCallback {
                 flightForm.setVisible(true);
             }
             else if (type.equals("Crew")) {
-                AddCrewForm crewForm = new AddCrewForm(this.mainView, this);
+                AddCrewForm crewForm = new AddCrewForm(this.mainView, this, this.mainView.getUserController().getAirline().getFlightCrewIds());
                 crewForm.setVisible(true);
             }
             else if (type.equals("Aircraft")) {

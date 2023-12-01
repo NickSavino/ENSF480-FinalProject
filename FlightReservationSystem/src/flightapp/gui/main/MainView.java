@@ -163,13 +163,12 @@ public class MainView extends JFrame implements RegistrationCallback {
         registrationForm.setVisible(true);
     }
 
-    public void onRegistrationComplete(String username, String password, String creditCardNumber,
-                                String creditCardSecurityCode, String firstName, String lastName,
+    public void onRegistrationComplete(String username, String password, String firstName, String lastName,
                                 int houseNumber, String street, String city,
                                 String province, String country, String email) {
         System.out.println("Registration Complete");
 
-        userController.customerSignup( username,  password,  creditCardNumber, creditCardSecurityCode, firstName, lastName,
+        userController.customerSignup( username,  password, firstName, lastName,
          houseNumber, street, city, province, country, email);
         JOptionPane.showMessageDialog(this, "Registration Successful!");
         loggedInLabel.setText("\t\tLogged in as: " + username + " - " + firstName + " " + lastName);
@@ -217,6 +216,9 @@ public class MainView extends JFrame implements RegistrationCallback {
         return this.customerPanel;
     }
 
-    public GuestPanel getGuestPanel() { return this.guestPanel; }
+    public GuestPanel getGuestPanel()
+    {
+        return this.guestPanel;
+    }
 
 }

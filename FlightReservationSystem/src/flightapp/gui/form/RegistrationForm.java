@@ -38,8 +38,6 @@ public class RegistrationForm extends JDialog{
 
         usernameField = new JTextField();
         passwordField = new JPasswordField();
-        creditCardNumberField = new JTextField();
-        creditCardSecurityCodeField = new JTextField();
         firstNameField = new JTextField();
         lastNameField = new JTextField();
         houseNumberField = new JTextField();
@@ -64,10 +62,6 @@ public class RegistrationForm extends JDialog{
         add(usernameField);
         add(new JLabel("Password:"));
         add(passwordField);
-        add(new JLabel("Credit Card Number:"));
-        add(creditCardNumberField);
-        add(new JLabel("Credit Card Security Code:"));
-        add(creditCardSecurityCodeField);
         add(new JLabel("First Name:"));
         add(firstNameField);
         add(new JLabel("Last Name:"));
@@ -95,8 +89,6 @@ public class RegistrationForm extends JDialog{
         // Extract data from fields and use callback
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword()); // Convert char[] to String
-        String creditCardNumber = creditCardNumberField.getText();
-        String creditCardSecurityCode = creditCardSecurityCodeField.getText();
         String firstName = firstNameField.getText();
         String lastName = lastNameField.getText();
         int houseNumber = Integer.parseInt(houseNumberField.getText());
@@ -107,7 +99,7 @@ public class RegistrationForm extends JDialog{
         String email = emailField.getText();
 
         // Now pass this data to the callback
-        callback.onRegistrationComplete(username, password, creditCardNumber, creditCardSecurityCode,
+        callback.onRegistrationComplete(username, password,
                 firstName, lastName, houseNumber, street, city,
                 province, country, email);
 

@@ -17,13 +17,11 @@ public class RegisteredCustomer extends Customer {
         super("Guest", "Guest", 0, "null", "null", "null", "null", "email");
         super.status = "Guest";
     }
-    public RegisteredCustomer(String username, String password, String creditCardNumber,
-                              String creditCardSecurityCode, String firstName, String lastName,
+    public RegisteredCustomer(String username, String password, String firstName, String lastName,
                               int houseNumber, String street, String city, String province,
                               String country, String email) {
         super(firstName, lastName, houseNumber, street, city, province, country, email);
 
-        this.creditCard = new CreditCard(creditCardNumber, Integer.parseInt(creditCardSecurityCode));
         this.password = password;
         this.username = username;
         super.status = "Registered";

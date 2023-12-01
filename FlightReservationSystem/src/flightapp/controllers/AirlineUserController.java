@@ -332,14 +332,12 @@ public class AirlineUserController {
         this.currentEmployee = null;
     }
 
-    public void customerSignup(String username, String password, String creditCardNumber,
-                               String creditCardSecurityCode, String firstName, String lastName,
+    public void customerSignup(String username, String password, String firstName, String lastName,
                                int houseNumber, String street, String city, String province,
                                String country, String email) {
 
         // Constructing new customer object with the additional fields
-        RegisteredCustomer newCustomer = new RegisteredCustomer(username, password, creditCardNumber,
-                creditCardSecurityCode,
+        RegisteredCustomer newCustomer = new RegisteredCustomer(username, password,
                 firstName, lastName, houseNumber, street,
                 city, province, country, email);
 

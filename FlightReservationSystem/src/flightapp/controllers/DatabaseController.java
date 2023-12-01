@@ -95,9 +95,9 @@ public class DatabaseController {
 
     public static void insertCustomer(RegisteredCustomer customer) {
         // SQL INSERT statement
-        String sql = "INSERT INTO customers (customerId, status, username, password, creditCardNumber, creditCardSecurityCode, " +
+        String sql = "INSERT INTO customers (customerId, status, username, password, " +
                 "firstName, lastName, houseNumber, street, city, province, country, email) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             Connection conn = DatabaseConnection.getConnection();
@@ -109,16 +109,14 @@ public class DatabaseController {
             stmt.setString(2, "Registered");
             stmt.setString(3, customer.getUsername());
             stmt.setString(4, customer.getPassword()); // Consider encrypting the password
-            stmt.setString(5, customer.getCreditCardNumber());
-            stmt.setInt(6, customer.getCreditCardSecurityCode());
-            stmt.setString(7, customer.getName().getFirstName());
-            stmt.setString(8, customer.getName().getLastName());
-            stmt.setInt(9, customer.getAddress().getHouseNumber());
-            stmt.setString(10, customer.getAddress().getStreet());
-            stmt.setString(11, customer.getAddress().getCity());
-            stmt.setString(12, customer.getAddress().getProvince());
-            stmt.setString(13, customer.getAddress().getCountry());
-            stmt.setString(14, customer.getEmail());
+            stmt.setString(5, customer.getName().getFirstName());
+            stmt.setString(6, customer.getName().getLastName());
+            stmt.setInt(7, customer.getAddress().getHouseNumber());
+            stmt.setString(8, customer.getAddress().getStreet());
+            stmt.setString(9, customer.getAddress().getCity());
+            stmt.setString(10, customer.getAddress().getProvince());
+            stmt.setString(11, customer.getAddress().getCountry());
+            stmt.setString(12, customer.getEmail());
 
             // Execute the insert operation
             stmt.executeUpdate();

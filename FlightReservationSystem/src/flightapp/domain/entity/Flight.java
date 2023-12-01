@@ -167,7 +167,7 @@ public class Flight {
 
     public String toString() {
         String flightString = String.format("%s to %s | Departure: %d/%d/%d %02d:%02d - %d", origin.getLocationId(), destination.getLocationId(),
-                departureTime.getDay(), departureTime.getMonth(), departureTime.getYear(), departureTime.getHour(), departureTime.getMinute(), flightId);
+                departureTime.getMonth(), departureTime.getDay(), departureTime.getYear(), departureTime.getHour(), departureTime.getMinute(), flightId);
         return flightString;
     }
 }

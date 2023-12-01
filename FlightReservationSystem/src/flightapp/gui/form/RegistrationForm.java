@@ -1,11 +1,14 @@
 package flightapp.gui.form;
 
+import flightapp.controllers.AirlineUserController;
+import flightapp.domain.entity.RegisteredCustomer;
 import flightapp.gui.main.MainView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class RegistrationForm extends JDialog{
     private JTextField usernameField;
@@ -22,11 +25,13 @@ public class RegistrationForm extends JDialog{
     private JTextField emailField;
     private JButton registerButton;
     private JButton cancelButton;
+    ArrayList<RegisteredCustomer> registeredCustomers;
 
     private RegistrationCallback callback;
 
-    public RegistrationForm(JFrame parent, RegistrationCallback callback) {
+    public RegistrationForm(JFrame parent, RegistrationCallback callback, ArrayList<RegisteredCustomer> registeredCustomers) {
         super(parent, "Registration", true);
+        this.registeredCustomers = registeredCustomers;
         initializeUI();
         this.callback = callback;
     }
@@ -51,7 +56,18 @@ public class RegistrationForm extends JDialog{
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                onRegister();
+                if (allFieldsValid())
+                {
+                    onRegister();
+                }
+                if (usernameAlreadyExists())
+                {
+                    JOptionPane.showMessageDialog(null, "Username already exists. Please choose another username.");
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Please fill in all fields. Please make sure house number is a numerical value.");
+                }
             }
         });
 
@@ -83,6 +99,41 @@ public class RegistrationForm extends JDialog{
 
         pack();
         setLocationRelativeTo(getParent());
+    }
+
+    private boolean allFieldsValid()
+    {
+        if (isEmpty(usernameField) || isEmpty(passwordField) || isEmpty(firstNameField) || isEmpty(lastNameField) ||
+                isEmpty(houseNumberField) || isEmpty(streetField) || isEmpty(cityField) || isEmpty(provinceField) ||
+                isEmpty(countryField) || isEmpty(emailField))
+        {
+            return false;
+        }
+        try {
+            Integer.parseInt(houseNumberField.getText());
+        }
+        catch (NumberFormatException e)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean usernameAlreadyExists()
+    {
+        for (RegisteredCustomer customer : registeredCustomers)
+        {
+            if (customer.getUsername().equals(usernameField.getText()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isEmpty(JTextField field)
+    {
+        return field.getText().trim().isEmpty();
     }
 
     private void onRegister() {

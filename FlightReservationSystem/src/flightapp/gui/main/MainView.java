@@ -158,7 +158,7 @@ public class MainView extends JFrame implements RegistrationCallback {
     }
 
     public void onRegister() {
-        RegistrationForm registrationForm = new RegistrationForm(this, this);
+        RegistrationForm registrationForm = new RegistrationForm(this, this, userController.getAirline().getRegisteredCustomers());
         registrationForm.setVisible(true);
     }
 

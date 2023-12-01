@@ -59,7 +59,7 @@ public class CustomerPanel extends JPanel {
 
     private JPanel createMainMenuPanel() {
         JPanel mainMenuPanel = new JPanel();
-        mainMenuPanel.setLayout(new GridLayout(3, 1)); // 3 options, one per row
+        mainMenuPanel.setLayout(new GridLayout(4, 1)); // 3 options, one per row
 
         JButton browseFlightsButton = new JButton("Browse Flights");
         JButton becomeMemberButton = new JButton("Become Member");

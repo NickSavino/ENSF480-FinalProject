@@ -217,10 +217,11 @@ public class DatabaseController {
     public static void addFlight(int flightId, int aircraftId, String originId, String destinationId, int flightDuration, int flightCrewId,
                                  int baseFlightCost, int departureDay, int departureMonth, int departureYear, int departureHour, int departureMinute)
     {
-
+        System.out.println("Adding flight departure month: " + departureMonth);
+        System.out.println("Adding flight departure day: " + departureDay);
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO FLIGHTS (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureMonth, flightDepartureDay, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO FLIGHTS (flightId, aircraftId, originId, destinationId, flightDuration, flightCrewId, baseFlightCost, flightDepartureDay, flightDepartureMonth, flightDepartureYear, flightDepartureHour, flightDepartureMinute) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, flightId);
                 stmt.setInt(2, aircraftId);

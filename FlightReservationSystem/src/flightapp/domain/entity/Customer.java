@@ -42,5 +42,7 @@ public class Customer extends Person {
         return this.status;
     }
 
-
+    public void removePurchase(Purchase purchase) {
+        purchases.remove(purchase);
+    }
 }

@@ -150,8 +150,8 @@ public class Flight {
             seat.setSeatType(seatType);
             seat.setBooked(isBooked);
         }
-
     }
+
 
     public void setBaseFlightCost(int baseFlightCost) {
         this.baseFlightCost = baseFlightCost;

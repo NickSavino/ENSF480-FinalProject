@@ -86,6 +86,75 @@ public class Purchase {
         this.receipt = new Receipt(UUID.randomUUID().toString(), this.totalPurchaseCost, this.creditCard.getCreditCardNumber());
     }
 
+    public Purchase(String purchaseId, Flight flight, boolean buyInsurance, boolean buyAirportLoungeAccess, boolean useCompanionVoucher,
+                    String creditCardNumber, int creditCardSecurityCode, ArrayList<Seat> seats, Customer customer)
+    {
+        this.loungeAccess = buyAirportLoungeAccess;
+        this.ticketInsurance = buyInsurance;
+        this.tickets = new ArrayList<Ticket>();
+        this.creditCard = new CreditCard(creditCardNumber, creditCardSecurityCode);
+        this.purchaseId = purchaseId;
+        this.customerId = customer.getCustomerId();
+        this.flightId = flight.getFlightId();
+
+        int baseFlightCost = flight.getBaseFlightCost();
+
+        for (Seat seat : seats)
+        {
+            this.tickets.add(new Ticket(flight.getDate(), flight.getFlightId(), seat.getSeatId(), UUID.randomUUID().toString()));
+            this.totalPurchaseCost += baseFlightCost;
+            if (seat.getSeatType().equals("Business"))
+            {
+                this.totalPurchaseCost *= 1.5;
+            }
+            else if (seat.getSeatType().equals("Comfort"))
+            {
+                this.totalPurchaseCost *= 2;
+            }
+            else
+            {
+                this.totalPurchaseCost *= 1;
+            }
+        }
+
+        if (loungeAccess)
+        {
+            if (customer.getStatus().equals("Airline Member"))
+            {
+                this.totalPurchaseCost += 25 * seats.size();
+            }
+            else
+            {
+                this.totalPurchaseCost += 50 * seats.size();
+            }
+        }
+
+        if (ticketInsurance)
+        {
+            this.totalPurchaseCost += 20 * seats.size();
+        }
+
+        if (useCompanionVoucher)
+        {
+            this.totalPurchaseCost -= flight.getBaseFlightCost();
+            String seatType = seats.get(0).getSeatType();
+            if (seatType.equals("Business"))
+            {
+                this.totalPurchaseCost -= 200;
+            }
+            else if (seatType.equals("Comfort"))
+            {
+                this.totalPurchaseCost -= 140;
+            }
+            else
+            {
+                this.totalPurchaseCost -= 100;
+            }
+        }
+
+        this.receipt = new Receipt(UUID.randomUUID().toString(), this.totalPurchaseCost, this.creditCard.getCreditCardNumber());
+    }
+
     public int getTotalPurchaseCost()
     {
         return this.totalPurchaseCost;

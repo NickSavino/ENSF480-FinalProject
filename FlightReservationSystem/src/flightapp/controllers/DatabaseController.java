@@ -96,8 +96,8 @@ public class DatabaseController {
     public static void insertCustomer(RegisteredCustomer customer) {
         // SQL INSERT statement
         String sql = "INSERT INTO customers (customerId, status, username, password, " +
-                "firstName, lastName, houseNumber, street, city, province, country, email) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "firstName, lastName, houseNumber, street, city, province, country, email, creditCardNumber, creditCardSecurityCode, hasCompanyCreditCard) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             Connection conn = DatabaseConnection.getConnection();
@@ -117,6 +117,9 @@ public class DatabaseController {
             stmt.setString(10, customer.getAddress().getProvince());
             stmt.setString(11, customer.getAddress().getCountry());
             stmt.setString(12, customer.getEmail());
+            stmt.setString(13, "null");
+            stmt.setInt(14, -1);
+            stmt.setBoolean(15, false);
 
             // Execute the insert operation
             stmt.executeUpdate();

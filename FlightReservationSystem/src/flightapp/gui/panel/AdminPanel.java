@@ -289,7 +289,9 @@ public class AdminPanel extends JPanel implements AdminFormCallback {
 
         String flightString = String.format("%s to %s | Departure: %02d/%02d/%d %02d:%02d - %d", originId, destinationId,
                 departureDay, departureMonth, departureYear, departureHour, departureMinute, flightId);
-        flightsModel.addElement(flightString);
+        String canadianFlightString = String.format("%s to %s | Departure: %02d/%02d/%d %02d:%02d - %d", originId, destinationId,
+                departureMonth, departureDay, departureYear, departureHour, departureMinute, flightId);
+        flightsModel.addElement(canadianFlightString);
 
         mainView.getCustomerPanel().addtoFlightList(flightString);
         mainView.getGuestPanel().addtoFlightList(flightString);

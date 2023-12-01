@@ -155,6 +155,17 @@ public class AdminPanel extends JPanel implements AdminFormCallback {
         if (result == JOptionPane.OK_OPTION) {
             String location = locationField.getText();
             String code = codeField.getText();
+            if (location.isEmpty() || code.isEmpty())
+            {
+                JOptionPane.showMessageDialog(this, "Please enter a location and code.", "Add Destination", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            for (String locationId : mainView.getUserController().getAirline().getLocationIds()) {
+                if (locationId.equals(code)) {
+                    JOptionPane.showMessageDialog(this, "Code already exists.", "Add Destination", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
             destinationsModel.addElement(code);
             destinationsComboBox.revalidate();
             destinationsComboBox.repaint();

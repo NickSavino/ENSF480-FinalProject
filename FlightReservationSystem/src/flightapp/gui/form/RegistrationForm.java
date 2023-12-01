@@ -56,17 +56,17 @@ public class RegistrationForm extends JDialog{
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (allFieldsValid())
-                {
-                    onRegister();
-                }
                 if (usernameAlreadyExists())
                 {
                     JOptionPane.showMessageDialog(null, "Username already exists. Please choose another username.");
                 }
-                else
+                else if (!allFieldsValid())
                 {
                     JOptionPane.showMessageDialog(null, "Please fill in all fields. Please make sure house number is a numerical value.");
+                }
+                else
+                {
+                    onRegister();
                 }
             }
         });

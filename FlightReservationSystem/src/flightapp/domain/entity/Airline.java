@@ -237,4 +237,13 @@ public class Airline {
         }
     }
 
+    public ArrayList<String> getLocationIds()
+    {
+        ArrayList<String> locationIds = new ArrayList<String>();
+        for (Location location : this.locations) {
+            locationIds.add(location.getLocationId());
+        }
+        return locationIds;
+    }
+
 }

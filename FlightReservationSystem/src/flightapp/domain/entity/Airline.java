@@ -246,4 +246,12 @@ public class Airline {
         return locationIds;
     }
 
+    public ArrayList<Integer> getAircraftIds()
+    {
+        ArrayList<Integer> aircraftIds = new ArrayList<Integer>();
+        for (Aircraft aircraft : this.aircrafts) {
+            aircraftIds.add(aircraft.getAircraftId());
+        }
+        return aircraftIds;
+    }
 }

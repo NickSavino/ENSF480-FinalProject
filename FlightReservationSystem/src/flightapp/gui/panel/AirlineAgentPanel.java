@@ -1,7 +1,6 @@
 package flightapp.gui.panel;
 
-import flightapp.domain.entity.Flight;
-import flightapp.domain.entity.Seat;
+import flightapp.domain.entity.*;
 import flightapp.gui.main.MainView;
 import flightapp.gui.navigation.NavigationController;
 
@@ -49,7 +48,6 @@ public class AirlineAgentPanel extends JPanel {
         updateSeatMap();
 
         add(flightSelector, BorderLayout.NORTH);
-
         add(cardPanel, BorderLayout.CENTER);
     }
 
@@ -105,6 +103,17 @@ public class AirlineAgentPanel extends JPanel {
                 JButton disabledButton = new JButton("" + (i + 1));
                 disabledButton.setEnabled(false);
                 disabledButton.setBackground(Color.RED);
+
+                for (Customer customer : flight.getPassengers()) {
+                    for (Purchase purchase : customer.getPurchases()) {
+                        for (Ticket ticket : purchase.getTickets()) {
+                            if (seatList.get(i).getSeatId() == ticket.getSeatNumber()) {
+                                disabledButton.setText(customer.getName().toString());
+                            }
+                        }
+                    }
+                }
+
                 seatSelectionPanel.add(disabledButton);
             } else {
                 seatSelectionPanel.add(seatButton);
@@ -136,7 +145,6 @@ public class AirlineAgentPanel extends JPanel {
         mainView.getUserController().setSelectedFlightFromString(selectedFlight);
         cardPanel.add(createSeatMapPanel(), "Seat Map");
         navigationController.navigateTo("Seat Map");
-
     }
 
     private boolean[][] fetchSeatStatusesForFlight(String flight) {

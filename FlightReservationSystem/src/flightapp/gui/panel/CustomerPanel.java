@@ -3,7 +3,6 @@ package flightapp.gui.panel;
 import com.sun.mail.imap.protocol.Item;
 import com.sun.tools.javac.Main;
 
-import flightapp.controllers.FlightController;
 import flightapp.domain.entity.*;
 import flightapp.gui.main.MainView;
 import flightapp.gui.navigation.NavigationController;
